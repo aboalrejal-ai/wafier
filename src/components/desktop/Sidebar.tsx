@@ -1,0 +1,145 @@
+import type { Screen } from "../../App";
+
+interface SidebarProps {
+  current: Screen;
+  onNavigate: (screen: Screen) => void;
+}
+
+const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
+  {
+    id: "dashboard",
+    label: "الميزانية الشهرية",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="15" rx="2" />
+        <path d="M2 10h20M6 15h4M14 15h4" />
+      </svg>
+    ),
+  },
+  {
+    id: "forecast",
+    label: "توقعات الفاتورة",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+    ),
+  },
+  {
+    id: "profile",
+    label: "الملف الشخصي",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+      </svg>
+    ),
+  },
+];
+
+export default function Sidebar({ current, onNavigate }: SidebarProps) {
+  return (
+    <aside
+      style={{
+        width: 280,
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        background: "#fff",
+        borderInlineEnd: "1px solid #E5E7EB",
+        height: "100%",
+        overflow: "hidden",
+      }}
+    >
+      {/* Logo */}
+      <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid #E5E7EB" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end" }}>
+          <div style={{ textAlign: "end" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafier</div>
+            <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>إدارة الطاقة والحلول الذكية</div>
+          </div>
+          <div style={{
+            width: 44, height: 44, borderRadius: 8,
+            background: "#1B8354",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav style={{ flex: 1, padding: "20px 12px", display: "flex", flexDirection: "column", gap: 4 }}>
+        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          القائمة الرئيسية
+        </p>
+        {navItems.map((item) => {
+          const active = current === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onNavigate(item.id)}
+              style={{
+                display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end",
+                padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer",
+                background: active ? "#F3FCF6" : "transparent",
+                color: active ? "#166A45" : "#111927",
+                fontSize: 14, fontWeight: active ? 600 : 400, fontFamily: "inherit",
+                transition: "all 0.18s",
+                borderInlineStart: active ? "3px solid #1B8354" : "3px solid transparent",
+              }}
+              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#F3FCF6"; }}
+              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
+            >
+              <span>{item.label}</span>
+              <span style={{ color: active ? "#166A45" : "#4D5761" }}>{item.icon}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* Bottom — AI Button + User Info */}
+      <div style={{ padding: "16px 16px 24px", borderTop: "1px solid #E5E7EB" }}>
+        <button
+          onClick={() => onNavigate("ai")}
+          style={{
+            width: "100%", padding: "10px 14px", borderRadius: 8,
+            border: current === "ai" ? "1px solid #1B8354" : "1px solid #E5E7EB",
+            background: current === "ai" ? "#F3FCF6" : "#fff",
+            cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            color: current === "ai" ? "#166A45" : "#111927", fontSize: 13, fontWeight: 600, fontFamily: "inherit",
+            marginBottom: 14, transition: "background 0.18s",
+          }}
+          onMouseEnter={(e) => { if (current !== "ai") e.currentTarget.style.background = "#F3FCF6"; }}
+          onMouseLeave={(e) => { if (current !== "ai") e.currentTarget.style.background = "#fff"; }}
+        >
+          <span style={{ fontSize: 14 }}>✨</span>
+          المساعد الاستشاري AI
+        </button>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "flex-end" }}>
+          <div style={{ textAlign: "end" }}>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>مستخدم Wafier</p>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: "#4D5761" }}>عضو منذ أبريل 2024</p>
+          </div>
+          <div style={{
+            width: 38, height: 38, borderRadius: 8,
+            background: "hsl(var(--color-sa-600) / 0.1)",
+            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1B8354">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
