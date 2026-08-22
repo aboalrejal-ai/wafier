@@ -13,6 +13,12 @@ import NotificationsPanel from "./panels/NotificationsPanel";
 import EditProfileModal from "./modals/EditProfileModal";
 import PeriodPicker from "./ui/PeriodPicker";
 import type { Screen } from "../App";
+import { useDashboardData } from "../hooks/useDashboardData";
+import { useAppStore, getFilteredChartData } from "../stores/app-store";
+import { useAuth } from "../contexts/AuthContext";
+import { updateProfile } from "../services/data-service";
+import { demoService } from "../services/data-service";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -28,34 +34,33 @@ const chartData = [
   { month: "أبريل", value: 193 },
 ];
 
-const sensors = [
-  { icon: "🌡️", label: "عداد الكهرباء الرئيسي", value: "1,245", unit: "ك.و.س" },
-  { icon: "💧", label: "عداد المياه", value: "18.6", unit: "م³" },
-  { icon: "🔥", label: "مقياس الغاز", value: "32.4", unit: "م³" },
-  { icon: "☀️", label: "الألواح الشمسية", value: "4.8", unit: "ك.و.س" },
-];
-
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div style={{
-        background: "hsl(var(--color-sa-600))", color: "#fff",
-        padding: "8px 12px", borderRadius: 10, fontSize: 13, fontFamily: "inherit",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-      }}>
-        <div style={{ fontWeight: 700, marginBottom: 2 }}>{label}</div>
-        <div dir="ltr">{payload[0].value} ر.س</div>
-      </div>
-    );
-  }
-  return null;
-};
 
 export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
-  const [period, setPeriod] = useState("آخر 6 أشهر");
+  const period = useAppStore((s) => s.period);
+  const setPeriodStore = useAppStore((s) => s.setPeriod);
+  const { profile, budget, spend, remaining, usagePct, sensors, notifications, historicalBills } = useDashboardData();
+  const { signOut } = useAuth();
+  const queryClient = useQueryClient();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const chartDataFiltered = getFilteredChartData(historicalBills.length ? historicalBills : chartData, period);
 
+  const markAllRead = () => {
+    demoService.markAllNotificationsRead();
+    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div style={{ background: "hsl(var(--color-sa-600))", color: "#fff", padding: "8px 12px", borderRadius: 10, fontSize: 13, fontFamily: "inherit", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}>
+          <div style={{ fontWeight: 700, marginBottom: 2 }}>{label}</div>
+          <div dir="ltr">{payload[0].value} ر.س</div>
+        </div>
+      );
+    }
+    return null;
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
@@ -144,7 +149,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ textAlign: "end" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
-                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>مستخدم Wafier</p>
+                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{profile?.full_name ?? "مستخدم Wafier"}</p>
                     <span style={{ color: "hsl(var(--color-sa-600))", fontSize: 14 }}>✓</span>
                   </div>
                   <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>عضو منذ أبريل 2024</p>
@@ -179,9 +184,9 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
               {[
-                { label: "الميزانية الشهرية", value: "500", sub: "الحد الأقصى", color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
-                { label: "المصروف الحالي", value: "193.20", sub: "38.6% الميزانية", color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
-                { label: "المتبقي من الميزانية", value: "347.76", sub: "69.4% من الميزانية", color: "hsl(var(--color-warning))", bg: "hsl(var(--color-warning) / 0.1)" },
+                { label: "الميزانية الشهرية", value: budget.toFixed(2), sub: "الحد الأقصى", color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
+                { label: "المصروف الحالي", value: spend.toFixed(2), sub: `${usagePct}% الميزانية`, color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
+                { label: "المتبقي من الميزانية", value: remaining.toFixed(2), sub: `${(100 - usagePct).toFixed(1)}% من الميزانية`, color: "hsl(var(--color-warning))", bg: "hsl(var(--color-warning) / 0.1)" },
               ].map((item, i) => (
                 <div key={i} style={{
                   background: item.bg, borderRadius: 12, padding: "12px 10px", textAlign: "center",
@@ -236,7 +241,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             border: "1px solid hsl(var(--color-gray-100))",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <PeriodPicker value={period} onChange={setPeriod} />
+              <PeriodPicker value={period} onChange={setPeriodStore} />
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</h2>
                 <span style={{ fontSize: 16 }}>📊</span>
@@ -254,7 +259,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               </div>
 
               <ResponsiveContainer width="100%" height={160}>
-                <AreaChart data={chartData} margin={{ top: 30, right: 10, left: -20, bottom: 0 }}>
+                <AreaChart data={chartDataFiltered} margin={{ top: 30, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorBill" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="hsl(152.9, 65.8%, 31%)" stopOpacity={0.15} />
@@ -319,8 +324,18 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
 
       <BottomNav current="profile" onNavigate={onNavigate} />
 
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
-      {showEditProfile && <EditProfileModal onClose={() => setShowEditProfile(false)} />}
+      {showNotifications && <NotificationsPanel notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />}
+      {showEditProfile && (
+        <EditProfileModal
+          onClose={() => setShowEditProfile(false)}
+          initial={{ name: profile?.full_name ?? "", email: profile?.email ?? "", city: profile?.city ?? "الرياض" }}
+          onSave={async (data) => { await updateProfile(data); queryClient.invalidateQueries({ queryKey: ["dashboard"] }); }}
+        />
+      )}
+      <div style={{ padding: "8px 16px 0", display: "flex", gap: 8, justifyContent: "center" }}>
+        <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>عن Wafier</button>
+        <button onClick={async () => { await signOut(); window.location.href = "/login"; }} style={{ background: "none", border: "none", color: "hsl(var(--color-gray-500))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>تسجيل الخروج</button>
+      </div>
     </div>
   );
 }

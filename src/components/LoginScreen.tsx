@@ -4,10 +4,12 @@ import SignUpModal from "./modals/SignUpModal";
 import Toast from "./ui/Toast";
 
 interface LoginScreenProps {
-  onLogin: () => void;
+  onLogin: (email: string, password: string) => Promise<void>;
+  onSignUp: (email: string, password: string, name: string) => Promise<void>;
+  onResetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
 
-export default function LoginScreen({ onLogin }: LoginScreenProps) {
+export default function LoginScreen({ onLogin, onSignUp, onResetPassword }: LoginScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [email, setEmail] = useState("");
@@ -15,6 +17,8 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showForgot, setShowForgot] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -207,7 +211,18 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
         {/* Login Button */}
         <button
-          onClick={onLogin}
+          onClick={async () => {
+            setError(null);
+            setLoading(true);
+            try {
+              await onLogin(email, password);
+            } catch (e) {
+              setError(e instanceof Error ? e.message : "فشل تسجيل الدخول");
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading || !email || password.length < 4}
           style={{
             width: "100%", padding: "15px",
             background: "linear-gradient(90deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-600)))",
@@ -225,6 +240,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </svg>
           تسجيل الدخول
         </button>
+        {error && <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-destructive))", textAlign: "center" }}>{error}</p>}
 
         {/* Divider */}
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -308,11 +324,11 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
       </div>
 
       {/* Overlays */}
-      {showForgot && <ForgotPasswordModal onClose={() => setShowForgot(false)} />}
+      {showForgot && <ForgotPasswordModal onClose={() => setShowForgot(false)} onReset={onResetPassword} />}
       {showSignUp && (
         <SignUpModal
           onClose={() => setShowSignUp(false)}
-          onSuccess={() => { setShowSignUp(false); onLogin(); }}
+          onSignUp={onSignUp}
         />
       )}
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}

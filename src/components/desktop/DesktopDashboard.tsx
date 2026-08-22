@@ -1,19 +1,15 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Sidebar from "./Sidebar";
+import NotificationsPanel from "../panels/NotificationsPanel";
 import type { Screen } from "../../App";
+import { useDashboardData } from "../../hooks/useDashboardData";
+import { demoService } from "../../services/data-service";
 
 interface DesktopDashboardProps {
   onNavigate: (screen: Screen) => void;
 }
-
-const miniChartData = [
-  { month: "نوف", value: 185 },
-  { month: "ديس", value: 130 },
-  { month: "يناير", value: 160 },
-  { month: "فبراير", value: 120 },
-  { month: "مارس", value: 155 },
-  { month: "أبريل", value: 193 },
-];
 
 function StatCard({ icon, label, value, sub, accent = false }: { icon: string; label: string; value: string; sub?: string; accent?: boolean }) {
   return (
@@ -51,6 +47,16 @@ function DeviceRow({ icon, label, pct }: { icon: React.ReactNode; label: string;
 }
 
 export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { budget, spend, remaining, usagePct, forecast, weather, devices, notifications, historicalBills, greetingName } = useDashboardData();
+  const queryClient = useQueryClient();
+  const miniChartData = historicalBills.slice(-6).map((b) => ({ month: b.month.slice(0, 3), value: b.value }));
+
+  const markAllRead = () => {
+    demoService.markAllNotificationsRead();
+    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  };
+
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
       <Sidebar current="dashboard" onNavigate={onNavigate} />
@@ -61,7 +67,7 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             {/* Notification */}
-            <div style={{ position: "relative", cursor: "pointer" }}>
+            <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setShowNotifications(true)}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-600))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
@@ -75,7 +81,7 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
               <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الميزانية الشهرية</h1>
               <span style={{ fontSize: 22 }}>☀️</span>
             </div>
-            <p style={{ margin: "4px 0 0", fontSize: 14, color: "hsl(var(--color-gray-500))" }}>صباح الخير، جوري — أبريل 2024</p>
+            <p style={{ margin: "4px 0 0", fontSize: 14, color: "hsl(var(--color-gray-500))" }}>صباح الخير، {greetingName} — {new Date().toLocaleDateString("ar-SA", { month: "long", year: "numeric" })}</p>
           </div>
         </div>
 
@@ -91,27 +97,27 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
               <div style={{ background: "rgba(255,255,255,0.12)", borderRadius: 10, padding: "6px 12px", fontSize: 12, color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>
-                69% مستخدم
+                {usagePct}% مستخدم
               </div>
               <div style={{ textAlign: "end" }}>
                 <p style={{ margin: "0 0 4px", fontSize: 13, color: "rgba(255,255,255,0.7)" }}>الميزانية الشهرية</p>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, justifyContent: "flex-end" }}>
                   <span style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>ر.س</span>
-                  <span style={{ fontSize: 44, fontWeight: 800, color: "#fff", letterSpacing: "-1.5px" }}>500</span>
+                  <span style={{ fontSize: 44, fontWeight: 800, color: "#fff", letterSpacing: "-1.5px" }}>{budget}</span>
                 </div>
               </div>
             </div>
             {/* Progress */}
             <div style={{ marginBottom: 24 }}>
               <div style={{ height: 8, borderRadius: 99, background: "rgba(255,255,255,0.2)", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: "69%", background: "rgba(255,255,255,0.8)", borderRadius: 99 }} />
+                <div style={{ height: "100%", width: `${usagePct}%`, background: "rgba(255,255,255,0.8)", borderRadius: 99 }} />
               </div>
             </div>
             {/* Two stats */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               {[
-                { label: "المتبقي من الميزانية", value: "347.76", icon: "💳" },
-                { label: "المصروف الحالي", value: "193.20", icon: "📉" },
+                { label: "المتبقي من الميزانية", value: remaining.toFixed(2), icon: "💳" },
+                { label: "المصروف الحالي", value: spend.toFixed(2), icon: "📉" },
               ].map((s) => (
                 <div key={s.label} style={{ background: "rgba(255,255,255,0.1)", borderRadius: 12, padding: "14px 16px", textAlign: "end" }}>
                   <div style={{ fontSize: 16, marginBottom: 6 }}>{s.icon}</div>
@@ -125,10 +131,10 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
           {/* Real-time Stats 2×2 */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             {[
-              { icon: "☀️", label: "درجة الحرارة", value: "26°C", sub: "مشمس حار" },
-              { icon: "💧", label: "الرطوبة الخارجية", value: "45%", sub: "" },
-              { icon: "⚡", label: "استهلاك الطاقة", value: "1.25 kW", sub: "" },
-              { icon: "🌤️", label: "حالة الطقس", value: "", sub: "مشمس حار" },
+              { icon: "☀️", label: "درجة الحرارة", value: `${weather.temp_c}°C`, sub: weather.description },
+              { icon: "💧", label: "الرطوبة الخارجية", value: `${weather.humidity}%`, sub: "" },
+              { icon: "⚡", label: "استهلاك الطاقة", value: `${(spend / Math.max(budget, 1)).toFixed(2)} kW`, sub: "" },
+              { icon: "🌤️", label: "حالة الطقس", value: "", sub: weather.description },
             ].map((item, i) => (
               <div key={i} style={{ background: "#fff", borderRadius: 14, padding: "18px 16px", border: "1px solid #E5E7EB", boxShadow: "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)" }}>
                 <div style={{ fontSize: 26, marginBottom: 6 }}>{item.icon}</div>
@@ -149,14 +155,13 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
           {/* Device Consumption */}
           <div style={{ background: "#fff", borderRadius: 18, padding: "24px", border: "1px solid #E5E7EB", boxShadow: "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>عرض الكل</button>
+              <button onClick={() => onNavigate("forecast")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>عرض الكل</button>
               <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>الاستهلاك التقديري للأجهزة</h2>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <DeviceRow pct={50} label="المكيف" icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5z" /><circle cx="12" cy="15" r="2" /></svg>} />
-              <DeviceRow pct={20} label="الإضاءة" icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>} />
-              <DeviceRow pct={15} label="التلفزيون" icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M17 7V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2" /></svg>} />
-              <DeviceRow pct={10} label="الثلاجة" icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="4" y1="10" x2="20" y2="10" /></svg>} />
+              {devices.map((d) => (
+                <DeviceRow key={d.type} pct={d.pct} label={d.label} icon={<span>{d.type === "ac" ? "❄️" : "💡"}</span>} />
+              ))}
             </div>
           </div>
 
@@ -172,7 +177,7 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
             {/* Forecast amount */}
             <div style={{ background: "hsl(var(--color-sa-25))", borderRadius: 12, padding: "16px 20px", marginBottom: 16, textAlign: "end", border: "1px solid hsl(var(--color-sa-100))" }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>التوقع لهذا الشهر</p>
-              <p style={{ margin: 0, fontSize: 28, fontWeight: 800, color: "hsl(var(--color-sa-700))" }} dir="ltr">410 <span style={{ fontSize: 14 }}>ر.س</span></p>
+              <p style={{ margin: 0, fontSize: 28, fontWeight: 800, color: "hsl(var(--color-sa-700))" }} dir="ltr">{forecast.toFixed(2)} <span style={{ fontSize: 14 }}>ر.س</span></p>
               <p style={{ margin: "6px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>بتقليل استهلاك الأجهزة يمكنك توفير المزيد</p>
             </div>
 
@@ -197,6 +202,9 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
           </div>
         </div>
       </div>
+      {showNotifications && (
+        <NotificationsPanel variant="desktop" notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />
+      )}
     </div>
   );
 }

@@ -1,8 +1,11 @@
 import type { Screen } from "../../App";
+import { useAuth } from "../../contexts/AuthContext";
+import { useAppStore } from "../../stores/app-store";
 
 interface SidebarProps {
   current: Screen;
   onNavigate: (screen: Screen) => void;
+  onLogout?: () => void;
 }
 
 const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
@@ -50,87 +53,62 @@ const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
   },
 ];
 
-export default function Sidebar({ current, onNavigate }: SidebarProps) {
+export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps) {
+  const dashboard = useAppStore((s) => s.dashboard);
+  const { signOut } = useAuth();
+  const profileName = dashboard?.profile.full_name ?? "مستخدم Wafier";
+
+  const handleLogout = async () => {
+    if (onLogout) onLogout();
+    else await signOut();
+    window.location.href = "/login";
+  };
+
   return (
-    <aside
-      style={{
-        width: 280,
-        flexShrink: 0,
-        display: "flex",
-        flexDirection: "column",
-        background: "#fff",
-        borderInlineEnd: "1px solid #E5E7EB",
-        height: "100%",
-        overflow: "hidden",
-      }}
-    >
-      {/* Logo */}
+    <aside style={{ width: 280, flexShrink: 0, display: "flex", flexDirection: "column", background: "#fff", borderInlineEnd: "1px solid #E5E7EB", height: "100%", overflow: "hidden" }}>
       <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid #E5E7EB" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end" }}>
           <div style={{ textAlign: "end" }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafier</div>
             <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>إدارة الطاقة والحلول الذكية</div>
           </div>
-          <div style={{
-            width: 44, height: 44, borderRadius: 8,
-            background: "#1B8354",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            flexShrink: 0,
-          }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-            </svg>
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: "#1B8354", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
           </div>
         </div>
       </div>
 
-      {/* Nav */}
       <nav style={{ flex: 1, padding: "20px 12px", display: "flex", flexDirection: "column", gap: 4 }}>
-        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-          القائمة الرئيسية
-        </p>
+        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase" }}>القائمة الرئيسية</p>
         {navItems.map((item) => {
           const active = current === item.id;
           return (
-            <button
-              key={item.id}
-              onClick={() => onNavigate(item.id)}
-              style={{
-                display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end",
-                padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer",
-                background: active ? "#F3FCF6" : "transparent",
-                color: active ? "#166A45" : "#111927",
-                fontSize: 14, fontWeight: active ? 600 : 400, fontFamily: "inherit",
-                transition: "all 0.18s",
-                borderInlineStart: active ? "3px solid #1B8354" : "3px solid transparent",
-              }}
-              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#F3FCF6"; }}
-              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
-            >
+            <button key={item.id} onClick={() => onNavigate(item.id)}
+              style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end", padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer", background: active ? "#F3FCF6" : "transparent", color: active ? "#166A45" : "#111927", fontSize: 14, fontWeight: active ? 600 : 400, fontFamily: "inherit", borderInlineStart: active ? "3px solid #1B8354" : "3px solid transparent" }}>
               <span>{item.label}</span>
               <span style={{ color: active ? "#166A45" : "#4D5761" }}>{item.icon}</span>
             </button>
           );
         })}
+        <button onClick={() => onNavigate("about")} style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end", padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer", background: current === "about" ? "#F3FCF6" : "transparent", color: "#111927", fontSize: 14, fontFamily: "inherit", marginTop: 8 }}>
+          <span>عن Wafier</span>
+          <span>ℹ️</span>
+        </button>
       </nav>
 
-      {/* Bottom — User Info */}
       <div style={{ padding: "16px 16px 24px", borderTop: "1px solid #E5E7EB" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "flex-end" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "flex-end", marginBottom: 12 }}>
           <div style={{ textAlign: "end" }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>مستخدم Wafier</p>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>{profileName}</p>
             <p style={{ margin: "2px 0 0", fontSize: 11, color: "#4D5761" }}>عضو منذ أبريل 2024</p>
           </div>
-          <div style={{
-            width: 38, height: 38, borderRadius: 8,
-            background: "hsl(var(--color-sa-600) / 0.1)",
-            display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1B8354">
-              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-            </svg>
+          <div style={{ width: 38, height: 38, borderRadius: 8, background: "hsl(var(--color-sa-600) / 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1B8354"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
           </div>
         </div>
+        <button onClick={handleLogout} style={{ width: "100%", padding: "9px 0", borderRadius: 8, border: "1px solid #E5E7EB", background: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 600, color: "#6C737F", fontFamily: "inherit" }}>
+          تسجيل الخروج
+        </button>
       </div>
     </aside>
   );

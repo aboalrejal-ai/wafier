@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Toast from "./ui/Toast";
 import BottomNav from "./BottomNav";
+import { ragChat } from "../lib/rag-chat";
+import { useDashboardData } from "../hooks/useDashboardData";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
 
@@ -8,6 +10,7 @@ interface Message {
   role: "user" | "ai";
   text: string;
   time: string;
+  sources?: { title: string; source: string }[];
 }
 
 type Effort = "fast" | "balanced" | "high";
@@ -188,6 +191,7 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
 }
 
 export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps) {
+  const { spend, budget, forecast } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", text: "مرحباً! أنا مساعد Wafier الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
   ]);
@@ -212,10 +216,10 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setIsTyping(true);
 
-    const delay = effort === "fast" ? 600 : effort === "balanced" ? 900 : 1400;
-    setTimeout(() => {
-      const reply = aiReplies[text.trim()] ?? "شكراً على سؤالك! بناءً على بيانات استهلاكك، أنصحك بمراجعة إعدادات المكيف وتقليل ساعات الاستخدام خلال فترة الذروة للحصول على أفضل توفير ممكن.";
-      setMessages((prev) => [...prev, { role: "ai", text: reply, time: getTime() }]);
+    const delay = effort === "fast" ? 300 : effort === "balanced" ? 600 : 900;
+    setTimeout(async () => {
+      const result = await ragChat(text.trim(), { spend, budget, forecast });
+      setMessages((prev) => [...prev, { role: "ai", text: result.reply, time: getTime(), sources: result.sources }]);
       setIsTyping(false);
     }, delay);
   };

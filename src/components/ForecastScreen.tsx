@@ -3,62 +3,26 @@ import BottomNav from "./BottomNav";
 import NotificationsPanel from "./panels/NotificationsPanel";
 import SetBudgetModal from "./modals/SetBudgetModal";
 import type { Screen } from "../App";
+import { useDashboardData } from "../hooks/useDashboardData";
+import { useBudgetMutation } from "../hooks/useDashboard";
+import { demoService } from "../services/data-service";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ForecastScreenProps {
   onNavigate: (screen: Screen) => void;
 }
 
-const devices = [
-  {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5z" />
-        <circle cx="12" cy="15" r="2" />
-      </svg>
-    ),
-    label: "المكيف",
-    pct: 50,
-    cost: "25.50",
-  },
-  {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-      </svg>
-    ),
-    label: "الإضاءة",
-    pct: 20,
-    cost: "10.20",
-  },
-  {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M17 7V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2" />
-      </svg>
-    ),
-    label: "التلفزيون",
-    pct: 15,
-    cost: "7.65",
-  },
-  {
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="4" y="2" width="16" height="20" rx="2" />
-        <line x1="4" y1="10" x2="20" y2="10" />
-      </svg>
-    ),
-    label: "الثلاجة",
-    pct: 10,
-    cost: "5.10",
-  },
-];
-
 export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSetBudget, setShowSetBudget] = useState(false);
+  const { budget, forecast, devices, notifications, seasonProfile } = useDashboardData();
+  const saveBudget = useBudgetMutation();
+  const queryClient = useQueryClient();
 
+  const markAllRead = () => {
+    demoService.markAllNotificationsRead();
+    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
@@ -104,7 +68,7 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
         </div>
 
         <p style={{ textAlign: "center", margin: "6px 24px 16px", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
-          توزيع تقريري لاستهلاك أجهزتك بناءً على الذكاء الاصطناعي
+          MLFO: {seasonProfile} — توقع {forecast.toFixed(2)} ر.س (ميزانية {budget} ر.س)
         </p>
 
         {/* Hero Banner */}
@@ -163,7 +127,7 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 1, background: "hsl(var(--color-gray-100))", borderRadius: 16, overflow: "hidden" }}>
             {devices.map((device, i) => (
-              <div key={i} style={{
+              <div key={device.type} style={{
                 background: "#fff",
                 padding: "16px 16px",
                 borderBottom: i < devices.length - 1 ? "1px solid hsl(var(--color-gray-100))" : "none",
@@ -171,17 +135,12 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                   <div style={{ flex: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-                      التكلفة حتى الآن: <span dir="ltr" style={{ fontWeight: 600, color: "hsl(var(--color-gray-700))" }}>{device.cost}</span> ريال
+                      التكلفة حتى الآن: <span dir="ltr" style={{ fontWeight: 600, color: "hsl(var(--color-gray-700))" }}>{device.cost.toFixed(2)}</span> ريال
                     </span>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--color-gray-900))" }}>{device.label}</span>
-                      <div style={{
-                        width: 36, height: 36, borderRadius: 10,
-                        background: "hsl(var(--color-sa-25))",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "hsl(var(--color-sa-600))",
-                      }}>
-                        {device.icon}
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: "hsl(var(--color-sa-25))", display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--color-sa-600))" }}>
+                        {device.type === "ac" ? "❄️" : device.type === "lights" ? "💡" : device.type === "tv" ? "📺" : "🗄️"}
                       </div>
                     </div>
                   </div>
@@ -234,8 +193,14 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
       </div>
 
       <BottomNav current="forecast" onNavigate={onNavigate} />
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
-      {showSetBudget && <SetBudgetModal onClose={() => setShowSetBudget(false)} />}
+      {showNotifications && <NotificationsPanel notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />}
+      {showSetBudget && (
+        <SetBudgetModal
+          initialAmount={String(budget)}
+          onClose={() => setShowSetBudget(false)}
+          onSet={async (amount) => { await saveBudget(Number(amount)); }}
+        />
+      )}
     </div>
   );
 }

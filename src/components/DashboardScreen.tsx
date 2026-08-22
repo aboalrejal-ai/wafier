@@ -2,6 +2,9 @@ import { useState } from "react";
 import BottomNav from "./BottomNav";
 import NotificationsPanel from "./panels/NotificationsPanel";
 import type { Screen } from "../App";
+import { useDashboardData } from "../hooks/useDashboardData";
+import { demoService } from "../services/data-service";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DashboardScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -40,6 +43,13 @@ function DeviceBar({ icon, label, pct, color = "hsl(var(--color-sa-500))" }: { i
 
 export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
   const [showNotifications, setShowNotifications] = useState(false);
+  const { budget, spend, remaining, usagePct, forecast, weather, devices, notifications, greetingName } = useDashboardData();
+  const queryClient = useQueryClient();
+
+  const markAllRead = () => {
+    demoService.markAllNotificationsRead();
+    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -50,7 +60,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
           padding: "20px 20px 12px",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 15, color: "hsl(var(--color-gray-700))" }}>صباح الخير، جوري</span>
+            <span style={{ fontSize: 15, color: "hsl(var(--color-gray-700))" }}>صباح الخير، {greetingName}</span>
             <span style={{ fontSize: 18 }}>☀️</span>
           </div>
           <button
@@ -99,13 +109,13 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             <p style={{ margin: "0 0 4px", fontSize: 13, opacity: 0.85, textAlign: "end" }}>الميزانية الشهرية</p>
             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
               <span style={{ fontSize: 13, opacity: 0.85 }}>ر.س</span>
-              <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-1px" }}>500</span>
+              <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-1px" }}>{budget}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 12, opacity: 0.75 }}>مستخدم 69%</span>
+              <span style={{ fontSize: 12, opacity: 0.75 }}>مستخدم {usagePct}%</span>
               <span style={{ fontSize: 12, opacity: 0.85 }}>الميزانية المتاحة</span>
             </div>
-            <ProgressBar value={69} />
+            <ProgressBar value={usagePct} />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20, gap: 12 }}>
               <div style={{
                 flex: 1, background: "rgba(255,255,255,0.12)", borderRadius: 12, padding: "12px 14px",
@@ -120,7 +130,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 <div style={{ textAlign: "end" }}>
                   <p style={{ margin: 0, fontSize: 11, opacity: 0.75 }}>المتبقي من الميزانية</p>
                   <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 700 }}>
-                    <span dir="ltr">347.76</span> ر.س
+                    <span dir="ltr">{remaining.toFixed(2)}</span> ر.س
                   </p>
                 </div>
               </div>
@@ -137,7 +147,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 <div style={{ textAlign: "end" }}>
                   <p style={{ margin: 0, fontSize: 11, opacity: 0.75 }}>المصروف الحالي</p>
                   <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 700 }}>
-                    <span dir="ltr">193.20</span> ر.س
+                    <span dir="ltr">{spend.toFixed(2)}</span> ر.س
                   </p>
                 </div>
               </div>
@@ -148,17 +158,17 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
         {/* Real-time Data */}
         <div style={{ margin: "0 16px 16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
+            <button onClick={() => onNavigate("forecast")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
               عرض الكل
             </button>
             <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>البيانات اللحظية</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {[
-              { icon: "☀️", label: "درجة الحرارة", value: "26°C", sub: "مشمس حار" },
-              { icon: "💧", label: "الرطوبة الخارجية", value: "45%", sub: "" },
-              { icon: "⚡", label: "استهلاك الطاقة", value: "1.25 kW", sub: "" },
-              { icon: "🌤️", label: "حالة الطقس الخارجية", value: "", sub: "مشمس حار" },
+              { icon: "☀️", label: "درجة الحرارة", value: `${weather.temp_c}°C`, sub: weather.description },
+              { icon: "💧", label: "الرطوبة الخارجية", value: `${weather.humidity}%`, sub: "" },
+              { icon: "⚡", label: "استهلاك الطاقة", value: `${(spend / Math.max(budget, 1) * 1.25).toFixed(2)} kW`, sub: "" },
+              { icon: "🌤️", label: "حالة الطقس الخارجية", value: "", sub: weather.description },
             ].map((item, i) => (
               <div key={i} style={{
                 background: "#fff", borderRadius: 14, padding: "14px 14px 10px",
@@ -195,7 +205,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
         {/* Device Consumption */}
         <div style={{ margin: "0 16px 16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-            <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
+            <button onClick={() => onNavigate("forecast")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
               عرض الكل
             </button>
             <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>الاستهلاك التقديري للأجهزة</span>
@@ -205,10 +215,9 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             border: "1px solid hsl(var(--color-gray-100))",
             display: "flex", flexDirection: "column", gap: 14,
           }}>
-            <DeviceBar icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 2a5 5 0 0 0-5 5v3H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2V7a5 5 0 0 0-5-5z" /><circle cx="12" cy="15" r="2" /></svg>} label="المكيف" pct={50} />
-            <DeviceBar icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" /></svg>} label="الإضاءة" pct={20} />
-            <DeviceBar icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M17 7V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2" /><line x1="12" y1="12" x2="12" y2="16" /><line x1="10" y1="14" x2="14" y2="14" /></svg>} label="التلفزيون" pct={15} />
-            <DeviceBar icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="4" y1="10" x2="20" y2="10" /></svg>} label="الثلاجة" pct={10} />
+            {devices.map((d) => (
+              <DeviceBar key={d.type} icon={<span>{d.type === "ac" ? "❄️" : d.type === "lights" ? "💡" : d.type === "tv" ? "📺" : "🗄️"}</span>} label={d.label} pct={d.pct} />
+            ))}
           </div>
         </div>
 
@@ -239,7 +248,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 <span style={{ fontSize: 18 }}>💡</span>
               </div>
               <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>
-                يمكنك توقع <strong style={{ color: "hsl(var(--color-sa-700))" }}>410 ر.س</strong> هذا الشهر
+                يمكنك توقع <strong style={{ color: "hsl(var(--color-sa-700))" }}>{forecast.toFixed(2)} ر.س</strong> هذا الشهر
               </p>
               <p style={{ margin: "4px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
                 بتقليل استهلاك الأجهزة يمكنك توفير المزيد
@@ -250,7 +259,13 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
       </div>
 
       <BottomNav current="dashboard" onNavigate={onNavigate} />
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
+      {showNotifications && (
+        <NotificationsPanel
+          notifications={notifications}
+          onClose={() => setShowNotifications(false)}
+          onMarkAllRead={markAllRead}
+        />
+      )}
     </div>
   );
 }

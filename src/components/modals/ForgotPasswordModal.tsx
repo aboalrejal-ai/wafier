@@ -2,14 +2,16 @@ import { useState } from "react";
 
 interface ForgotPasswordModalProps {
   onClose: () => void;
+  onReset: (email: string) => Promise<{ error: Error | null }>;
 }
 
-export default function ForgotPasswordModal({ onClose }: ForgotPasswordModalProps) {
+export default function ForgotPasswordModal({ onClose, onReset }: ForgotPasswordModalProps) {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!email.trim()) return;
+    await onReset(email);
     setSent(true);
   };
 

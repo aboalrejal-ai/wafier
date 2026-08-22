@@ -5,10 +5,11 @@ const presets = ["300", "400", "500", "600", "750", "1000"];
 interface SetBudgetModalProps {
   onClose: () => void;
   onSet?: (amount: string) => void;
+  initialAmount?: string;
 }
 
-export default function SetBudgetModal({ onClose, onSet }: SetBudgetModalProps) {
-  const [amount, setAmount] = useState("500");
+export default function SetBudgetModal({ onClose, onSet, initialAmount = "500" }: SetBudgetModalProps) {
+  const [amount, setAmount] = useState(initialAmount);
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {

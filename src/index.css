@@ -35,6 +35,7 @@
   --color-warning: 28 97% 44%;    /* #DC6803 */
   --color-warning-text: 26 89% 37%; /* #B54708 */
   --color-danger: 4 74% 49%;      /* #D92D20 */
+  --color-destructive: 4 74% 49%;
   --color-danger-hover: 6 78% 42%;  /* #B42318 */
   --color-info: 215 87% 51%;      /* #1570EF */
 

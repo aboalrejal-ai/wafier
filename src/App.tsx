@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AuthProvider, useAuth, setDemoSession } from "./contexts/AuthContext";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import ConsentScreen from "./components/ConsentScreen";
+import AboutScreen from "./components/AboutScreen";
+import PrivacyScreen from "./components/PrivacyScreen";
 import LoginScreen from "./components/LoginScreen";
 import DashboardScreen from "./components/DashboardScreen";
 import ForecastScreen from "./components/ForecastScreen";
@@ -9,72 +16,118 @@ import DesktopDashboard from "./components/desktop/DesktopDashboard";
 import DesktopForecast from "./components/desktop/DesktopForecast";
 import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
+import { signIn, signUp, resetPassword } from "./services/data-service";
+import { useDashboard } from "./hooks/useDashboard";
 
-export type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
+export type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 
-export default function App() {
-  const [screen, setScreen] = useState<Screen>("login");
+const queryClient = new QueryClient();
+
+function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
-
   useEffect(() => {
     const handler = () => setIsDesktop(window.innerWidth >= 1024);
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);
   }, []);
+  return isDesktop;
+}
 
-  const navigate = (s: Screen) => {
-    setScreen(s);
+function LoginRoute() {
+  const navigate = useNavigate();
+  const { refreshSession } = useAuth();
+  const isDesktop = useIsDesktop();
+
+  const handleLogin = async (email: string, password: string) => {
+    const { user, error } = await signIn(email, password);
+    if (error) throw error;
+    if (user) {
+      setDemoSession(email);
+      await refreshSession();
+      navigate("/consent");
+    }
+  };
+
+  const handleSignUp = async (email: string, password: string, name: string) => {
+    const { error } = await signUp(email, password, name);
+    if (error) throw error;
+    setDemoSession(email);
+    await refreshSession();
+    navigate("/consent");
   };
 
   if (isDesktop) {
     return (
-      <div style={{
-        height: "100dvh",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        background: "hsl(var(--color-gray-25))",
-        overflow: "hidden",
-        direction: "rtl",
-      }}>
-        <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
-          {screen === "login" && <DesktopLogin onLogin={() => setScreen("dashboard")} />}
-          {screen === "dashboard" && <DesktopDashboard onNavigate={navigate} />}
-          {screen === "forecast" && <DesktopForecast onNavigate={navigate} />}
-          {screen === "profile" && <DesktopProfile onNavigate={navigate} />}
-          {screen === "ai" && <DesktopAIAssistant onNavigate={navigate} />}
-        </div>
-      </div>
+      <DesktopLogin
+        onLogin={handleLogin}
+        onSignUp={handleSignUp}
+        onResetPassword={resetPassword}
+      />
     );
   }
+  return (
+    <LoginScreen
+      onLogin={handleLogin}
+      onSignUp={handleSignUp}
+      onResetPassword={resetPassword}
+    />
+  );
+}
+
+function AppShell() {
+  const isDesktop = useIsDesktop();
+  const navigate = useNavigate();
+  useDashboard();
+
+  const nav = (screen: Screen) => {
+    const map: Record<Screen, string> = {
+      login: "/login",
+      dashboard: "/dashboard",
+      forecast: "/forecast",
+      profile: "/profile",
+      ai: "/ai",
+      about: "/about",
+    };
+    navigate(map[screen]);
+  };
+
+  const shellStyle: React.CSSProperties = isDesktop
+    ? { height: "100dvh", width: "100%", display: "flex", flexDirection: "column", background: "hsl(var(--color-gray-25))", overflow: "hidden", direction: "rtl" }
+    : { height: "100dvh", display: "flex", justifyContent: "center", alignItems: "center", background: "hsl(var(--color-gray-25))", direction: "rtl" };
+
+  const innerStyle: React.CSSProperties = isDesktop
+    ? { flex: 1, overflow: "hidden", display: "flex" }
+    : { width: "100%", maxWidth: 430, height: "100%", maxHeight: 900, background: "hsl(var(--color-gray-25))", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 12px 16px -4px hsl(220 39% 11% / 0.08)", position: "relative" };
 
   return (
-    <div style={{
-      height: "100dvh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      background: "hsl(var(--color-gray-25))",
-      direction: "rtl",
-    }}>
-      <div style={{
-        width: "100%",
-        maxWidth: 430,
-        height: "100%",
-        maxHeight: 900,
-        background: "hsl(var(--color-gray-25))",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        boxShadow: "0 12px 16px -4px hsl(220 39% 11% / 0.08), 0 4px 6px -2px hsl(220 39% 11% / 0.03)",
-        position: "relative",
-      }}>
-        {screen === "login" && <LoginScreen onLogin={() => setScreen("dashboard")} />}
-        {screen === "dashboard" && <DashboardScreen onNavigate={navigate} />}
-        {screen === "forecast" && <ForecastScreen onNavigate={navigate} />}
-        {screen === "profile" && <ProfileScreen onNavigate={navigate} />}
-        {screen === "ai" && <AIAssistantScreen onNavigate={navigate} />}
+    <div style={shellStyle}>
+      <div style={innerStyle}>
+        <Routes>
+          <Route path="/dashboard" element={isDesktop ? <DesktopDashboard onNavigate={nav} /> : <DashboardScreen onNavigate={nav} />} />
+          <Route path="/forecast" element={isDesktop ? <DesktopForecast onNavigate={nav} /> : <ForecastScreen onNavigate={nav} />} />
+          <Route path="/profile" element={isDesktop ? <DesktopProfile onNavigate={nav} /> : <ProfileScreen onNavigate={nav} />} />
+          <Route path="/ai" element={isDesktop ? <DesktopAIAssistant onNavigate={nav} /> : <AIAssistantScreen onNavigate={nav} />} />
+          <Route path="/about" element={<AboutScreen />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </div>
     </div>
+  );
+}
+
+export default function AppRouter() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginRoute />} />
+            <Route path="/consent" element={<ConsentScreen />} />
+            <Route path="/privacy" element={<PrivacyScreen />} />
+            <Route path="/*" element={<ProtectedRoute><AppShell /></ProtectedRoute>} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
