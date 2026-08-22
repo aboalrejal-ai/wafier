@@ -107,7 +107,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                 display: "flex", alignItems: "center", gap: 10, width: "100%",
                 padding: "10px 14px", border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: effort === o.id ? "hsl(var(--color-sa-50))" : "transparent",
-                textAlign: "end",
+                textAlign: "start",
                 transition: "background 0.1s",
               }}
               onMouseEnter={(e) => { if (effort !== o.id) e.currentTarget.style.background = "hsl(var(--color-gray-50))"; }}
@@ -118,7 +118,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
-              <div style={{ flex: 1, textAlign: "end" }}>
+              <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
                   {o.icon} {o.label}
                 </p>
@@ -153,7 +153,7 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
           <div style={{ width: 36, height: 4, borderRadius: 99, background: "hsl(var(--color-gray-200))" }} />
         </div>
-        <p style={{ margin: "0 20px 12px", fontSize: 11, fontWeight: 600, color: "hsl(var(--color-gray-500))", letterSpacing: "0.06em", textAlign: "end" }}>
+        <p style={{ margin: "0 20px 12px", fontSize: 11, fontWeight: 600, color: "hsl(var(--color-gray-500))", letterSpacing: "0.06em", textAlign: "start" }}>
           أضف مرجعاً
         </p>
         {options.map((o) => (
@@ -163,18 +163,18 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
             style={{
               display: "flex", alignItems: "center", gap: 14, width: "100%",
               padding: "14px 20px", border: "none", cursor: "pointer",
-              background: "transparent", fontFamily: "inherit", textAlign: "end",
+              background: "transparent", fontFamily: "inherit", textAlign: "start",
               transition: "background 0.1s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--color-gray-50))")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 500, color: "hsl(var(--color-gray-900))" }}>{o.label}</span>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 12 }}>
               <span style={{ fontSize: 22 }}>{o.icon}</span>
+              <span style={{ fontSize: 14, fontWeight: 500, color: "hsl(var(--color-gray-900))" }}>{o.label}</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-400))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
+              <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
         ))}
@@ -325,7 +325,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 color: m.role === "user" ? "#FFFFFF" : "#111927",
                 fontSize: 14,
                 lineHeight: 1.65,
-                textAlign: "end",
+                textAlign: "start",
                 whiteSpace: "pre-line",
               }}>
                 {m.text}
@@ -373,7 +373,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 key={s.text}
                 onClick={() => send(s.text)}
                 style={{
-                  padding: "14px 12px", borderRadius: 14, textAlign: "end",
+                  padding: "14px 12px", borderRadius: 14, textAlign: "start",
                   border: "1px solid #E5E7EB",
                   background: "#FFFFFF",
                   boxShadow: CARD_SHADOW,

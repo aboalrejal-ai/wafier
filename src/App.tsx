@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import LoginScreen from "./components/LoginScreen";
 import DashboardScreen from "./components/DashboardScreen";
 import ForecastScreen from "./components/ForecastScreen";
@@ -12,8 +13,9 @@ import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
 
 export type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
 
-export default function App() {
-  const [screen, setScreen] = useState<Screen>("login");
+function AppShell() {
+  const { user } = useAuth();
+  const [screen, setScreen] = useState<Screen>(user ? "dashboard" : "login");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
   useEffect(() => {
@@ -22,9 +24,15 @@ export default function App() {
     return () => window.removeEventListener("resize", handler);
   }, []);
 
+  useEffect(() => {
+    if (!user) setScreen("login");
+  }, [user]);
+
   const navigate = (s: Screen) => {
     setScreen(s);
   };
+
+  const enterApp = () => setScreen("dashboard");
 
   if (isDesktop) {
     return (
@@ -38,7 +46,7 @@ export default function App() {
         direction: "rtl",
       }}>
         <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
-          {screen === "login" && <DesktopLogin onLogin={() => setScreen("dashboard")} />}
+          {screen === "login" && <DesktopLogin onLogin={enterApp} />}
           {screen === "dashboard" && <DesktopDashboard onNavigate={navigate} />}
           {screen === "forecast" && <DesktopForecast onNavigate={navigate} />}
           {screen === "profile" && <DesktopProfile onNavigate={navigate} />}
@@ -69,12 +77,20 @@ export default function App() {
         boxShadow: "0 12px 16px -4px hsl(220 39% 11% / 0.08), 0 4px 6px -2px hsl(220 39% 11% / 0.03)",
         position: "relative",
       }}>
-        {screen === "login" && <LoginScreen onLogin={() => setScreen("dashboard")} />}
+        {screen === "login" && <LoginScreen onLogin={enterApp} />}
         {screen === "dashboard" && <DashboardScreen onNavigate={navigate} />}
         {screen === "forecast" && <ForecastScreen onNavigate={navigate} />}
         {screen === "profile" && <ProfileScreen onNavigate={navigate} />}
         {screen === "ai" && <AIAssistantScreen onNavigate={navigate} />}
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
   );
 }

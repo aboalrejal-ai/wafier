@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 interface SignUpModalProps {
   onClose: () => void;
@@ -6,13 +7,25 @@ interface SignUpModalProps {
 }
 
 export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
+  const { signup } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const valid = name.trim() && email.trim() && password.length >= 6 && agree;
+
+  const handleSubmit = () => {
+    if (!valid) return;
+    const result = signup(name, email, password);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    onSuccess();
+  };
 
   return (
     <>
@@ -38,6 +51,10 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px 36px" }}>
           {/* Header */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div style={{ textAlign: "start" }}>
+              <h2 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>إنشاء حساب جديد</h2>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>انضم إلى Wafier وابدأ التوفير</p>
+            </div>
             <button
               onClick={onClose}
               style={{
@@ -50,16 +67,12 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            <div style={{ textAlign: "end" }}>
-              <h2 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>إنشاء حساب جديد</h2>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>انضم إلى Wafier وابدأ التوفير</p>
-            </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Name */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>الاسم الكامل</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>الاسم الكامل</label>
               <input
                 type="text"
                 value={name}
@@ -80,7 +93,7 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
 
             {/* Email */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>البريد الإلكتروني</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>البريد الإلكتروني</label>
               <input
                 type="email"
                 value={email}
@@ -101,7 +114,7 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
 
             {/* Password */}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>كلمة المرور</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>كلمة المرور</label>
               <div style={{ position: "relative" }}>
                 <input
                   type={showPass ? "text" : "password"}
@@ -110,7 +123,7 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
                   placeholder="6 أحرف على الأقل"
                   dir="rtl"
                   style={{
-                    width: "100%", padding: "13px 16px 13px 44px",
+                    width: "100%", padding: "13px 16px", paddingInlineEnd: 44,
                     border: "1.5px solid hsl(var(--color-gray-200))",
                     borderRadius: 12, fontSize: 14, outline: "none",
                     fontFamily: "inherit", background: "hsl(var(--color-gray-25))",
@@ -122,7 +135,7 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
                 <button
                   onClick={() => setShowPass(!showPass)}
                   style={{
-                    position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
+                    position: "absolute", insetInlineEnd: 14, top: "50%", transform: "translateY(-50%)",
                     background: "none", border: "none", cursor: "pointer", padding: 0,
                     color: "hsl(var(--color-gray-400))",
                   }}
@@ -144,10 +157,6 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
 
             {/* Terms */}
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5, textAlign: "end", flex: 1 }}>
-                أوافق على <span style={{ color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>شروط الاستخدام</span> و
-                <span style={{ color: "hsl(var(--color-sa-600))", fontWeight: 600 }}> سياسة الخصوصية</span>
-              </p>
               <div
                 onClick={() => setAgree(!agree)}
                 style={{
@@ -164,10 +173,18 @@ export default function SignUpModal({ onClose, onSuccess }: SignUpModalProps) {
                   </svg>
                 )}
               </div>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5, textAlign: "start", flex: 1 }}>
+                أوافق على <span style={{ color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>شروط الاستخدام</span> و
+                <span style={{ color: "hsl(var(--color-sa-600))", fontWeight: 600 }}> سياسة الخصوصية</span>
+              </p>
             </label>
 
+            {error && (
+              <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-danger))", textAlign: "start" }}>{error}</p>
+            )}
+
             <button
-              onClick={valid ? onSuccess : undefined}
+              onClick={valid ? handleSubmit : undefined}
               style={{
                 width: "100%", padding: "15px",
                 background: valid

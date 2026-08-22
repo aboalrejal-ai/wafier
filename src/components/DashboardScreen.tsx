@@ -2,6 +2,8 @@ import { useState } from "react";
 import BottomNav from "./BottomNav";
 import NotificationsPanel from "./panels/NotificationsPanel";
 import type { Screen } from "../App";
+import { useAuth } from "../context/AuthContext";
+import { firstNameOf } from "../lib/userStorage";
 
 interface DashboardScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -40,6 +42,8 @@ function DeviceBar({ icon, label, pct, color = "hsl(var(--color-sa-500))" }: { i
 
 export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
   const [showNotifications, setShowNotifications] = useState(false);
+  const { user } = useAuth();
+  const greetingName = firstNameOf(user?.name || "مستخدم");
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -50,8 +54,8 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
           padding: "20px 20px 12px",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 15, color: "hsl(var(--color-gray-700))" }}>صباح الخير، جوري</span>
             <span style={{ fontSize: 18 }}>☀️</span>
+            <span style={{ fontSize: 15, color: "hsl(var(--color-gray-700))" }}>صباح الخير، {greetingName}</span>
           </div>
           <button
             onClick={() => setShowNotifications(true)}
@@ -96,14 +100,14 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             color: "#fff",
             boxShadow: "0 8px 32px hsla(var(--color-sa-800), 0.35)",
           }}>
-            <p style={{ margin: "0 0 4px", fontSize: 13, opacity: 0.85, textAlign: "end" }}>الميزانية الشهرية</p>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 13, opacity: 0.85, textAlign: "start" }}>الميزانية الشهرية</p>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+              <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-1px" }} dir="ltr">500</span>
               <span style={{ fontSize: 13, opacity: 0.85 }}>ر.س</span>
-              <span style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-1px" }}>500</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-              <span style={{ fontSize: 12, opacity: 0.75 }}>مستخدم 69%</span>
               <span style={{ fontSize: 12, opacity: 0.85 }}>الميزانية المتاحة</span>
+              <span style={{ fontSize: 12, opacity: 0.75 }}>مستخدم 69%</span>
             </div>
             <ProgressBar value={69} />
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20, gap: 12 }}>
@@ -117,7 +121,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                     <path d="M12 6v6l4 2" />
                   </svg>
                 </div>
-                <div style={{ textAlign: "end" }}>
+                <div style={{ textAlign: "start" }}>
                   <p style={{ margin: 0, fontSize: 11, opacity: 0.75 }}>المتبقي من الميزانية</p>
                   <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 700 }}>
                     <span dir="ltr">347.76</span> ر.س
@@ -134,7 +138,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                     <path d="M2 10h20" />
                   </svg>
                 </div>
-                <div style={{ textAlign: "end" }}>
+                <div style={{ textAlign: "start" }}>
                   <p style={{ margin: 0, fontSize: 11, opacity: 0.75 }}>المصروف الحالي</p>
                   <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 700 }}>
                     <span dir="ltr">193.20</span> ر.س
@@ -148,10 +152,10 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
         {/* Real-time Data */}
         <div style={{ margin: "0 16px 16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>البيانات اللحظية</span>
             <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
               عرض الكل
             </button>
-            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>البيانات اللحظية</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {[
@@ -195,10 +199,10 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
         {/* Device Consumption */}
         <div style={{ margin: "0 16px 16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>الاستهلاك التقديري للأجهزة</span>
             <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>
               عرض الكل
             </button>
-            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>الاستهلاك التقديري للأجهزة</span>
           </div>
           <div style={{
             background: "#fff", borderRadius: 16, padding: "16px",
@@ -220,23 +224,10 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             borderRadius: 16, padding: "16px 18px",
             display: "flex", justifyContent: "space-between", alignItems: "center",
           }}>
-            <button
-              onClick={() => onNavigate("forecast")}
-              style={{
-                background: "none", border: "none", cursor: "pointer", padding: 0,
-                fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit",
-                display: "flex", alignItems: "center", gap: 4,
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              التفاصيل
-            </button>
-            <div style={{ textAlign: "end" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end", marginBottom: 4 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</span>
+            <div style={{ textAlign: "start" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                 <span style={{ fontSize: 18 }}>💡</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</span>
               </div>
               <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>
                 يمكنك توقع <strong style={{ color: "hsl(var(--color-sa-700))" }}>410 ر.س</strong> هذا الشهر
@@ -245,6 +236,19 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 بتقليل استهلاك الأجهزة يمكنك توفير المزيد
               </p>
             </div>
+            <button
+              onClick={() => onNavigate("forecast")}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit",
+                display: "flex", alignItems: "center", gap: 4,
+              }}
+            >
+              التفاصيل
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

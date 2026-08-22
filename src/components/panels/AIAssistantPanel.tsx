@@ -82,6 +82,22 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
             flexShrink: 0,
           }}
         >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: "50%",
+              background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 2px 8px hsla(var(--color-sa-600), 0.4)",
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
+              </svg>
+            </div>
+            <div style={{ textAlign: "start" }}>
+              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>المساعد الذكي</h2>
+              <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 500 }}>مدعوم بالذكاء الاصطناعي ✨</p>
+            </div>
+          </div>
           <button
             onClick={onClose}
             style={{
@@ -94,22 +110,6 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ textAlign: "end" }}>
-              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>المساعد الذكي</h2>
-              <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 500 }}>مدعوم بالذكاء الاصطناعي ✨</p>
-            </div>
-            <div style={{
-              width: 40, height: 40, borderRadius: "50%",
-              background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 2px 8px hsla(var(--color-sa-600), 0.4)",
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-              </svg>
-            </div>
-          </div>
         </div>
 
         {/* Messages */}
@@ -134,7 +134,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
                   color: m.role === "user" ? "#FFFFFF" : "#111927",
                   fontSize: 13,
                   lineHeight: 1.6,
-                  textAlign: "end",
+                  textAlign: "start",
                 }}
               >
                 {m.text}

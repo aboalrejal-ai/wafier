@@ -38,6 +38,10 @@ export default function SetBudgetModal({ onClose, onSet }: SetBudgetModalProps) 
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div style={{ textAlign: "start" }}>
+            <h2 style={{ margin: "0 0 2px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>تحديد الميزانية</h2>
+            <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>حدد ميزانيتك الشهرية للكهرباء</p>
+          </div>
           <button
             onClick={onClose}
             style={{
@@ -50,10 +54,6 @@ export default function SetBudgetModal({ onClose, onSet }: SetBudgetModalProps) 
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          <div style={{ textAlign: "end" }}>
-            <h2 style={{ margin: "0 0 2px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>تحديد الميزانية</h2>
-            <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>حدد ميزانيتك الشهرية للكهرباء</p>
-          </div>
         </div>
 
         {/* Amount display */}
@@ -80,7 +80,7 @@ export default function SetBudgetModal({ onClose, onSet }: SetBudgetModalProps) 
         </div>
 
         {/* Presets */}
-        <p style={{ margin: "0 0 10px", fontSize: 12, color: "hsl(var(--color-gray-500))", textAlign: "end", fontWeight: 500 }}>
+        <p style={{ margin: "0 0 10px", fontSize: 12, color: "hsl(var(--color-gray-500))", textAlign: "start", fontWeight: 500 }}>
           اختر من القيم الشائعة
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 24 }}>

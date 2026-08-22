@@ -62,11 +62,32 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {/* Header */}
+        {/* Header: title at start (right), bell at end (left) */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "20px 20px 0",
         }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <button
+              onClick={() => onNavigate("dashboard")}
+              style={{
+                background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer",
+                width: 36, height: 36, borderRadius: "50%",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "hsl(var(--color-gray-700))",
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+            <div style={{ textAlign: "start" }}>
+              <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
+                توقعات الفاتورة
+              </h1>
+            </div>
+          </div>
+
           <button
             onClick={() => setShowNotifications(true)}
             style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 4 }}
@@ -81,29 +102,9 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
               borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))",
             }} />
           </button>
-
-          <div style={{ textAlign: "center" }}>
-            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
-              توقعات الفاتورة
-            </h1>
-          </div>
-
-          <button
-            onClick={() => onNavigate("dashboard")}
-            style={{
-              background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer",
-              width: 36, height: 36, borderRadius: "50%",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "hsl(var(--color-gray-700))",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
         </div>
 
-        <p style={{ textAlign: "center", margin: "6px 24px 16px", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
+        <p style={{ textAlign: "start", margin: "6px 20px 16px", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
           توزيع تقريري لاستهلاك أجهزتك بناءً على الذكاء الاصطناعي
         </p>
 
@@ -126,8 +127,8 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
               <rect x="10" y="52" width="35" height="20" rx="1" fill="rgba(255,255,255,0.8)" transform="rotate(-8,27,62)" />
             </svg>
 
-            <div style={{ position: "relative", textAlign: "end", color: "#fff" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, marginBottom: 8 }}>
+            <div style={{ position: "relative", textAlign: "start", color: "#fff" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2" />
                   <line x1="16" y1="2" x2="16" y2="6" />
@@ -144,6 +145,7 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
         {/* Devices Section */}
         <div style={{ margin: "0 16px 16px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>استهلاك الأجهزة</span>
             <button
               onClick={() => setShowSetBudget(true)}
               style={{
@@ -158,7 +160,6 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
             >
               تحديد الميزانية
             </button>
-            <span style={{ fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>استهلاك الأجهزة</span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 1, background: "hsl(var(--color-gray-100))", borderRadius: 16, overflow: "hidden" }}>
@@ -169,22 +170,18 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
                 borderBottom: i < devices.length - 1 ? "1px solid hsl(var(--color-gray-100))" : "none",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-                  <div style={{ flex: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-                      التكلفة حتى الآن: <span dir="ltr" style={{ fontWeight: 600, color: "hsl(var(--color-gray-700))" }}>{device.cost}</span> ريال
-                    </span>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--color-gray-900))" }}>{device.label}</span>
-                      <div style={{
-                        width: 36, height: 36, borderRadius: 10,
-                        background: "hsl(var(--color-sa-25))",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "hsl(var(--color-sa-600))",
-                      }}>
-                        {device.icon}
-                      </div>
-                    </div>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 10,
+                    background: "hsl(var(--color-sa-25))",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "hsl(var(--color-sa-600))", flexShrink: 0,
+                  }}>
+                    {device.icon}
                   </div>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--color-gray-900))", flex: 1 }}>{device.label}</span>
+                  <span style={{ fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
+                    التكلفة حتى الآن: <span dir="ltr" style={{ fontWeight: 600, color: "hsl(var(--color-gray-700))" }}>{device.cost}</span> ريال
+                  </span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 13, fontWeight: 600, color: "hsl(var(--color-sa-600))", minWidth: 36, textAlign: "start" }}>
@@ -211,12 +208,6 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
             borderRadius: 16, padding: "18px",
             display: "flex", alignItems: "center", gap: 16,
           }}>
-            <div style={{ textAlign: "end", flex: 1 }}>
-              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك</p>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>
-                أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.
-              </p>
-            </div>
             <div style={{
               width: 52, height: 52, borderRadius: "50%",
               background: "hsl(var(--color-sa-600))",
@@ -228,6 +219,12 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="M13 2L4.5 13.5H11L10 22" stroke="white" strokeWidth="1.5" fill="hsl(var(--color-sa-300))" />
               </svg>
+            </div>
+            <div style={{ textAlign: "start", flex: 1 }}>
+              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك</p>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>
+                أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.
+              </p>
             </div>
           </div>
         </div>

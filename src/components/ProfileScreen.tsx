@@ -13,6 +13,8 @@ import NotificationsPanel from "./panels/NotificationsPanel";
 import EditProfileModal from "./modals/EditProfileModal";
 import PeriodPicker from "./ui/PeriodPicker";
 import type { Screen } from "../App";
+import { useAuth } from "../context/AuthContext";
+import { formatMemberSince } from "../lib/userStorage";
 
 interface ProfileScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -55,6 +57,9 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   const [period, setPeriod] = useState("آخر 6 أشهر");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const { user } = useAuth();
+  const displayName = user?.name || "مستخدم";
+  const memberSince = user ? formatMemberSince(user.createdAt) : "";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -64,18 +69,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "20px 20px 0",
         }}>
-          {/* Spacer to balance centered title */}
-          <div style={{ width: 36 }} />
-
-          <div style={{ textAlign: "center" }}>
-            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
-              الملف الشخصي
-            </h1>
-            <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
-              معلوماتك المالية واستهلاكك للطاقة
-            </p>
-          </div>
-
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <button
               onClick={() => onNavigate("dashboard")}
@@ -90,11 +83,16 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
+            <div style={{ textAlign: "start" }}>
+              <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
+                الملف الشخصي
+              </h1>
+              <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
+                معلوماتك المالية واستهلاكك للطاقة
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Notification Bell */}
-        <div style={{ display: "flex", justifyContent: "flex-start", padding: "8px 20px 16px" }}>
           <button
             onClick={() => setShowNotifications(true)}
             style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 0 }}
@@ -112,54 +110,58 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
         </div>
 
         {/* User Card */}
-        <div style={{ margin: "0 16px 16px" }}>
+        <div style={{ margin: "16px 16px 16px" }}>
           <div style={{
             background: "#fff", borderRadius: 18, padding: "18px",
             border: "1px solid hsl(var(--color-gray-100))",
             boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-                <button
-                  onClick={() => setShowEditProfile(true)}
-                  style={{
-                    background: "none",
-                    border: "1.5px solid hsl(var(--color-sa-200))", cursor: "pointer",
-                    padding: "7px 14px", borderRadius: 8, color: "hsl(var(--color-sa-600))",
-                    fontSize: 11, fontWeight: 600, fontFamily: "inherit",
-                    display: "flex", alignItems: "center", gap: 4,
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--color-sa-25))")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
-                >
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                  تعديل الملف
-                </button>
-              </div>
-
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ textAlign: "end" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
-                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>مستخدم Wafier</p>
-                    <span style={{ color: "hsl(var(--color-sa-600))", fontSize: 14 }}>✓</span>
-                  </div>
-                  <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>عضو منذ أبريل 2024</p>
-                </div>
                 <div style={{
                   width: 50, height: 50, borderRadius: "50%",
                   background: "linear-gradient(135deg, hsl(var(--color-sa-100)), hsl(var(--color-sa-200)))",
                   display: "flex", alignItems: "center", justifyContent: "center",
                   border: "2px solid hsl(var(--color-sa-200))",
+                  flexShrink: 0,
                 }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="hsl(var(--color-sa-600))">
                     <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
                   </svg>
                 </div>
+                <div style={{ textAlign: "start" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ color: "hsl(var(--color-sa-600))", fontSize: 14 }}>✓</span>
+                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{displayName}</p>
+                  </div>
+                  {user?.email && (
+                    <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }} dir="ltr">{user.email}</p>
+                  )}
+                  {memberSince && (
+                    <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>{memberSince}</p>
+                  )}
+                </div>
               </div>
+
+              <button
+                onClick={() => setShowEditProfile(true)}
+                style={{
+                  background: "none",
+                  border: "1.5px solid hsl(var(--color-sa-200))", cursor: "pointer",
+                  padding: "7px 14px", borderRadius: 8, color: "hsl(var(--color-sa-600))",
+                  fontSize: 11, fontWeight: 600, fontFamily: "inherit",
+                  display: "flex", alignItems: "center", gap: 4,
+                  transition: "background 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--color-sa-25))")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "none")}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+                تعديل الملف
+              </button>
             </div>
           </div>
         </div>
@@ -170,11 +172,11 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             background: "#fff", borderRadius: 18, padding: "18px",
             border: "1px solid hsl(var(--color-gray-100))",
           }}>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>ملخص حسابك المالي</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
               <span style={{ fontSize: 16 }}>💰</span>
+              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>ملخص حسابك المالي</h2>
             </div>
-            <p style={{ margin: "0 0 16px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "end" }}>
+            <p style={{ margin: "0 0 16px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "start" }}>
               إدارة الطاقة والحلول المالية (وفير) نظام الميزانية الشخصية
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
@@ -202,26 +204,26 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             background: "#fff", borderRadius: 18, padding: "18px",
             border: "1px solid hsl(var(--color-gray-100))",
           }}>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>مكان قراءة الحساسات</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
               <span style={{ fontSize: 16 }}>📡</span>
+              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>مكان قراءة الحساسات</h2>
             </div>
-            <p style={{ margin: "0 0 14px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "end" }}>
+            <p style={{ margin: "0 0 14px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "start" }}>
               حالة أجهزتك واستهلاكك الفعلي للطاقة
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               {sensors.map((s, i) => (
                 <div key={i} style={{
                   background: "hsl(var(--color-gray-25))", borderRadius: 12, padding: "12px",
-                  border: "1px solid hsl(var(--color-gray-100))", textAlign: "end",
+                  border: "1px solid hsl(var(--color-gray-100))", textAlign: "start",
                 }}>
                   <div style={{ fontSize: 20, marginBottom: 6 }}>{s.icon}</div>
                   <div style={{ fontSize: 11, color: "hsl(var(--color-gray-600))", marginBottom: 4 }}>{s.label}</div>
                   <div style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{s.value}</div>
                   <div style={{ fontSize: 11, color: "hsl(var(--color-gray-500))", marginBottom: 8 }}>{s.unit}</div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4 }}>
-                    <span style={{ fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>متصل</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                     <span style={{ width: 8, height: 8, borderRadius: "50%", background: "hsl(var(--color-sa-500))", display: "inline-block" }} />
+                    <span style={{ fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>متصل</span>
                   </div>
                 </div>
               ))}
@@ -236,11 +238,11 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             border: "1px solid hsl(var(--color-gray-100))",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <PeriodPicker value={period} onChange={setPeriod} />
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</h2>
                 <span style={{ fontSize: 16 }}>📊</span>
+                <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</h2>
               </div>
+              <PeriodPicker value={period} onChange={setPeriod} />
             </div>
 
             <div style={{ position: "relative" }}>
@@ -296,12 +298,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             borderRadius: 16, padding: "18px",
             display: "flex", alignItems: "center", gap: 16,
           }}>
-            <div style={{ textAlign: "end", flex: 1 }}>
-              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6 }}>
-                أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.
-              </p>
-            </div>
             <div style={{
               width: 52, height: 52, borderRadius: "50%",
               background: "hsl(var(--color-sa-600))",
@@ -312,6 +308,12 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
+            </div>
+            <div style={{ textAlign: "start", flex: 1 }}>
+              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6 }}>
+                أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.
+              </p>
             </div>
           </div>
         </div>

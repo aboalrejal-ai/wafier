@@ -1,4 +1,6 @@
 import type { Screen } from "../../App";
+import { useAuth } from "../../context/AuthContext";
+import { formatMemberSince } from "../../lib/userStorage";
 
 interface SidebarProps {
   current: Screen;
@@ -51,6 +53,10 @@ const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
 ];
 
 export default function Sidebar({ current, onNavigate }: SidebarProps) {
+  const { user } = useAuth();
+  const displayName = user?.name || "مستخدم";
+  const memberSince = user ? formatMemberSince(user.createdAt) : "";
+
   return (
     <aside
       style={{
@@ -64,13 +70,9 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
         overflow: "hidden",
       }}
     >
-      {/* Logo */}
+      {/* Logo: icon at inline-start (right in RTL), text beside it */}
       <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid #E5E7EB" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end" }}>
-          <div style={{ textAlign: "end" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafier</div>
-            <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>إدارة الطاقة والحلول الذكية</div>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{
             width: 44, height: 44, borderRadius: 8,
             background: "#1B8354",
@@ -81,12 +83,16 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
               <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
             </svg>
           </div>
+          <div style={{ textAlign: "start" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafier</div>
+            <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>إدارة الطاقة والحلول الذكية</div>
+          </div>
         </div>
       </div>
 
       {/* Nav */}
       <nav style={{ flex: 1, padding: "20px 12px", display: "flex", flexDirection: "column", gap: 4 }}>
-        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "start" }}>
           القائمة الرئيسية
         </p>
         {navItems.map((item) => {
@@ -96,19 +102,20 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
               key={item.id}
               onClick={() => onNavigate(item.id)}
               style={{
-                display: "flex", alignItems: "center", gap: 12, justifyContent: "flex-end",
+                display: "flex", alignItems: "center", gap: 12,
                 padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer",
                 background: active ? "#F3FCF6" : "transparent",
                 color: active ? "#166A45" : "#111927",
                 fontSize: 14, fontWeight: active ? 600 : 400, fontFamily: "inherit",
                 transition: "all 0.18s",
                 borderInlineStart: active ? "3px solid #1B8354" : "3px solid transparent",
+                textAlign: "start",
               }}
               onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#F3FCF6"; }}
               onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
             >
+              <span style={{ color: active ? "#166A45" : "#4D5761", display: "flex" }}>{item.icon}</span>
               <span>{item.label}</span>
-              <span style={{ color: active ? "#166A45" : "#4D5761" }}>{item.icon}</span>
             </button>
           );
         })}
@@ -116,11 +123,13 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
 
       {/* Bottom — User Info */}
       <div style={{ padding: "16px 16px 24px", borderTop: "1px solid #E5E7EB" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "flex-end" }}>
-          <div style={{ textAlign: "end" }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>مستخدم Wafier</p>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: "#4D5761" }}>عضو منذ أبريل 2024</p>
-          </div>
+        <button
+          onClick={() => onNavigate("profile")}
+          style={{
+            display: "flex", alignItems: "center", gap: 10, width: "100%",
+            background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit",
+          }}
+        >
           <div style={{
             width: 38, height: 38, borderRadius: 8,
             background: "hsl(var(--color-sa-600) / 0.1)",
@@ -130,7 +139,11 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
               <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
             </svg>
           </div>
-        </div>
+          <div style={{ textAlign: "start", minWidth: 0 }}>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{displayName}</p>
+            {memberSince && <p style={{ margin: "2px 0 0", fontSize: 11, color: "#4D5761" }}>{memberSince}</p>}
+          </div>
+        </button>
       </div>
     </aside>
   );

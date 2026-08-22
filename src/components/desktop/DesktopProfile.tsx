@@ -2,6 +2,9 @@ import { useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import Sidebar from "./Sidebar";
 import type { Screen } from "../../App";
+import { useAuth } from "../../context/AuthContext";
+import { formatMemberSince } from "../../lib/userStorage";
+import EditProfileModal from "../modals/EditProfileModal";
 
 interface DesktopProfileProps {
   onNavigate: (screen: Screen) => void;
@@ -37,6 +40,10 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
   const [period] = useState("آخر 6 أشهر");
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const { user } = useAuth();
+  const displayName = user?.name || "مستخدم";
+  const memberSince = user ? formatMemberSince(user.createdAt) : "";
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
@@ -44,8 +51,12 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
-        {/* Page Header */}
+        {/* Page Header: title at start (right), bell at end (left) */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+          <div style={{ textAlign: "start" }}>
+            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الملف الشخصي</h1>
+            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>معلوماتك المالية واستهلاكك للطاقة</p>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ position: "relative" }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -55,10 +66,6 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
               </div>
               <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
             </div>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الملف الشخصي</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>معلوماتك المالية واستهلاكك للطاقة</p>
           </div>
         </div>
 
@@ -74,14 +81,15 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 6 }}>
                 <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>✓</span>
-                <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>مستخدم Wafier</p>
+                <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>{displayName}</p>
               </div>
-              <p style={{ margin: "0 0 20px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>عضو منذ أبريل 2024</p>
+              {user?.email && <p style={{ margin: "0 0 4px", fontSize: 12, color: "rgba(255,255,255,0.65)" }} dir="ltr">{user.email}</p>}
+              <p style={{ margin: "0 0 20px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{memberSince}</p>
               <div style={{ display: "flex", gap: 10 }}>
                 <button onClick={() => onNavigate("ai")} style={{ flex: 1, padding: "9px 0", borderRadius: 10, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", color: "#fff", fontSize: 12, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" }}>
                   🤖 مساعد AI
                 </button>
-                <button style={{ flex: 1, padding: "9px 0", borderRadius: 10, background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500, fontFamily: "inherit", cursor: "pointer" }}>
+                <button onClick={() => setShowEditProfile(true)} style={{ flex: 1, padding: "9px 0", borderRadius: 10, background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500, fontFamily: "inherit", cursor: "pointer" }}>
                   ✏️ تعديل
                 </button>
               </div>
@@ -89,9 +97,9 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
 
             {/* Financial Summary */}
             <div style={{ background: "#fff", borderRadius: 18, padding: "22px", border: "1px solid #E5E7EB", boxShadow: "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)" }}>
-              <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 16 }}>
-                <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>ملخص حسابك المالي</h2>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
                 <span style={{ fontSize: 16 }}>💰</span>
+                <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>ملخص حسابك المالي</h2>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {[
@@ -105,11 +113,11 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
                     background: i === 2 ? "hsl(var(--color-warning) / 0.1)" : "hsl(var(--color-sa-25))",
                     border: `1px solid ${i === 2 ? "#FEDF89" : "hsl(var(--color-sa-100))"}`,
                   }}>
+                    <div style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", textAlign: "start" }}>{item.label}</div>
                     <div>
                       <div style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{item.value} <span style={{ fontSize: 11, fontWeight: 400 }}>ر.س</span></div>
                       <div style={{ fontSize: 10, color: item.color, fontWeight: 600 }}>{item.sub}</div>
                     </div>
-                    <div style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", textAlign: "end" }}>{item.label}</div>
                   </div>
                 ))}
               </div>
@@ -120,19 +128,19 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Sensors */}
             <div style={{ background: "#fff", borderRadius: 18, padding: "22px", border: "1px solid #E5E7EB", boxShadow: "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)" }}>
-              <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 16 }}>
-                <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>مكان قراءة الحساسات</h2>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
                 <span style={{ fontSize: 16 }}>📡</span>
+                <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>مكان قراءة الحساسات</h2>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 {sensors.map((s, i) => (
-                  <div key={i} style={{ background: "hsl(var(--color-gray-25))", borderRadius: 12, padding: "14px 16px", border: "1px solid hsl(var(--color-gray-200))", textAlign: "end" }}>
+                  <div key={i} style={{ background: "hsl(var(--color-gray-25))", borderRadius: 12, padding: "14px 16px", border: "1px solid hsl(var(--color-gray-200))", textAlign: "start" }}>
                     <div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div>
                     <div style={{ fontSize: 11, color: "hsl(var(--color-gray-500))", marginBottom: 4 }}>{s.label}</div>
                     <div style={{ fontSize: 22, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{s.value} <span style={{ fontSize: 11, fontWeight: 400 }}>{s.unit}</span></div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 5, marginTop: 8 }}>
-                      <span style={{ fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>{s.status}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 8 }}>
                       <span style={{ width: 7, height: 7, borderRadius: "50%", background: "hsl(var(--color-sa-500))", display: "inline-block" }} />
+                      <span style={{ fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>{s.status}</span>
                     </div>
                   </div>
                 ))}
@@ -144,7 +152,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
               <div style={{ width: 48, height: 48, borderRadius: "50%", background: "hsl(var(--color-sa-600))", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px hsla(var(--color-sa-600), 0.3)", flexShrink: 0 }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
               </div>
-              <div style={{ textAlign: "end", flex: 1 }}>
+            <div style={{ textAlign: "start", flex: 1 }}>
                 <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
                 <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6 }}>أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.</p>
               </div>
@@ -155,13 +163,13 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
         {/* Full-width Chart */}
         <div style={{ background: "#fff", borderRadius: 18, padding: "24px 28px", border: "1px solid #E5E7EB", boxShadow: "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, background: "hsl(var(--color-gray-50))", border: "1px solid hsl(var(--color-gray-200))", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-500))" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
-              <span style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", fontFamily: "inherit" }}>{period}</span>
-            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>تطور المصروف خلال الأشهر</h2>
               <span style={{ fontSize: 16 }}>📊</span>
+              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>تطور المصروف خلال الأشهر</h2>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: "hsl(var(--color-gray-50))", border: "1px solid hsl(var(--color-gray-200))", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}>
+              <span style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", fontFamily: "inherit" }}>{period}</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-500))" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
             </div>
           </div>
 
@@ -190,6 +198,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
           </div>
         </div>
       </div>
+      {showEditProfile && <EditProfileModal onClose={() => setShowEditProfile(false)} />}
     </div>
   );
 }

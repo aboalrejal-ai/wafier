@@ -1,16 +1,25 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 interface EditProfileModalProps {
   onClose: () => void;
 }
 
 export default function EditProfileModal({ onClose }: EditProfileModalProps) {
-  const [name, setName] = useState("مستخدم Wafier");
-  const [email, setEmail] = useState("user@wafier.sa");
-  const [city, setCity] = useState("الأحساء");
+  const { user, updateProfile } = useAuth();
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [city, setCity] = useState(user?.city || "");
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSave = () => {
+    const result = updateProfile({ name, email, city });
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setError(null);
     setSaved(true);
     setTimeout(onClose, 1200);
   };
@@ -38,6 +47,10 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
 
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 24px 36px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div style={{ textAlign: "start" }}>
+              <h2 style={{ margin: "0 0 2px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>تعديل الملف الشخصي</h2>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>حدّث معلوماتك الشخصية</p>
+            </div>
             <button
               onClick={onClose}
               style={{
@@ -50,10 +63,6 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            <div style={{ textAlign: "end" }}>
-              <h2 style={{ margin: "0 0 2px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>تعديل الملف الشخصي</h2>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>حدّث معلوماتك الشخصية</p>
-            </div>
           </div>
 
           {/* Avatar */}
@@ -87,29 +96,34 @@ export default function EditProfileModal({ onClose }: EditProfileModalProps) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {[
-              { label: "الاسم الكامل", value: name, set: setName, type: "text" },
-              { label: "البريد الإلكتروني", value: email, set: setEmail, type: "email" },
-              { label: "المدينة", value: city, set: setCity, type: "text" },
-            ].map(({ label, value, set, type }) => (
+              { label: "الاسم الكامل", value: name, set: setName, type: "text", dir: "rtl" as const },
+              { label: "البريد الإلكتروني", value: email, set: setEmail, type: "email", dir: "ltr" as const },
+              { label: "المدينة", value: city, set: setCity, type: "text", dir: "rtl" as const },
+            ].map(({ label, value, set, type, dir }) => (
               <div key={label} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>{label}</label>
+                <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>{label}</label>
                 <input
                   type={type}
                   value={value}
                   onChange={(e) => set(e.target.value)}
-                  dir="rtl"
+                  dir={dir}
                   style={{
                     width: "100%", padding: "13px 16px",
                     border: "1.5px solid hsl(var(--color-gray-200))",
                     borderRadius: 12, fontSize: 14, outline: "none",
                     fontFamily: "inherit", background: "hsl(var(--color-gray-25))",
                     color: "hsl(var(--color-gray-950))", boxSizing: "border-box",
+                    textAlign: "start",
                   }}
                   onFocus={(e) => (e.target.style.borderColor = "hsl(var(--color-sa-600))")}
                   onBlur={(e) => (e.target.style.borderColor = "hsl(var(--color-gray-200))")}
                 />
               </div>
             ))}
+
+            {error && (
+              <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-danger))", textAlign: "start" }}>{error}</p>
+            )}
 
             <button
               onClick={handleSave}

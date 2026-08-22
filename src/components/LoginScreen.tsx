@@ -2,12 +2,14 @@ import { useState } from "react";
 import ForgotPasswordModal from "./modals/ForgotPasswordModal";
 import SignUpModal from "./modals/SignUpModal";
 import Toast from "./ui/Toast";
+import { useAuth } from "../context/AuthContext";
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
 export default function LoginScreen({ onLogin }: LoginScreenProps) {
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [email, setEmail] = useState("");
@@ -15,9 +17,20 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showForgot, setShowForgot] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
     setToast(msg);
+  };
+
+  const handleLogin = () => {
+    const result = login(email, password, remember);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setError(null);
+    onLogin();
   };
 
   return (
@@ -106,11 +119,11 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="أدخل بريدك الإلكتروني"
               style={{
-                width: "100%", padding: "13px 16px 13px 44px",
+                width: "100%", padding: "13px 16px", paddingInlineStart: 44,
                 border: "1.5px solid hsl(var(--color-gray-200))",
                 borderRadius: 12, fontSize: 14, outline: "none",
                 fontFamily: "inherit", background: "hsl(var(--color-gray-25))",
-                color: "hsl(var(--color-gray-950))", direction: "rtl",
+                color: "hsl(var(--color-gray-950))", direction: "ltr", textAlign: "start",
                 boxSizing: "border-box",
               }}
               onFocus={(e) => (e.target.style.borderColor = "hsl(var(--color-sa-600))")}
@@ -135,9 +148,10 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
               placeholder="أدخل كلمة المرور"
               style={{
-                width: "100%", padding: "13px 44px 13px 44px",
+                width: "100%", padding: "13px 44px",
                 border: "1.5px solid hsl(var(--color-gray-200))",
                 borderRadius: 12, fontSize: 14, outline: "none",
                 fontFamily: "inherit", background: "hsl(var(--color-gray-25))",
@@ -176,16 +190,13 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
           </div>
         </div>
 
+        {error && (
+          <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-danger))", textAlign: "start" }}>{error}</p>
+        )}
+
         {/* Remember + Forgot */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <button
-            onClick={() => setShowForgot(true)}
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontFamily: "inherit" }}
-          >
-            نسيت كلمة المرور؟
-          </button>
           <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "hsl(var(--color-gray-700))" }}>
-            <span>تذكرني</span>
             <div
               onClick={() => setRemember(!remember)}
               style={{
@@ -202,12 +213,19 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
                 </svg>
               )}
             </div>
+            <span>تذكرني</span>
           </label>
+          <button
+            onClick={() => setShowForgot(true)}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontFamily: "inherit" }}
+          >
+            نسيت كلمة المرور؟
+          </button>
         </div>
 
         {/* Login Button */}
         <button
-          onClick={onLogin}
+          onClick={handleLogin}
           style={{
             width: "100%", padding: "15px",
             background: "linear-gradient(90deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-600)))",

@@ -30,6 +30,7 @@ export default function PeriodPicker({ value, onChange }: PeriodPickerProps) {
           transition: "border-color 0.15s",
         }}
       >
+        <span style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", fontFamily: "inherit" }}>{value}</span>
         <svg
           width="12" height="12" viewBox="0 0 24 24" fill="none"
           stroke="hsl(var(--color-gray-500))" strokeWidth="2.5"
@@ -37,13 +38,12 @@ export default function PeriodPicker({ value, onChange }: PeriodPickerProps) {
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
-        <span style={{ fontSize: 12, color: "hsl(var(--color-gray-600))", fontFamily: "inherit" }}>{value}</span>
       </button>
 
       {open && (
         <div
           style={{
-            position: "absolute", top: "calc(100% + 6px)", left: 0,
+            position: "absolute", top: "calc(100% + 6px)", insetInlineStart: 0,
             background: "#fff",
             borderRadius: 12,
             border: "1px solid hsl(var(--color-gray-200))",
@@ -58,7 +58,7 @@ export default function PeriodPicker({ value, onChange }: PeriodPickerProps) {
               key={o}
               onClick={() => { onChange(o); setOpen(false); }}
               style={{
-                display: "block", width: "100%", textAlign: "end",
+                display: "block", width: "100%", textAlign: "start",
                 padding: "10px 14px",
                 background: o === value ? "hsl(var(--color-sa-25))" : "#fff",
                 border: "none", cursor: "pointer",

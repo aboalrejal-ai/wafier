@@ -67,8 +67,14 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
-        {/* Header */}
+        {/* Header: title at start (right), bell at end (left) */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+          <div style={{ textAlign: "start" }}>
+            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
+            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
+              توزيع تقريري لاستهلاك أجهزتك بناءً على الذكاء الاصطناعي — الاثنين، 30 أبريل 2024
+            </p>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ position: "relative" }}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -78,12 +84,6 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
               </div>
               <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
             </div>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-              توزيع تقريري لاستهلاك أجهزتك بناءً على الذكاء الاصطناعي — الاثنين، 30 أبريل 2024
-            </p>
           </div>
         </div>
 
@@ -100,8 +100,17 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
             <svg viewBox="0 0 200 100"><circle cx="50" cy="80" r="3" fill="white" /><rect x="48" y="20" width="4" height="60" fill="white" /><line x1="50" y1="23" x2="25" y2="3" stroke="white" strokeWidth="2.5" strokeLinecap="round" /><line x1="50" y1="23" x2="75" y2="3" stroke="white" strokeWidth="2.5" strokeLinecap="round" /><line x1="50" y1="23" x2="50" y2="0" stroke="white" strokeWidth="2.5" strokeLinecap="round" /><rect x="5" y="75" width="40" height="22" rx="2" fill="white" /><rect x="15" y="64" width="50" height="26" rx="2" fill="white" opacity="0.85" transform="rotate(-8,40,77)" /></svg>
           </div>
 
+          <div style={{ textAlign: "start" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+              <p style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "#fff" }}>آخر تحديث: منذ دقيقة</p>
+            </div>
+            <button style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 10, padding: "10px 20px", color: "#fff", fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" }}>
+              تحديد الميزانية
+            </button>
+          </div>
+
           <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
-            {/* Total bill */}
             <div style={{ background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: "16px 24px", textAlign: "center" }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, color: "rgba(255,255,255,0.65)" }}>إجمالي التوقع</p>
               <p style={{ margin: 0, fontSize: 36, fontWeight: 800, color: "#fff" }} dir="ltr">48.45 <span style={{ fontSize: 14, fontWeight: 400 }}>ر.س</span></p>
@@ -114,23 +123,13 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
               <p style={{ margin: "4px 0 0", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>بنهاية الشهر</p>
             </div>
           </div>
-
-          <div style={{ textAlign: "end" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end", marginBottom: 12 }}>
-              <p style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "#fff" }}>آخر تحديث: منذ دقيقة</p>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
-            </div>
-            <button style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 10, padding: "10px 20px", color: "#fff", fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" }}>
-              تحديد الميزانية
-            </button>
-          </div>
         </div>
 
         {/* Device Cards Grid 2×2 */}
         <div style={{ marginBottom: 24 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-            <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>عرض الكل</button>
             <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>استهلاك الأجهزة</h2>
+            <button style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "hsl(var(--color-sa-600))", fontWeight: 600, fontFamily: "inherit", padding: 0 }}>عرض الكل</button>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -146,6 +145,12 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
               >
                 {/* Card Header */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ width: 50, height: 50, borderRadius: 14, background: "hsl(var(--color-sa-25))", display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--color-sa-600))" }}>
+                      {device.icon}
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{device.label}</h3>
+                  </div>
                   <div style={{
                     fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 20,
                     background: device.trendUp ? "hsl(var(--color-sa-25))" : (device.trend === "0%" ? "hsl(var(--color-gray-100))" : "hsl(var(--color-warning) / 0.1)"),
@@ -154,19 +159,13 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
                   }}>
                     {device.trendUp ? "▲" : device.trend === "0%" ? "─" : "▼"} {device.trend}
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{device.label}</h3>
-                    <div style={{ width: 50, height: 50, borderRadius: 14, background: "hsl(var(--color-sa-25))", display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--color-sa-600))" }}>
-                      {device.icon}
-                    </div>
-                  </div>
                 </div>
 
                 {/* Progress Bar */}
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "hsl(var(--color-sa-600))" }}>{device.pct}%</span>
                     <span style={{ fontSize: 12, color: "hsl(var(--color-gray-500))" }}>نسبة الاستهلاك</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "hsl(var(--color-sa-600))" }}>{device.pct}%</span>
                   </div>
                   <div style={{ height: 8, borderRadius: 99, background: "hsl(var(--color-gray-100))", overflow: "hidden" }}>
                     <div style={{ height: "100%", width: `${device.pct}%`, background: "linear-gradient(90deg, hsl(var(--color-sa-600)), hsl(var(--color-sa-400)))", borderRadius: 99, transition: "width 0.6s ease" }} />
@@ -175,8 +174,8 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
 
                 {/* Cost */}
                 <div style={{ background: "hsl(var(--color-gray-25))", borderRadius: 10, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{device.cost} <span style={{ fontSize: 12, fontWeight: 500 }}>ر.س</span></span>
                   <span style={{ fontSize: 12, color: "hsl(var(--color-gray-500))" }}>التكلفة حتى الآن</span>
+                  <span style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{device.cost} <span style={{ fontSize: 12, fontWeight: 500 }}>ر.س</span></span>
                 </div>
               </div>
             ))}
@@ -195,10 +194,10 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
             </div>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <p style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك ✓</p>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.</p>
+            <div style={{ textAlign: "start" }}>
+              <p style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك ✓</p>
+              <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.</p>
+            </div>
           </div>
         </div>
       </div>

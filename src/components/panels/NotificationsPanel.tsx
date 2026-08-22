@@ -78,6 +78,14 @@ export default function NotificationsPanel({ onClose }: NotificationsPanelProps)
 
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px 12px" }}>
+          <div style={{ textAlign: "start" }}>
+            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>الإشعارات</h2>
+            {unread > 0 && (
+              <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>
+                {unread} غير مقروء
+              </p>
+            )}
+          </div>
           <button
             onClick={onClose}
             style={{
@@ -91,14 +99,6 @@ export default function NotificationsPanel({ onClose }: NotificationsPanelProps)
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          <div style={{ textAlign: "end" }}>
-            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>الإشعارات</h2>
-            {unread > 0 && (
-              <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>
-                {unread} غير مقروء
-              </p>
-            )}
-          </div>
         </div>
 
         {/* List */}
@@ -114,15 +114,15 @@ export default function NotificationsPanel({ onClose }: NotificationsPanelProps)
                 opacity: n.read ? 0.65 : 1,
               }}
             >
-              <div style={{ paddingTop: 2, flexShrink: 0 }}>
-                {!n.read && (
-                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "hsl(var(--color-sa-500))", marginBottom: 4 }} />
-                )}
+              <div style={{ flexShrink: 0, color: typeColor[n.type], paddingTop: 2 }}>
+                {typeIcon[n.type]}
               </div>
-              <div style={{ flex: 1, textAlign: "end" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, marginBottom: 4 }}>
+              <div style={{ flex: 1, textAlign: "start" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
                   <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{n.title}</p>
-                  <div style={{ color: typeColor[n.type] }}>{typeIcon[n.type]}</div>
+                  {!n.read && (
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "hsl(var(--color-sa-500))" }} />
+                  )}
                 </div>
                 <p style={{ margin: "0 0 4px", fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>{n.body}</p>
                 <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-400))" }}>{n.time}</p>

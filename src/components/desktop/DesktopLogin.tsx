@@ -1,14 +1,31 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import SignUpModal from "../modals/SignUpModal";
+import ForgotPasswordModal from "../modals/ForgotPasswordModal";
 
 interface DesktopLoginProps {
   onLogin: () => void;
 }
 
 export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [showForgot, setShowForgot] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);
+
+  const handleLogin = () => {
+    const result = login(email, password, remember);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setError(null);
+    onLogin();
+  };
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
@@ -82,15 +99,11 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
               { icon: "💰", title: "ميزانية ذكية", desc: "تحكم كامل في مصاريفك الشهرية" },
             ].map((f) => (
               <div key={f.title} style={{
-                display: "flex", alignItems: "center", gap: 14, justifyContent: "flex-end",
+                display: "flex", alignItems: "center", gap: 14,
                 background: "rgba(255,255,255,0.07)",
                 border: "1px solid rgba(255,255,255,0.1)",
                 borderRadius: 12, padding: "14px 18px",
               }}>
-                <div style={{ textAlign: "end" }}>
-                  <p style={{ margin: "0 0 3px", fontSize: 14, fontWeight: 600, color: "#fff" }}>{f.title}</p>
-                  <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{f.desc}</p>
-                </div>
                 <div style={{
                   width: 40, height: 40, borderRadius: 10,
                   background: "rgba(255,255,255,0.1)",
@@ -98,6 +111,10 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
                   fontSize: 20, flexShrink: 0,
                 }}>
                   {f.icon}
+                </div>
+                <div style={{ textAlign: "start" }}>
+                  <p style={{ margin: "0 0 3px", fontSize: 14, fontWeight: 600, color: "#fff" }}>{f.title}</p>
+                  <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -144,11 +161,11 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
                 type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="أدخل بريدك الإلكتروني"
                 style={{
-                  width: "100%", padding: "13px 16px 13px 44px",
+                  width: "100%", padding: "13px 16px", paddingInlineStart: 44,
                   border: "1.5px solid hsl(var(--color-gray-200))",
                   borderRadius: 12, fontSize: 14, outline: "none", fontFamily: "inherit",
                   background: "#fff", color: "hsl(var(--color-gray-950))", boxSizing: "border-box",
-                  transition: "border-color 0.15s",
+                  transition: "border-color 0.15s", direction: "ltr", textAlign: "start",
                 }}
                 onFocus={(e) => (e.target.style.borderColor = "hsl(var(--color-sa-600))")}
                 onBlur={(e) => (e.target.style.borderColor = "hsl(var(--color-gray-200))")}
@@ -169,9 +186,10 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
             <div style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }}
                 placeholder="أدخل كلمة المرور"
                 style={{
-                  width: "100%", padding: "13px 44px 13px 44px",
+                  width: "100%", padding: "13px 44px",
                   border: "1.5px solid hsl(var(--color-gray-200))",
                   borderRadius: 12, fontSize: 14, outline: "none", fontFamily: "inherit",
                   background: "#fff", color: "hsl(var(--color-gray-950))", boxSizing: "border-box",
@@ -200,22 +218,26 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
             </div>
           </div>
 
+          {error && (
+            <p style={{ margin: "0 0 16px", fontSize: 13, color: "hsl(var(--color-danger))", textAlign: "start" }}>{error}</p>
+          )}
+
           {/* Remember + Forgot */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
-            <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontFamily: "inherit", fontWeight: 500 }}>
-              نسيت كلمة المرور؟
-            </button>
             <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "hsl(var(--color-gray-700))" }}>
-              <span>تذكرني</span>
               <div onClick={() => setRemember(!remember)} style={{ width: 18, height: 18, borderRadius: 4, border: `2px solid ${remember ? "hsl(var(--color-sa-600))" : "hsl(var(--color-gray-300))"}`, background: remember ? "hsl(var(--color-sa-600))" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", cursor: "pointer" }}>
                 {remember && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>}
               </div>
+              <span>تذكرني</span>
             </label>
+            <button onClick={() => setShowForgot(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontFamily: "inherit", fontWeight: 500 }}>
+              نسيت كلمة المرور؟
+            </button>
           </div>
 
           {/* Login Button */}
           <button
-            onClick={onLogin}
+            onClick={handleLogin}
             style={{
               width: "100%", padding: "15px",
               background: "#1B8354",
@@ -266,12 +288,20 @@ export default function DesktopLogin({ onLogin }: DesktopLoginProps) {
 
           <p style={{ textAlign: "center", margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
             ليس لديك حساب؟{" "}
-            <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontWeight: 700, fontFamily: "inherit" }}>
+            <button onClick={() => setShowSignUp(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontWeight: 700, fontFamily: "inherit" }}>
               إنشاء حساب جديد
             </button>
           </p>
         </div>
       </div>
+
+      {showForgot && <ForgotPasswordModal onClose={() => setShowForgot(false)} />}
+      {showSignUp && (
+        <SignUpModal
+          onClose={() => setShowSignUp(false)}
+          onSuccess={() => { setShowSignUp(false); onLogin(); }}
+        />
+      )}
     </div>
   );
 }

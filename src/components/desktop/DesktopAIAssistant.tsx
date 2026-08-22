@@ -102,7 +102,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                 display: "flex", alignItems: "center", gap: 10, width: "100%",
                 padding: "11px 16px", border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: effort === o.id ? "hsl(var(--color-sa-50))" : "transparent",
-                textAlign: "end", transition: "background 0.1s",
+                textAlign: "start", transition: "background 0.1s",
               }}
               onMouseEnter={(e) => { if (effort !== o.id) e.currentTarget.style.background = "hsl(var(--color-gray-50))"; }}
               onMouseLeave={(e) => { if (effort !== o.id) e.currentTarget.style.background = "transparent"; }}
@@ -112,7 +112,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
-              <div style={{ flex: 1, textAlign: "end" }}>
+              <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
                   {o.icon} {o.label}
                 </p>
@@ -175,17 +175,13 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
       }}>
         {/* Header */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "flex-end",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "20px 32px 18px",
           background: "#FFFFFF",
           borderBottom: "1px solid #E5E7EB",
           flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ textAlign: "end" }}>
-              <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafier AI</h1>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
-            </div>
             <div style={{
               width: 44, height: 44, borderRadius: "50%",
               background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
@@ -194,6 +190,10 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
               <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
                 <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
               </svg>
+            </div>
+            <div style={{ textAlign: "start" }}>
+              <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafier AI</h1>
+              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
             </div>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     border: `1px solid ${m.role === "user" ? "#1B8354" : "#E5E7EB"}`,
                     boxShadow: m.role === "user" ? "none" : CARD_SHADOW,
                     color: m.role === "user" ? "#FFFFFF" : "#111927",
-                    fontSize: 14, lineHeight: 1.7, textAlign: "end", whiteSpace: "pre-line",
+                    fontSize: 14, lineHeight: 1.7, textAlign: "start", whiteSpace: "pre-line",
                   }}>
                     {m.text}
                   </div>
@@ -292,7 +292,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     key={s.text}
                     onClick={() => send(s.text)}
                     style={{
-                      padding: "18px 16px", borderRadius: 16, textAlign: "end",
+                      padding: "18px 16px", borderRadius: 16, textAlign: "start",
                       border: "1px solid #E5E7EB",
                       background: "#FFFFFF",
                       boxShadow: CARD_SHADOW,
