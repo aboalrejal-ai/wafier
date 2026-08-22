@@ -53,6 +53,30 @@ SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor �
 - `pnpm build` — production build
 - `pnpm test` — unit tests
 
+## Hostinger (Deploy Web App from GitHub)
+
+This project is a **static React SPA**, not a Node.js server app.
+
+| Setting | Value |
+|--------|--------|
+| Framework | **Vite** |
+| Node version | **22** (matches `.mise.toml`; use 20 if 22 is unavailable) |
+| Install / build | `pnpm install && pnpm build` (or `npm install && npm run build`) |
+| Output directory | **`dist`** |
+| Start command | **Leave empty** — static files only; no long-running Node process |
+
+**Do not choose:** Next.js, Express, or Custom Node server — there is no backend in this repo.
+
+**Backend / database:** Supabase (hosted separately). Set build-time env vars in Hostinger:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- Optional: `VITE_OPENWEATHER_API_KEY`, `VITE_OPENAI_API_KEY`
+
+`public/.htaccess` is included for React Router on Apache (shared/cloud hosting). After deploy, test deep links such as `/dashboard` and `/login`.
+
+**Recommended hosting:** Hostinger Cloud or Business with GitHub auto-deploy (pull from `main`). VPS is not required.
+
 ## Docs
 
 - [SPEC.md](docs/SPEC.md) — product specification

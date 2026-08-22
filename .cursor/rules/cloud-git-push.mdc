@@ -1,0 +1,27 @@
+---
+description: After every Cloud Agent change, commit and push directly to main for Hostinger auto-deploy.
+alwaysApply: true
+---
+
+# Cloud Git workflow (Hostinger auto-deploy)
+
+The owner deploys from **GitHub `main`**. Hostinger pulls and rebuilds after each push to `main`.
+
+## After every modification
+
+When you finish a meaningful batch of work in a Cloud Agent session:
+
+1. **Commit** with a clear message describing what changed.
+2. **Push to `main`** — not only a feature branch:
+   - If already on `main`: `git push origin main`
+   - If on another branch: merge or rebase onto `main`, then `git push origin main`
+3. Do **not** leave uncommitted or unpushed work at the end of the turn.
+
+## Branch preference
+
+- Prefer working on `main` for small, deploy-ready changes.
+- Feature branches are optional for large work, but **always land on `main` and push** before finishing so Hostinger can deploy.
+
+## Do not skip push
+
+Treat `git push origin main` as part of the task, not optional cleanup.
