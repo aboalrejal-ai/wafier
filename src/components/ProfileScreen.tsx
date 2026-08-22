@@ -64,23 +64,8 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
           display: "flex", justifyContent: "space-between", alignItems: "center",
           padding: "20px 20px 0",
         }}>
-          {/* AI Button */}
-          <button
-            onClick={() => onNavigate("ai")}
-            style={{
-              background: "hsl(var(--color-sa-600))", borderRadius: 10,
-              padding: "6px 10px",
-              display: "flex", alignItems: "center", gap: 4,
-              boxShadow: "0 2px 8px hsla(var(--color-sa-600), 0.35)",
-              border: "none", cursor: "pointer",
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >
-            <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>AI</span>
-            <span style={{ fontSize: 10 }}>✨</span>
-          </button>
+          {/* Spacer to balance centered title */}
+          <div style={{ width: 36 }} />
 
           <div style={{ textAlign: "center" }}>
             <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
@@ -135,20 +120,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-                <button
-                  onClick={() => onNavigate("ai")}
-                  style={{
-                    background: "hsl(var(--color-sa-600))", border: "none", cursor: "pointer",
-                    padding: "7px 12px", borderRadius: 8, color: "#fff",
-                    fontSize: 11, fontWeight: 600, fontFamily: "inherit",
-                    display: "flex", alignItems: "center", gap: 4,
-                    transition: "opacity 0.2s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
-                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                >
-                  <span style={{ fontSize: 10 }}>🤖</span> المساعد الاستشاري
-                </button>
                 <button
                   onClick={() => setShowEditProfile(true)}
                   style={{

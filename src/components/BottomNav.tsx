@@ -1,6 +1,6 @@
 import type { Screen } from "../App";
 
-type NavTab = "dashboard" | "forecast" | "profile";
+type NavTab = "dashboard" | "forecast" | "ai" | "profile";
 
 interface BottomNavProps {
   current: Screen;
@@ -16,6 +16,16 @@ export default function BottomNav({ current, onNavigate }: BottomNavProps) {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="8" r="4" />
           <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+        </svg>
+      ),
+    },
+    {
+      id: "ai",
+      label: "الوكيل الذكي",
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+          <path d="M19 14.5l.7 1.9 1.8.7-1.8.7-.7 1.9-.7-1.9-1.8-.7 1.8-.7z" />
         </svg>
       ),
     },

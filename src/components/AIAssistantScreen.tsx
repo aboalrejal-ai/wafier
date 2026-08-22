@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Toast from "./ui/Toast";
+import BottomNav from "./BottomNav";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
 
@@ -42,7 +43,7 @@ function getTime() {
 }
 
 interface AIAssistantScreenProps {
-  onBack: () => void;
+  onNavigate: (screen: Screen) => void;
 }
 
 function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Effort) => void }) {
@@ -186,7 +187,7 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default function AIAssistantScreen({ onBack }: AIAssistantScreenProps) {
+export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps) {
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", text: "مرحباً! أنا مساعد Wafier الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
   ]);
@@ -264,23 +265,6 @@ export default function AIAssistantScreen({ onBack }: AIAssistantScreenProps) {
           </div>
         </div>
 
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          style={{
-            background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer",
-            width: 36, height: 36, borderRadius: "50%",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#4D5761",
-            transition: "background 0.15s",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--color-gray-200))")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "hsl(var(--color-gray-100))")}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
       </div>
 
       {/* Messages */}
@@ -537,6 +521,8 @@ export default function AIAssistantScreen({ onBack }: AIAssistantScreenProps) {
           </div>
         </div>
       </div>
+
+      <BottomNav current="ai" onNavigate={onNavigate} />
 
       {/* Overlays */}
       {showRef && <ReferenceSheet onClose={() => setShowRef(false)} />}

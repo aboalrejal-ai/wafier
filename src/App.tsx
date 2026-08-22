@@ -14,7 +14,6 @@ export type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("login");
-  const [prevScreen, setPrevScreen] = useState<Screen>("profile");
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ export default function App() {
   }, []);
 
   const navigate = (s: Screen) => {
-    if (s === "ai") setPrevScreen(screen);
     setScreen(s);
   };
 
@@ -75,7 +73,7 @@ export default function App() {
         {screen === "dashboard" && <DashboardScreen onNavigate={navigate} />}
         {screen === "forecast" && <ForecastScreen onNavigate={navigate} />}
         {screen === "profile" && <ProfileScreen onNavigate={navigate} />}
-        {screen === "ai" && <AIAssistantScreen onBack={() => navigate(prevScreen)} />}
+        {screen === "ai" && <AIAssistantScreen onNavigate={navigate} />}
       </div>
     </div>
   );

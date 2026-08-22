@@ -29,6 +29,16 @@ const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
     ),
   },
   {
+    id: "ai",
+    label: "الوكيل الذكي",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+        <path d="M19 14.5l.7 1.9 1.8.7-1.8.7-.7 1.9-.7-1.9-1.8-.7 1.8-.7z" />
+      </svg>
+    ),
+  },
+  {
     id: "profile",
     label: "الملف الشخصي",
     icon: (
@@ -104,26 +114,8 @@ export default function Sidebar({ current, onNavigate }: SidebarProps) {
         })}
       </nav>
 
-      {/* Bottom — AI Button + User Info */}
+      {/* Bottom — User Info */}
       <div style={{ padding: "16px 16px 24px", borderTop: "1px solid #E5E7EB" }}>
-        <button
-          onClick={() => onNavigate("ai")}
-          style={{
-            width: "100%", padding: "10px 14px", borderRadius: 8,
-            border: current === "ai" ? "1px solid #1B8354" : "1px solid #E5E7EB",
-            background: current === "ai" ? "#F3FCF6" : "#fff",
-            cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            color: current === "ai" ? "#166A45" : "#111927", fontSize: 13, fontWeight: 600, fontFamily: "inherit",
-            marginBottom: 14, transition: "background 0.18s",
-          }}
-          onMouseEnter={(e) => { if (current !== "ai") e.currentTarget.style.background = "#F3FCF6"; }}
-          onMouseLeave={(e) => { if (current !== "ai") e.currentTarget.style.background = "#fff"; }}
-        >
-          <span style={{ fontSize: 14 }}>✨</span>
-          المساعد الاستشاري AI
-        </button>
-
         <div style={{ display: "flex", alignItems: "center", gap: 10, justifyContent: "flex-end" }}>
           <div style={{ textAlign: "end" }}>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>مستخدم Wafier</p>
