@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { runEvaluationScenario } from "../services/data-service";
+import { runEvaluationScenario, demoService } from "../services/data-service";
 
 function DemoScenarioButton() {
   const queryClient = useQueryClient();
@@ -64,6 +64,25 @@ export default function AboutScreen({ onBack }: { onBack?: () => void }) {
             Step 1: ميزانية 500 ر.س · Step 2: موجة حر · Step 3: MLFO + Level 2 alert
           </p>
           <DemoScenarioButton />
+        </div>
+
+        
+        <div style={{ background: "#fff", borderRadius: 16, padding: 20, marginBottom: 16, border: "1px solid #E5E7EB" }}>
+          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>سينario الجدل (Controversy)</h2>
+          <p style={{ margin: "0 0 8px", fontSize: 13, color: "hsl(var(--color-gray-600))", lineHeight: 1.7 }}>
+            بعد موجة الحر، يرفض النظام استخدام بيانات الاستهلاك للإعلانات المستهدفة وفق PDPL (تحديد الغرض) ومبادئ SDAIA.
+            الإجراء يُسجّل في سجل التدقيق ويظهر كإشعار سياسة من قاعدة المعرفة.
+          </p>
+        </div>
+
+        <div style={{ background: "#fff", borderRadius: 16, padding: 20, marginBottom: 16, border: "1px solid #E5E7EB" }}>
+          <h2 style={{ fontSize: 16, margin: "0 0 8px" }}>سجل التدقيق (Demo)</h2>
+          <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.8 }}>
+            {(demoService.getAuditLog?.() ?? []).slice(0, 8).map((e: any) => (
+              <li key={e.id}><strong>{e.action}</strong>: {e.detail}</li>
+            ))}
+            {(demoService.getAuditLog?.() ?? []).length === 0 && <li>شغّل سيناريو موجة الحر لعرض أحداث SRC→C→PP→M→P→D</li>}
+          </ul>
         </div>
 
         <div style={{ background: "#fff", borderRadius: 16, padding: 20, marginBottom: 16, border: "1px solid #E5E7EB" }}>

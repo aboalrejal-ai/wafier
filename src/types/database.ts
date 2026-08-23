@@ -81,6 +81,8 @@ export interface DashboardData {
   historicalBills: { month: string; value: number }[];
   devices: { type: string; label: string; pct: number; cost: number }[];
   sensors: { icon: string; label: string; value: string; unit: string; status: string }[];
+  auditLog?: { id: string; at: string; action: string; detail: string }[];
+  lastAnonymizedId?: string | null;
 }
 
 export interface Database {

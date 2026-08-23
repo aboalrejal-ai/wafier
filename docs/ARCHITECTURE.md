@@ -1,22 +1,34 @@
 # Wafier Architecture
 
 ```
-SRC (meter, weather, budget)
-  → Collector (ingest-meter-reading, fetch-weather)
+SRC (meter sim, weather, budget)
+  → Collector (ingest / heatwave aggregate)
   → Preprocessor (gap-fill, anonymize)
-  → Model Node (predict-bill + MLFO)
-  → Policy Node (evaluate-policy → L1/L2 alerts)
-  → Distributor (notifications)
+  → Model + MLFO (predictBill, season profile)
+      ↳ Sandbox path (no alerts)
+  → Policy (L1 / L1b / L2, HITL override)
+  → Distributor (in-app notifications)
   → SINK (React UI)
 ```
 
 ## Stack
 
-- **Frontend:** React 19, Vite 8, Tailwind v4, React Router, Zustand, TanStack Query
-- **Backend:** Supabase (Auth, Postgres, Edge Functions, Realtime)
-- **ML:** TypeScript predictor with seasonal profiles (summer/winter via MLFO)
-- **RAG:** Regulation chunks + retrieval + LLM fallback
+- **Frontend:** React 19, Vite, Tailwind v4, React Router, Zustand, TanStack Query  
+- **Backend (optional):** Supabase Auth / Postgres / Edge function stubs  
+- **Default path:** Demo mode (`localStorage` + client engines) when Supabase env unset  
 
-## Demo Mode
+## Engines
 
-When `VITE_SUPABASE_URL` is unset, the app runs in **demo mode** using localStorage and client-side services — same business logic, no cloud required.
+| Module | Path |
+|--------|------|
+| Financial | `src/lib/financial-engine.ts` |
+| ML / MLFO | `src/lib/ml-predictor.ts` |
+| Policy | `src/lib/policy-engine.ts` |
+| Preprocessor | `src/lib/preprocessor.ts` |
+| RAG | `src/lib/rag-chat.ts` |
+| Demo orchestration | `src/services/demo-service.ts` |
+
+## Deployment
+
+Static SPA → Hostinger (Vite, Node 22, output `dist`, empty start command).  
+`public/.htaccess` for React Router on Apache.

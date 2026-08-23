@@ -333,6 +333,17 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
         />
       )}
       <div style={{ padding: "8px 16px 0", display: "flex", gap: 8, justifyContent: "center" }}>
+                <button
+          onClick={() => {
+            const until = new Date(Date.now() + 2 * 3600 * 1000).toISOString();
+            demoService.setAlertOverride(until);
+            alert("تم إيقاف التنبيهات ساعتين (Human-in-the-loop).");
+          }}
+          style={{ background: "none", border: "1px solid hsl(var(--color-sa-200))", borderRadius: 10, padding: "8px 12px", color: "hsl(var(--color-sa-700))", fontSize: 12, cursor: "pointer", fontFamily: "inherit", marginInlineEnd: 8 }}
+        >
+          إيقاف التنبيهات ساعتين (HITL)
+        </button>
+
         <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>عن Wafier</button>
         <button onClick={async () => { await signOut(); window.location.href = "/login"; }} style={{ background: "none", border: "none", color: "hsl(var(--color-gray-500))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>تسجيل الخروج</button>
       </div>

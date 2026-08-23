@@ -1,84 +1,76 @@
 # Wafier — Proactive Bill Prediction and Budget Planning
 
-Arabic RTL FinTech app for household energy budget management (ITU-T Y.3172 aligned).
+Arabic RTL FinTech app for household energy budget management (**ITU-T Y.3172** aligned).
+
+## Demo video
+
+> **TODO (team):** paste public URL after recording (≤7 min). Script: [docs/DEMO-VIDEO-SCRIPT.md](docs/DEMO-VIDEO-SCRIPT.md)
 
 ## Team
 
-- Fatima Alsultan, Jorry Alfalah, Noor Alshammari, Shahad Alsultan
-- Contact: King Faisal Budget Planning
+- Fatima Alsultan, Jorry Alfalah, Noor Alshammari, Shahad Alsultan  
+- King Faisal University — Budget Planning  
 
-## Quick Start
+## Problem → Solution
+
+Families hit bill shock after peak cooling months. Wafier forecasts SAR spend, compares to a monthly budget, raises graduated alerts, and answers questions with **citations from a Saudi/energy policy knowledge base**.
+
+## Quick start
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Demo mode works without Supabase — use any email + password (4+ chars).
+Demo mode works without Supabase — any email + password (4+ chars), then PDPL consent.
 
-## Supabase Setup (Production)
+## Hackathon submission pack
 
-1. Create Supabase project
-2. Copy `.env.example` → `.env.local`:
-   ```
-   VITE_SUPABASE_URL=https://xxx.supabase.co
-   VITE_SUPABASE_ANON_KEY=eyJ...
-   ```
-3. Run migration: `supabase db push`
-4. Deploy edge functions: `supabase functions deploy`
+| Deliverable | Link |
+|-------------|------|
+| Technical report | [docs/TECHNICAL-REPORT.md](docs/TECHNICAL-REPORT.md) |
+| Knowledge base | [docs/KNOWLEDGE-BASE.md](docs/KNOWLEDGE-BASE.md) |
+| Evaluation steps | [docs/EVALUATION-SCENARIO.md](docs/EVALUATION-SCENARIO.md) |
+| Checklist | [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md) |
+| Original PDF | [docs/submission/wafeer-technical-report-original.pdf](docs/submission/wafeer-technical-report-original.pdf) |
 
-## Architecture
+## Y.3172 (implemented)
 
-```
-SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor → SINK (React UI)
-```
+`SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor (in-app) → SINK`
 
-- **Smart Financial Engine:** `src/lib/financial-engine.ts` — kWh → SAR + VAT
-- **ML + MLFO:** `src/lib/ml-predictor.ts` — seasonal profiles
-- **Policy:** `src/lib/policy-engine.ts` — L1 (50%), L2 proactive
-- **RAG:** `src/lib/rag-chat.ts` — Saudi energy regulations
+- Financial: `src/lib/financial-engine.ts`  
+- ML + MLFO: `src/lib/ml-predictor.ts`  
+- Policy: `src/lib/policy-engine.ts`  
+- RAG: `src/lib/rag-chat.ts`  
 
-## Evaluation Scenario (Demo)
+## Evaluation demo
 
-1. Login → PDPL consent → Dashboard (500 SAR budget)
-2. Profile → run heatwave simulation via `runEvaluationScenario()` in console:
-   ```js
-   // Or use About page demo button
-   ```
-3. Level 2 alert + MLFO summer profile activates
+1. Login → consent → Dashboard (500 SAR budget)  
+2. About → **تشغيل سيناريو موجة الحر**  
+3. Notifications: Level-2 + KB anti-ads guard; About shows audit log  
 
 ## Scripts
 
-- `pnpm dev` — development server
-- `pnpm build` — production build
-- `pnpm test` — unit tests
+- `pnpm dev` — development  
+- `pnpm build` — production  
+- `pnpm test` — unit tests (financial / policy / MLFO / heatwave)  
 
 ## Hostinger (Deploy Web App from GitHub)
 
-This project is a **static React SPA**, not a Node.js server app.
+Static React SPA (not a Node server).
 
 | Setting | Value |
 |--------|--------|
 | Framework | **Vite** |
-| Node version | **22** (matches `.mise.toml`; use 20 if 22 is unavailable) |
-| Install / build | `pnpm install && pnpm build` (or `npm install && npm run build`) |
-| Output directory | **`dist`** |
-| Start command | **Leave empty** — static files only; no long-running Node process |
+| Node | **22** (or 20) |
+| Build | `pnpm install && pnpm build` |
+| Output | **`dist`** |
+| Start command | **empty** |
 
-**Do not choose:** Next.js, Express, or Custom Node server — there is no backend in this repo.
+Env (build-time): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (optional for demo).
 
-**Backend / database:** Supabase (hosted separately). Set build-time env vars in Hostinger:
+## Limits (do not over-claim)
 
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-- Optional: `VITE_OPENWEATHER_API_KEY`, `VITE_OPENAI_API_KEY`
-
-`public/.htaccess` is included for React Router on Apache (shared/cloud hosting). After deploy, test deep links such as `/dashboard` and `/login`.
-
-**Recommended hosting:** Hostinger Cloud or Business with GitHub auto-deploy (pull from `main`). VPS is not required.
-
-## Docs
-
-- [SPEC.md](docs/SPEC.md) — product specification
-- [GAP-MATRIX.md](docs/GAP-MATRIX.md) — prototype vs spec
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — technical architecture
+- Meter data is simulated in demo mode  
+- Forecast is seasonal heuristics, not a trained deep model  
+- Alerts are in-app only (no push/email)  

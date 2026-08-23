@@ -1,14 +1,17 @@
+import { ragChat } from "../../lib/rag-chat";
+import { useDashboardData } from "../../hooks/useDashboardData";
 import { useState, useRef, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Toast from "../ui/Toast";
 
-type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
+type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 type Effort = "fast" | "balanced" | "high";
 
 interface Message {
   role: "user" | "ai";
   text: string;
   time: string;
+  sources?: { title: string; source: string; url?: string }[];
 }
 
 const effortLabels: Record<Effort, string> = {
@@ -132,6 +135,7 @@ interface DesktopAIAssistantProps {
 }
 
 export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantProps) {
+  const { spend, budget, forecast } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>([
     { role: "ai", text: "مرحباً! أنا مساعد Wafier الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
   ]);
@@ -154,9 +158,12 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setIsTyping(true);
     const delay = effort === "fast" ? 600 : effort === "balanced" ? 900 : 1400;
-    setTimeout(() => {
-      const reply = aiReplies[text.trim()] ?? "شكراً على سؤالك! بناءً على بيانات استهلاكك، أنصحك بمراجعة إعدادات المكيف وتقليل ساعات الاستخدام خلال فترة الذروة للحصول على أفضل توفير ممكن.";
-      setMessages((prev) => [...prev, { role: "ai", text: reply, time: getTime() }]);
+    setTimeout(async () => {
+      const result = await ragChat(text.trim(), { spend, budget, forecast });
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: result.reply, time: getTime(), sources: result.sources },
+      ]);
       setIsTyping(false);
     }, delay);
   };
@@ -250,6 +257,20 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     fontSize: 14, lineHeight: 1.7, textAlign: "end", whiteSpace: "pre-line",
                   }}>
                     {m.text}
+                    {m.sources && m.sources.length > 0 && (
+                      <div style={{ marginTop: 8, fontSize: 11, opacity: 0.85 }}>
+                        {m.sources.map((s, i) => (
+                          <div key={i}>
+                            📎 {s.title} — {s.source}{" "}
+                            {s.url && (
+                              <a href={s.url} target="_blank" rel="noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>
+                                رابط المصدر
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <p style={{ margin: "4px 4px 0", fontSize: 11, color: "#4D5761" }}>{m.time}</p>
                 </div>

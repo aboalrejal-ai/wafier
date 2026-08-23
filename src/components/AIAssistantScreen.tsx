@@ -4,13 +4,13 @@ import BottomNav from "./BottomNav";
 import { ragChat } from "../lib/rag-chat";
 import { useDashboardData } from "../hooks/useDashboardData";
 
-type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai";
+type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 
 interface Message {
   role: "user" | "ai";
   text: string;
   time: string;
-  sources?: { title: string; source: string }[];
+  sources?: { title: string; source: string; url?: string }[];
 }
 
 type Effort = "fast" | "balanced" | "high";
@@ -333,6 +333,20 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 whiteSpace: "pre-line",
               }}>
                 {m.text}
+                    {m.sources && m.sources.length > 0 && (
+                      <div style={{ marginTop: 8, fontSize: 11, opacity: 0.85 }}>
+                        {m.sources.map((s, i) => (
+                          <div key={i}>
+                            📎 {s.title} — {s.source}{" "}
+                            {s.url && (
+                              <a href={s.url} target="_blank" rel="noreferrer" style={{ color: "inherit", textDecoration: "underline" }}>
+                                رابط المصدر
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
               </div>
               <p style={{ margin: "4px 4px 0", fontSize: 10, color: "#4D5761" }}>{m.time}</p>
             </div>

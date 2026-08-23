@@ -1,4 +1,4 @@
-import type { AppNotification } from "../types/database";
+import type { AppNotification } from "../../types/database";
 
 interface NotificationsPanelProps {
   onClose: () => void;

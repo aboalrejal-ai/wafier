@@ -1,24 +1,22 @@
-# Gap Matrix — Prototype vs Specification
+# Gap Matrix — Spec claims vs code (honest)
 
-| # | Spec Requirement | Prototype (Before) | Status |
-|---|------------------|-------------------|--------|
-| 1 | Level 1 at 50% budget | Showed 69% | Fixed — 50%/75%/L2 thresholds |
-| 2 | RAG on Saudi energy regulations | Static replies | Fixed — RAG service + citations |
-| 3 | Smart Financial Engine kWh→SAR | Hardcoded SAR | Fixed — financial-engine module |
-| 4 | MLFO summer/winter switch | Missing | Fixed — ml-predictor + MLFO |
-| 5 | ML Sandbox | Missing | Fixed — sandbox flag in schema |
-| 6 | 7-Node Pipeline | UI only | Fixed — backend services + docs |
-| 7 | Unauthorized access blocked | Missing | Fixed — RLS + Auth |
-| 8 | PDPL consent | Text only | Fixed — ConsentScreen + Privacy |
-| 9 | Human-in-the-loop override | Missing | Fixed — alert settings |
-| 10 | About/Contact page | Missing | Fixed — AboutScreen |
-| 11 | Desktop login modals | Unwired | Fixed |
-| 12 | Desktop notifications | Missing | Fixed |
-| 13 | Desktop set budget | Unwired | Fixed |
-| 14 | Desktop edit profile | Unwired | Fixed |
-| 15 | Sidebar logout | Missing | Fixed |
-| 16 | Budget propagates globally | Local only | Fixed — Zustand + DB |
-| 17 | Period picker filters chart | UI only | Fixed |
-| 18 | Dead "عرض الكل" buttons | No handler | Fixed — navigate to forecast |
-| 19 | Orphan AIAssistantPanel | Unused | Removed |
-| 20 | DESIGN.md Tailwind tokens | Inline styles | Partial — tokens in index.css |
+| # | Requirement | Status | Notes |
+|---|-------------|--------|-------|
+| 1 | L1 at 50% budget | **Complete** | `evaluatePolicy` |
+| 2 | L1b 75% / L2 proactive | **Complete** | forecast>budget or temp≥40 |
+| 3 | RAG + citations | **Partial** | Keyword RAG + real URLs; no embeddings/LLM unless key set |
+| 4 | Financial kWh→SAR+VAT | **Complete** | `financial-engine.ts` |
+| 5 | MLFO season switch | **Complete** | rule-based, not trained NN |
+| 6 | ML Sandbox | **Partial** | `isSandbox` path in demo evaluation |
+| 7 | Full 7-node cloud pipeline | **Partial** | Client demo complete; edge ingest stub |
+| 8 | Auth / RLS | **Partial** | Demo auth; SQL RLS when Supabase used |
+| 9 | PDPL consent UI | **Complete** | Consent screen |
+| 10 | Anonymization on eval | **Complete** | called in heatwave scenario |
+| 11 | HITL override | **Complete** | Profile button + `setAlertOverride` |
+| 12 | Push/email distributor | **Stub / not claimed** | In-app only |
+| 13 | Live smart meter | **Missing** | simulated |
+| 14 | Desktop parity RAG | **Complete** | Desktop uses `ragChat` |
+| 15 | Technical report pack | **Complete** | `docs/TECHNICAL-REPORT.md` |
+| 16 | Demo video | **Missing** | script ready; URL TBD |
+| 17 | Gap-fill preprocessor | **Complete** | `preprocessor.ts` |
+| 18 | Audit log for judges | **Complete** | About page + demo service |
