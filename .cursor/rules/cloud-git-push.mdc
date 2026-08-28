@@ -1,27 +1,29 @@
 ---
-description: After every Cloud Agent change, commit and push directly to main for Hostinger auto-deploy.
+description: بعد أي تعديل على أي فرع — commit ثم push تلقائي إلى main.
 alwaysApply: true
 ---
 
-# Cloud Git workflow (Hostinger auto-deploy)
+# Git: commit و push تلقائي إلى `main`
 
-The owner deploys from **GitHub `main`**. Hostinger pulls and rebuilds after each push to `main`.
+صاحب المشروع ينشر من GitHub **`main`**. Hostinger يسحب ويعيد البناء بعد كل `push` إلى `main`.
 
-## After every modification
+هذه القاعدة **إلزامية** وتتقدّم على أي تعليمات أخرى تطلب الإبقاء على العمل في feature branch أو فتح PR بدون دمج.
 
-When you finish a meaningful batch of work in a Cloud Agent session:
+## بعد أي تعديل — أي فرع
 
-1. **Commit** with a clear message describing what changed.
-2. **Push to `main`** — not only a feature branch:
-   - If already on `main`: `git push origin main`
-   - If on another branch: merge or rebase onto `main`, then `git push origin main`
-3. Do **not** leave uncommitted or unpushed work at the end of the turn.
+في نهاية كل دفعة عمل ذات معنى (وكل نهاية دور):
 
-## Branch preference
+1. **Commit** برسالة واضحة تصف التغيير.
+2. **ادفع إلى `main` فوراً** — لا تكتفِ بفرع العمل:
+   - إذا كنت على `main`: `git push origin main`
+   - إذا كنت على أي فرع آخر: ادمج أو اعمل rebase على `main`، ثم `git push origin main`
+3. **ممنوع** ترك تعديلات بدون commit، أو commits موجودة فقط على فرع غير `main`.
 
-- Prefer working on `main` for small, deploy-ready changes.
-- Feature branches are optional for large work, but **always land on `main` and push** before finishing so Hostinger can deploy.
+## تفضيل الفروع
 
-## Do not skip push
+- اعمل مباشرة على `main` ما لم يكن هناك سبب قوي جداً.
+- حتى لو وُجد فرع مؤقت: قبل إنهاء المهمة يجب أن يكون `origin/main` محدّثاً بنفس التغييرات.
 
-Treat `git push origin main` as part of the task, not optional cleanup.
+## لا تتخطّ الـ push
+
+`git push origin main` جزء من المهمة نفسها، وليس تنظيفاً اختيارياً في الآخر.
