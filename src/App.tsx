@@ -16,7 +16,7 @@ import DesktopDashboard from "./components/desktop/DesktopDashboard";
 import DesktopForecast from "./components/desktop/DesktopForecast";
 import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
-import { signIn, signUp, resetPassword, signInWithGoogle, isSupabaseConfigured } from "./services/data-service";
+import { signIn, signUp, resetPassword, signInWithGoogle, isSupabaseConfigured, getSession } from "./services/data-service";
 import { useDashboard } from "./hooks/useDashboard";
 import { initPushRegistration } from "./lib/notification-distributor";
 
@@ -59,6 +59,10 @@ function LoginRoute() {
     if (error) throw error;
     if (!isSupabaseConfigured) setDemoSession(email);
     await refreshSession();
+    const session = await getSession();
+    if (!session?.user) {
+      throw new Error("تم إنشاء الحساب. افتح بريدك لتأكيد الإيميل ثم سجّل الدخول.");
+    }
     navigate("/consent");
   };
 

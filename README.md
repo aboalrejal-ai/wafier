@@ -22,7 +22,7 @@ pnpm install
 pnpm dev
 ```
 
-Demo mode works without Supabase — any email + password (4+ chars), then PDPL consent.
+The app talks to the live **Wafier** Supabase project (email + Google). Demo/local identity is only used if those keys are missing. After signup, confirm the email if prompted, then PDPL consent.
 
 ## Hackathon submission pack
 
