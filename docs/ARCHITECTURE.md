@@ -7,13 +7,14 @@ SRC (meter sim, weather, budget)
   → Model + MLFO (predictBill, season profile)
       ↳ Sandbox path (no alerts)
   → Policy (L1 / L1b / L2, HITL override)
-  → Distributor (in-app notifications)
+  → Distributor (in-app + Web Notification + Capacitor Local/Push)
   → SINK (React UI)
 ```
 
 ## Stack
 
 - **Frontend:** React 19, Vite, Tailwind v4, React Router, Zustand, TanStack Query  
+- **Native wrap:** Capacitor 8 (`sa.wafier.app`) — Android في المستودع؛ iOS عبر `cap add ios` على macOS  
 - **Backend (optional):** Supabase Auth / Postgres / Edge function stubs  
 - **Default path:** Demo mode (`localStorage` + client engines) when Supabase env unset  
 
@@ -27,6 +28,7 @@ SRC (meter sim, weather, budget)
 | Preprocessor | `src/lib/preprocessor.ts` |
 | RAG | `src/lib/rag-chat.ts` |
 | Demo orchestration | `src/services/demo-service.ts` |
+| Notification distributor | `src/lib/notification-distributor.ts` |
 
 ## Deployment
 

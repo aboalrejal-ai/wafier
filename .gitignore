@@ -12,6 +12,18 @@ logs/
 .claude-replay.*
 .tmp-*
 
+# Capacitor native build artifacts
+android/.gradle/
+android/app/build/
+android/app/release/
+android/build/
+android/local.properties
+android/captures/
+android/.idea/
+ios/Pods/
+ios/DerivedData/
+ios/*.xcworkspace/xcuserdata/
+
 # Platform-managed agentplat state, not project source. In the
 # client-initiated single-repo workspace layout (make's `Path: "."` spec) the
 # repo root IS the workspace root, so these land inside this repo rather than

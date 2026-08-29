@@ -27,11 +27,31 @@ export function selectSeasonProfile(tempC: number): SeasonProfile {
   return "baseline";
 }
 
-const SEASON_MULTIPLIERS: Record<SeasonProfile, number> = {
+export const SEASON_MULTIPLIERS: Record<SeasonProfile, number> = {
   summer: 1.35,
   winter: 0.85,
   baseline: 1.0,
 };
+
+export function getSeasonCopy(profile: SeasonProfile): { title: string; explanation: string; winterTip?: string } {
+  if (profile === "summer") {
+    return {
+      title: "نموذج الصيف نشط",
+      explanation: "MLFO: نموذج الصيف نشط — موجة حر ترفع استهلاك المكيف",
+    };
+  }
+  if (profile === "winter") {
+    return {
+      title: "ملف الشتاء نشط",
+      explanation: "MLFO: نموذج الشتاء نشط — استهلاك منخفض نسبياً",
+      winterTip: "التكييف ينخفض في هذا الموسم؛ راقب أجهزة التدفئة حتى تبقى الفاتورة ضمن الميزانية.",
+    };
+  }
+  return {
+    title: "النموذج الأساسي",
+    explanation: "MLFO: النموذج الأساسي — ظروف معتدلة",
+  };
+}
 
 export function predictBill(input: ForecastInput): ForecastResult {
   const profile = selectSeasonProfile(input.temperature);
@@ -41,12 +61,8 @@ export function predictBill(input: ForecastInput): ForecastResult {
   const projectedSar = kwhToSar(projectedKwh);
 
   const confidence = input.isSandbox ? 0.75 : 0.88;
-  const explanation =
-    profile === "summer"
-      ? "MLFO: نموذج الصيف نشط — موجة حر ترفع استهلاك المكيف"
-      : profile === "winter"
-        ? "MLFO: نموذج الشتاء نشط — استهلاك منخفض نسبياً"
-        : "MLFO: النموذج الأساسي — ظروف معتدلة";
+  const copy = getSeasonCopy(profile);
+  const explanation = copy.explanation;
 
   return {
     predictedSar: Math.round(projectedSar * 100) / 100,

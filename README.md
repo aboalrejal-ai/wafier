@@ -73,4 +73,11 @@ Env (build-time): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (optional for de
 
 - Meter data is simulated in demo mode  
 - Forecast is seasonal heuristics, not a trained deep model  
-- Alerts are in-app only (no push/email)  
+- Device alerts: Web Notification API + Capacitor Local Notifications (remote FCM يحتاج `google-services.json`)
+
+## التطبيق الأصلي (Capacitor)
+
+- الإعداد: `capacitor.config.ts` — `appId: sa.wafier.app`
+- أندرويد: مجلد `android/` جاهز. بعد البناء: `pnpm cap:sync`
+- iOS: نفّذ `pnpm exec cap add ios` على جهاز macOS
+  

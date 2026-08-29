@@ -24,4 +24,4 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 
 - Video URL not recorded yet  
 - Model is heuristic seasonal (not trained weights)  
-- Distributor is in-app only  
+- Distributor: in-app + Web/Local notifications (remote FCM يحتاج مفاتيح)  

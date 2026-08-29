@@ -9,7 +9,7 @@
 
 1. Open **About** (`عن Wafier` from Profile).
 2. Press **تشغيل سيناريو موجة الحر**.
-3. Observe audit trail on About (SRC → Collector → Sandbox → PP anonymize → MLFO summer → Policy L2 → Distributor in-app).
+3. Observe audit trail on About (SRC → Collector → Sandbox → PP anonymize → MLFO summer → Policy L2 → Distributor).
 4. Open **Notifications**: Level-2 / heatwave + KB anti-ads guard notice.
 5. Dashboard/Forecast: higher kWh / summer season profile.
 
@@ -25,5 +25,5 @@ Profile → **إيقاف التنبيهات ساعتين (HITL)** calls `setAler
 ## Not demonstrated in UI (documented limits)
 
 - Live AMI meter API
-- Push/email distributor
+- Remote FCM/APNs من سيرفر (التسجيل جاهز ويحتاج مفاتيح Firebase)
 - RLS unauthorized-access live probe (schema supports RLS when Supabase configured)

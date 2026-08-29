@@ -13,7 +13,7 @@
 | 9 | PDPL consent UI | **Complete** | Consent screen |
 | 10 | Anonymization on eval | **Complete** | called in heatwave scenario |
 | 11 | HITL override | **Complete** | Profile button + `setAlertOverride` |
-| 12 | Push/email distributor | **Stub / not claimed** | In-app only |
+| 12 | Push/email distributor | **Partial** | In-app + Web/Local device notifications; remote FCM يحتاج مفاتيح |
 | 13 | Live smart meter | **Missing** | simulated |
 | 14 | Desktop parity RAG | **Complete** | Desktop uses `ragChat` |
 | 15 | Technical report pack | **Complete** | `docs/TECHNICAL-REPORT.md` |

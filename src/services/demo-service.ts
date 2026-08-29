@@ -16,6 +16,7 @@ import {
   gapFillDailySeries,
 } from "../lib/preprocessor";
 import type { AppNotification, DashboardData, Profile } from "../types/database";
+import { deliverExternalNotification } from "../lib/notification-distributor";
 
 const STORAGE_KEY = "wafier_demo_state";
 
@@ -188,6 +189,7 @@ export class DemoDataService {
       read: false,
       created_at: new Date().toISOString(),
     });
+    void deliverExternalNotification(title, body);
   }
 
   async refreshDashboard(options?: {
@@ -284,18 +286,6 @@ export class DemoDataService {
         value: b.value,
       })),
       devices: forecastResult.deviceBreakdown,
-      sensors: [
-        {
-          icon: "🌡️",
-          label: "عداد الكهرباء الرئيسي",
-          value: this.state.totalKwh.toLocaleString("ar-SA"),
-          unit: "ك.و.س",
-          status: "متصل",
-        },
-        { icon: "💧", label: "عداد المياه", value: "18.6", unit: "م³", status: "متصل" },
-        { icon: "🔥", label: "مقياس الغاز", value: "32.4", unit: "م³", status: "متصل" },
-        { icon: "☀️", label: "الألواح الشمسية", value: "4.8", unit: "ك.و.س", status: "متصل" },
-      ],
       auditLog: this.state.auditLog,
       lastAnonymizedId: this.state.lastAnonymizedId,
     } as DashboardData;

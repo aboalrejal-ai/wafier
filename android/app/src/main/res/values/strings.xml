@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wafier</string>
+    <string name="title_activity_main">Wafier</string>
+    <string name="package_name">sa.wafier.app</string>
+    <string name="custom_url_scheme">sa.wafier.app</string>
+</resources>

@@ -16,7 +16,6 @@ export function useDashboardData() {
     seasonProfile: d?.forecast?.season_profile ?? "baseline",
     weather: d?.weather ?? { temp_c: 26, humidity: 45, description: "مشمس حار", city: "الرياض" },
     devices: d?.devices ?? [],
-    sensors: d?.sensors ?? [],
     notifications: d?.notifications ?? [],
     historicalBills: d?.historicalBills ?? [],
     currentKwh: d?.currentKwh ?? 0,

@@ -121,12 +121,6 @@ export async function fetchDashboard(): Promise<DashboardData> {
     notifications: notifications ?? [],
     historicalBills: generateHistoricalBills(totalKwh),
     devices: disaggregateDevices(spend),
-    sensors: [
-      { icon: "🌡️", label: "عداد الكهرباء الرئيسي", value: totalKwh.toLocaleString("ar-SA"), unit: "ك.و.س", status: "متصل" },
-      { icon: "💧", label: "عداد المياه", value: "18.6", unit: "م³", status: "متصل" },
-      { icon: "🔥", label: "مقياس الغاز", value: "32.4", unit: "m³", status: "متصل" },
-      { icon: "☀️", label: "الألواح الشمسية", value: "4.8", unit: "ك.و.س", status: "متصل" },
-    ],
   };
 }
 

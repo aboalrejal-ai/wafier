@@ -2,6 +2,7 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import NotificationsPanel from "../panels/NotificationsPanel";
 import SetBudgetModal from "../modals/SetBudgetModal";
+import SeasonProfileCard from "../SeasonProfileCard";
 import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { useBudgetMutation } from "../../hooks/useDashboard";
@@ -15,7 +16,7 @@ interface DesktopForecastProps {
 export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
-  const { budget, forecast, devices, notifications, seasonProfile } = useDashboardData();
+  const { budget, forecast, devices, notifications, seasonProfile, weather } = useDashboardData();
   const saveBudget = useBudgetMutation();
   const queryClient = useQueryClient();
 
@@ -45,9 +46,13 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
           <div style={{ textAlign: "end" }}>
             <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
             <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-              MLFO: {seasonProfile} — توقع {forecast.toFixed(2)} ر.س
+              توقع {forecast.toFixed(2)} ر.س ضمن ميزانية {budget} ر.س
             </p>
           </div>
+        </div>
+
+        <div style={{ marginBottom: 20 }}>
+          <SeasonProfileCard variant="desktop" seasonProfile={seasonProfile} temperature={weather.temp_c} />
         </div>
 
         {/* Hero Banner */}

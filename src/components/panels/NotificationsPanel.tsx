@@ -1,4 +1,10 @@
+import { useEffect, useState } from "react";
 import type { AppNotification } from "../../types/database";
+import {
+  getDevicePermissionState,
+  requestDeviceNotificationPermission,
+  type DevicePermissionState,
+} from "../../lib/notification-distributor";
 
 interface NotificationsPanelProps {
   onClose: () => void;
@@ -27,6 +33,19 @@ function formatTime(iso: string) {
 export default function NotificationsPanel({ onClose, notifications, onMarkAllRead, variant = "mobile" }: NotificationsPanelProps) {
   const unread = notifications.filter((n) => !n.read).length;
   const isDesktop = variant === "desktop";
+  const [devicePermission, setDevicePermission] = useState<DevicePermissionState>(() => getDevicePermissionState());
+  const [enabling, setEnabling] = useState(false);
+
+  useEffect(() => {
+    setDevicePermission(getDevicePermissionState());
+  }, []);
+
+  const enableDeviceNotifications = async () => {
+    setEnabling(true);
+    const next = await requestDeviceNotificationPermission();
+    setDevicePermission(next);
+    setEnabling(false);
+  };
 
   return (
     <>
@@ -67,6 +86,38 @@ export default function NotificationsPanel({ onClose, notifications, onMarkAllRe
             {unread > 0 && <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>{unread} غير مقروء</p>}
           </div>
         </div>
+
+        {devicePermission !== "unsupported" && (
+          <div style={{ padding: "0 16px 12px" }}>
+            {devicePermission === "granted" ? (
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-sa-700))", textAlign: "end" }}>إشعارات الجهاز مفعّلة</p>
+            ) : (
+              <button
+                type="button"
+                onClick={enableDeviceNotifications}
+                disabled={enabling || devicePermission === "denied"}
+                style={{
+                  width: "100%",
+                  padding: "10px 12px",
+                  borderRadius: 12,
+                  border: "1px solid hsl(var(--color-sa-200))",
+                  background: "hsl(var(--color-sa-25))",
+                  color: "hsl(var(--color-sa-700))",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  fontFamily: "inherit",
+                  cursor: devicePermission === "denied" ? "not-allowed" : "pointer",
+                }}
+              >
+                {devicePermission === "denied"
+                  ? "الإذن مرفوض — فعّله من إعدادات المتصفح أو الجهاز"
+                  : enabling
+                    ? "جاري التفعيل…"
+                    : "تفعيل إشعارات الجهاز"}
+              </button>
+            )}
+          </div>
+        )}
 
         <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 24px" }}>
           {notifications.map((n) => (

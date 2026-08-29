@@ -38,7 +38,7 @@ const chartData = [
 export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   const period = useAppStore((s) => s.period);
   const setPeriodStore = useAppStore((s) => s.setPeriod);
-  const { profile, budget, spend, remaining, usagePct, sensors, notifications, historicalBills } = useDashboardData();
+  const { profile, notifications, historicalBills } = useDashboardData();
   const { signOut } = useAuth();
   const queryClient = useQueryClient();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -77,7 +77,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               الملف الشخصي
             </h1>
             <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
-              معلوماتك المالية واستهلاكك للطاقة
+              حسابك واستهلاك الطاقة
             </p>
           </div>
 
@@ -165,71 +165,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
                   </svg>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Financial Summary */}
-        <div style={{ margin: "0 16px 16px" }}>
-          <div style={{
-            background: "#fff", borderRadius: 18, padding: "18px",
-            border: "1px solid hsl(var(--color-gray-100))",
-          }}>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>ملخص حسابك المالي</h2>
-              <span style={{ fontSize: 16 }}>💰</span>
-            </div>
-            <p style={{ margin: "0 0 16px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "end" }}>
-              إدارة الطاقة والحلول المالية (وفير) نظام الميزانية الشخصية
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-              {[
-                { label: "الميزانية الشهرية", value: budget.toFixed(2), sub: "الحد الأقصى", color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
-                { label: "المصروف الحالي", value: spend.toFixed(2), sub: `${usagePct}% الميزانية`, color: "hsl(var(--color-sa-600))", bg: "hsl(var(--color-sa-25))" },
-                { label: "المتبقي من الميزانية", value: remaining.toFixed(2), sub: `${(100 - usagePct).toFixed(1)}% من الميزانية`, color: "hsl(var(--color-warning))", bg: "hsl(var(--color-warning) / 0.1)" },
-              ].map((item, i) => (
-                <div key={i} style={{
-                  background: item.bg, borderRadius: 12, padding: "12px 10px", textAlign: "center",
-                  border: `1px solid ${i === 2 ? "hsl(var(--color-warning) / 0.3)" : "hsl(var(--color-sa-100))"}`,
-                }}>
-                  <div style={{ fontSize: 11, color: "hsl(var(--color-gray-600))", marginBottom: 6, lineHeight: 1.3 }}>{item.label}</div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: "hsl(var(--color-gray-950))", marginBottom: 4 }} dir="ltr">{item.value}</div>
-                  <div style={{ fontSize: 10, color: i === 2 ? "hsl(var(--color-warning-text))" : "hsl(var(--color-sa-600))", fontWeight: 600 }}>{item.sub}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Sensors */}
-        <div style={{ margin: "0 16px 16px" }}>
-          <div style={{
-            background: "#fff", borderRadius: 18, padding: "18px",
-            border: "1px solid hsl(var(--color-gray-100))",
-          }}>
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, marginBottom: 4 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>مكان قراءة الحساسات</h2>
-              <span style={{ fontSize: 16 }}>📡</span>
-            </div>
-            <p style={{ margin: "0 0 14px", fontSize: 11, color: "hsl(var(--color-gray-500))", textAlign: "end" }}>
-              حالة أجهزتك واستهلاكك الفعلي للطاقة
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              {sensors.map((s, i) => (
-                <div key={i} style={{
-                  background: "hsl(var(--color-gray-25))", borderRadius: 12, padding: "12px",
-                  border: "1px solid hsl(var(--color-gray-100))", textAlign: "end",
-                }}>
-                  <div style={{ fontSize: 20, marginBottom: 6 }}>{s.icon}</div>
-                  <div style={{ fontSize: 11, color: "hsl(var(--color-gray-600))", marginBottom: 4 }}>{s.label}</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{s.value}</div>
-                  <div style={{ fontSize: 11, color: "hsl(var(--color-gray-500))", marginBottom: 8 }}>{s.unit}</div>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 4 }}>
-                    <span style={{ fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>متصل</span>
-                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: "hsl(var(--color-sa-500))", display: "inline-block" }} />
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

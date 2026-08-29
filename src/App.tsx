@@ -18,6 +18,7 @@ import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
 import { signIn, signUp, resetPassword } from "./services/data-service";
 import { useDashboard } from "./hooks/useDashboard";
+import { initPushRegistration } from "./lib/notification-distributor";
 
 export type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 
@@ -116,6 +117,10 @@ function AppShell() {
 }
 
 export default function AppRouter() {
+  useEffect(() => {
+    void initPushRegistration();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

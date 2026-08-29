@@ -13,7 +13,7 @@
 5. **MLFO** — `selectSeasonProfile` summer/winter/baseline from temperature  
 6. **Sandbox** — Forecast with `isSandbox` without distributor alerts  
 7. **P** — Graduated alerts: L1 50%, L1b 75%, L2 forecast>budget or temp≥40  
-8. **D** — **In-app notifications only**  
+8. **D** — إشعارات داخل التطبيق + Web Notification API + Capacitor Local Notifications (تسجيل Push جاهز ويحتاج `google-services.json` / APNs)  
 9. **SINK** — React mobile + desktop UI  
 
 ## Evaluation scenario

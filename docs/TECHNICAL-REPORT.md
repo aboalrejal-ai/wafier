@@ -47,7 +47,7 @@ The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox
 | **M + MLFO** | `predictBill` + `selectSeasonProfile` (summer/winter) | KAPSARC/KBEAT energy efficiency; MDPI SA forecasting paper |
 | **ML Sandbox** | `isSandbox` forecast without distributor alerts | Y.3172 sandbox; SDAIA transparency |
 | **P (Policy)** | L1 50% / L1b 75% / L2 forecast or heatwave | SDAIA ethics (explainable, non-guaranteed) |
-| **D (Distributor)** | **In-app notifications only** (no push/email claimed) | Consumer-protection style delivery |
+| **D (Distributor)** | إشعارات داخل التطبيق + Web Notification API + Capacitor Local Notifications (تسجيل Push يحتاج FCM/APNs) | توصيل تنبيه للمستخدم داخل وخارج الشاشة |
 | **SINK** | React mobile + desktop UI | Inclusion: Arabic RTL interface |
 | **KB / RAG** | Regulation chunks + URLs in assistant | Full list in `docs/KNOWLEDGE-BASE.md` |
 
@@ -97,4 +97,4 @@ From the team brief (also in original PDF under `docs/submission/`):
 | HITL override UI | Profile “إيقاف التنبيهات ساعتين” |
 | Evaluation UI | `AboutScreen` demo button |
 
-**Distributor:** in-app only. **Video:** see `docs/DEMO-VIDEO-SCRIPT.md` (team records ≤7 min). **Original 5p PDF:** `docs/submission/wafeer-technical-report-original.pdf`.
+**Distributor:** in-app + Web/Local device notifications (remote FCM يحتاج مفاتيح). **Video:** see `docs/DEMO-VIDEO-SCRIPT.md` (team records ≤7 min). **Original 5p PDF:** `docs/submission/wafeer-technical-report-original.pdf`.
