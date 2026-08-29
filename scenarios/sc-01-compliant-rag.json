@@ -1,0 +1,22 @@
+{
+  "id": "sc-01-compliant-rag",
+  "title": "Normal / Compliant — RAG with citations",
+  "synthetic": true,
+  "track": "finance",
+  "trigger": {
+    "type": "rag_query",
+    "query": "كيف أوفر في فاتورة الكهرباء؟"
+  },
+  "expected": {
+    "verdict": "COMPLIANT",
+    "insufficientEvidence": false,
+    "minSources": 1,
+    "sourceDomains": ["kapsarc.org", "sdaia.gov.sa", "kaust.edu.sa"]
+  },
+  "steps": [
+    "Open AI Assistant",
+    "Ask: كيف أوفر في فاتورة الكهرباء؟",
+    "Verify reply includes saving tips",
+    "Verify citation URLs are shown"
+  ]
+}

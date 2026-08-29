@@ -1,5 +1,15 @@
 export type AlertLevel = "level1" | "level1b" | "level2" | "info";
 
+export type PolicyVerdict =
+  | "COMPLIANT"
+  | "VIOLATION"
+  | "AMBIGUITY"
+  | "CONFLICT"
+  | "POTENTIAL_GAP"
+  | "INSUFFICIENT_EVIDENCE";
+
+export type PolicyAction = "PROCEED" | "WARN" | "BLOCK_DATA_USE" | "REQUIRE_HITL";
+
 export interface PolicyInput {
   budgetSar: number;
   currentSpendSar: number;
@@ -15,9 +25,83 @@ export interface PolicyAlert {
   title: string;
   body: string;
   type: "warning" | "info" | "success";
+  verdict?: PolicyVerdict;
+  action?: PolicyAction;
+  recordId?: string;
+  sourceUrl?: string;
 }
 
-export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
+export interface PolicyDecision {
+  verdict: PolicyVerdict;
+  action: PolicyAction;
+  recordId: string;
+  sourceUrl: string;
+  title: string;
+  detail: string;
+}
+
+export interface AdsPolicyRequest {
+  feature: "targeted_ads_from_consumption" | "budget_alerts_only";
+  providerName?: string;
+}
+
+const KB_ADS_RECORD = {
+  id: "PDPL-ADS-001",
+  url: "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+  title: "PDPL — منع إعلانات من بيانات الاستهلاك",
+};
+
+const PDPL_ANON_RECORD = {
+  id: "PDPL-ANON-001",
+  url: "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+  title: "PDPL — إخفاء الهوية للتحليل",
+};
+
+/** Deterministic KB guard — no LLM in decision path. */
+export function evaluateKbGuardPolicy(request: AdsPolicyRequest): PolicyDecision {
+  if (request.feature === "targeted_ads_from_consumption") {
+    return {
+      verdict: "VIOLATION",
+      action: "BLOCK_DATA_USE",
+      recordId: KB_ADS_RECORD.id,
+      sourceUrl: KB_ADS_RECORD.url,
+      title: "حارس سياسة KB — منع الإعلانات",
+      detail: `رفض طلب${request.providerName ? ` من ${request.providerName}` : ""}: بيانات الاستهلاك لا تُستخدم للإعلانات المستهدفة (PDPL تحديد الغرض + SDAIA).`,
+    };
+  }
+  return {
+    verdict: "COMPLIANT",
+    action: "PROCEED",
+    recordId: KB_ADS_RECORD.id,
+    sourceUrl: KB_ADS_RECORD.url,
+    title: "قناة الميزانية فقط",
+    detail: "تنبيهات الميزانية داخل التطبيق — متوافق مع الغرض المصرّح.",
+  };
+}
+
+export function evaluateAnonymizationPolicy(exported: boolean): PolicyDecision {
+  if (!exported) {
+    return {
+      verdict: "INSUFFICIENT_EVIDENCE",
+      action: "REQUIRE_HITL",
+      recordId: PDPL_ANON_RECORD.id,
+      sourceUrl: PDPL_ANON_RECORD.url,
+      title: "تصدير بدون إخفاء هوية",
+      detail: "يجب تطبيق إخفاء الهوية قبل تصدير بيانات الأسرة لمسار ML.",
+    };
+  }
+  return {
+    verdict: "COMPLIANT",
+    action: "PROCEED",
+    recordId: PDPL_ANON_RECORD.id,
+    sourceUrl: PDPL_ANON_RECORD.url,
+    title: "إخفاء هوية مُطبّق",
+    detail: "تم إخفاء معرف الأسرة قبل المعالجة.",
+  };
+}
+
+/** Budget alerting policy (graduated L1/L1b/L2). */
+export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
   if (input.alertOverrideUntil && new Date(input.alertOverrideUntil) > new Date()) {
     return [];
   }
@@ -34,6 +118,10 @@ export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
       title: "تنبيه الميزانية — المستوى 1",
       body: `وصلت إلى ${Math.round(usagePct)}% من ميزانيتك الشهرية (${l1}% عتبة). تبقى ${remaining.toFixed(2)} ر.س.`,
       type: "warning",
+      verdict: "COMPLIANT",
+      action: "WARN",
+      recordId: "SDAIA-ETHICS-001",
+      sourceUrl: "https://sdaia.gov.sa/",
     });
   }
 
@@ -43,6 +131,10 @@ export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
       title: `تحذير الميزانية — ${l2}%`,
       body: `وصلت إلى ${Math.round(usagePct)}% من ميزانيتك. تبقى ${remaining.toFixed(2)} ر.س فقط.`,
       type: "warning",
+      verdict: "COMPLIANT",
+      action: "WARN",
+      recordId: "SDAIA-ETHICS-001",
+      sourceUrl: "https://sdaia.gov.sa/",
     });
   }
 
@@ -52,6 +144,10 @@ export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
       title: "تحذير استباقي — المستوى 2",
       body: `توقعنا ارتفاع فاتورتك إلى ${input.predictedSar.toFixed(2)} ر.س — يتجاوز ميزانيتك ${input.budgetSar} ر.س.`,
       type: "warning",
+      verdict: "COMPLIANT",
+      action: "WARN",
+      recordId: "SDAIA-ETHICS-001",
+      sourceUrl: "https://sdaia.gov.sa/",
     });
   }
 
@@ -61,10 +157,19 @@ export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
       title: "موجة حر متوقعة",
       body: "درجات حرارة مرتفعة (≥40°C). MLFO ينشّط نموذج الصيف — قد يرتفع استهلاك المكيف.",
       type: "warning",
+      verdict: "COMPLIANT",
+      action: "WARN",
+      recordId: "MDPI-FORECAST-001",
+      sourceUrl: "https://www.mdpi.com/1996-1073/16/4/2035",
     });
   }
 
   return alerts;
+}
+
+/** Combined policy evaluation for demo pipeline. */
+export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
+  return evaluateBudgetPolicy(input);
 }
 
 /** PDPL anonymization — hash household id for ML export */

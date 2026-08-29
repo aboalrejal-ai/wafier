@@ -1,0 +1,204 @@
+{
+  "compiled": "2026-08-30",
+  "track": "finance",
+  "records": [
+    {
+      "document_title": "نظام حماية البيانات الشخصية (PDPL)",
+      "issuing_authority": "SDAIA",
+      "policy_category": "data_governance",
+      "section_reference": "نظرة عامة",
+      "content": "ينظم معالجة البيانات الشخصية بما فيها بيانات الاستهلاك المنزلي المرتبطة بفرد محدد.",
+      "source_url": "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+      "is_verified": true,
+      "record_id": "PDPL-OVERVIEW",
+      "y3172_node": "PP"
+    },
+    {
+      "document_title": "PDPL — تحديد الغرض",
+      "issuing_authority": "SDAIA",
+      "policy_category": "data_governance",
+      "section_reference": "الغرض من الجمع",
+      "content": "يجب جمع البيانات لأغراض محددة وصريحة؛ الاستخدام الثانوي (مثل الإعلانات) يتطلب أساساً قانونياً منفصلاً وموافقة.",
+      "source_url": "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+      "is_verified": true,
+      "record_id": "PDPL-PURPOSE",
+      "y3172_node": "P"
+    },
+    {
+      "document_title": "PDPL — إخفاء الهوية للتحليل",
+      "issuing_authority": "SDAIA",
+      "policy_category": "data_governance",
+      "section_reference": "إخفاء الهوية",
+      "content": "قبل تصدير بيانات الأسرة لمسار ML يجب إزالة المعرفات أو استخدام معرفات مجهولة.",
+      "source_url": "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+      "is_verified": true,
+      "record_id": "PDPL-ANON-001",
+      "y3172_node": "PP"
+    },
+    {
+      "document_title": "PDPL — منع إعلانات من بيانات الاستهلاك",
+      "issuing_authority": "SDAIA",
+      "policy_category": "ai_ethics",
+      "section_reference": "تحديد الغرض",
+      "content": "استخدام أنماط استهلاك الكهرباء للإعلانات المستهدفة دون موافقة منفصلة يتجاوز غرض إدارة الميزانية.",
+      "source_url": "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+      "is_verified": true,
+      "record_id": "PDPL-ADS-001",
+      "y3172_node": "P"
+    },
+    {
+      "document_title": "مبادئ أخلاقيات الذكاء الاصطناعي الوطنية",
+      "issuing_authority": "SDAIA",
+      "policy_category": "ai_ethics",
+      "section_reference": "المبادئ",
+      "content": "يجب أن تكون مخرجات الذكاء الاصطناعي شفافة وقابلة للتفسير؛ التوقعات تقديرية وليست ضماناً مالياً.",
+      "source_url": "https://sdaia.gov.sa/",
+      "is_verified": true,
+      "record_id": "SDAIA-ETHICS-001",
+      "y3172_node": "M"
+    },
+    {
+      "document_title": "SDAIA — الإشراف البشري",
+      "issuing_authority": "SDAIA",
+      "policy_category": "human_oversight",
+      "section_reference": "أخلاقيات الذكاء الاصطناعي",
+      "content": "يحق للمستخدم التحكم في التنبيهات الآلية؛ Wafier يوفّر إيقاف التنبيهات مؤقتاً (HITL).",
+      "source_url": "https://sdaia.gov.sa/",
+      "is_verified": true,
+      "record_id": "SDAIA-HITL-001",
+      "y3172_node": "P"
+    },
+    {
+      "document_title": "إطار الخدمات المصرفية المفتوحة",
+      "issuing_authority": "SAMA",
+      "policy_category": "fintech_regulation",
+      "section_reference": "الإطار",
+      "content": "ينظم مشاركة البيانات المالية بموافقة المستهلك؛ حدود Wafier: بيانات العداد ليست مصرفية إلا عند ربط حساب بنكي مستقبلاً.",
+      "source_url": "https://openbanking.sama.gov.sa/index-en.html",
+      "is_verified": true,
+      "record_id": "SAMA-OB-001",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "حماية المستهلك — SAMA",
+      "issuing_authority": "SAMA",
+      "policy_category": "consumer_protection",
+      "section_reference": "قواعد حماية المستهلك",
+      "content": "يجب الإفصاح الواضح للمستهلك؛ يُطبّق مبدأ الإفصاح على تنبيهات التوقع في Wafier.",
+      "source_url": "https://www.sama.gov.sa/en-US/RulesInstructions/Pages/ConsumerProtection.aspx",
+      "is_verified": true,
+      "record_id": "SAMA-CP-001",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "إطار الأمن السيبراني — SAMA",
+      "issuing_authority": "SAMA",
+      "policy_category": "cybersecurity",
+      "section_reference": "CSF",
+      "content": "مرجع لأمن البيانات عند تكامل Wafier مع خدمات مالية مستقبلية.",
+      "source_url": "https://www.sama.gov.sa/en-US/RulesInstructions/CyberSecurity/Cyber%20Security%20Framework/Pages/default.aspx",
+      "is_verified": true,
+      "record_id": "SAMA-CYBER-001",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "مختبر التقنية المالية — CMA",
+      "issuing_authority": "CMA",
+      "policy_category": "fintech_regulation",
+      "section_reference": "Fintech Lab",
+      "content": "بيئة تنظيمية تجريبية لمنتجات FinTech مبتكرة في أسواق المال.",
+      "source_url": "https://fintech.cma.org.sa/",
+      "is_verified": true,
+      "record_id": "CMA-FINTECH-001",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "KAUST وSEC — تعلم آلي لخسائر الشبكة",
+      "issuing_authority": "KAUST / SEC",
+      "policy_category": "energy_utility",
+      "section_reference": "بيان صحفي",
+      "content": "يُشجّع استخدام ML في قطاع الكهرباء السعودي؛ سياق شرعي لتوقعات الاستهلاك.",
+      "source_url": "https://www.kaust.edu.sa/news/kaust-helps-slash-sec-profit-losses-using-ml",
+      "is_verified": true,
+      "record_id": "SEC-KAUST-ML-001",
+      "y3172_node": "SRC"
+    },
+    {
+      "document_title": "الشركة السعودية للكهرباء",
+      "issuing_authority": "SEC",
+      "policy_category": "energy_utility",
+      "section_reference": "البوابة الرسمية",
+      "content": "مزوّد الكهرباء الوطني؛ سياق التعرفة السكنية وخدمات العداد.",
+      "source_url": "https://www.se.com.sa/",
+      "is_verified": true,
+      "record_id": "SEC-PORTAL-001",
+      "y3172_node": "SRC"
+    },
+    {
+      "document_title": "تعرفة الكهرباء السكنية (تنفيذ Wafier)",
+      "issuing_authority": "SEC / KAUST context",
+      "policy_category": "tariff",
+      "section_reference": "شرائح الاستهلاك",
+      "content": "الشريحة الأولى حتى 6000 ك.و.س/شهر بـ 0.18 ر.س/ك.و.س؛ التالية 0.30 ر.س/ك.و.س؛ ضريبة 15%.",
+      "source_url": "https://www.kaust.edu.sa/news/kaust-helps-slash-sec-profit-losses-using-ml",
+      "is_verified": true,
+      "record_id": "SEC-TARIFF-001",
+      "y3172_node": "SRC"
+    },
+    {
+      "document_title": "KAPSARC — كفاءة الطاقة والذكاء الاصطناعي",
+      "issuing_authority": "KAPSARC",
+      "policy_category": "energy_efficiency",
+      "section_reference": "DP00503",
+      "content": "سياق كفاءة الطاقة وتطبيقات الذكاء الاصطناعي في قطاع الطاقة.",
+      "source_url": "https://www.kapsarc.org/media/ip0dt4i1/dp00503-v1.pdf",
+      "is_verified": true,
+      "record_id": "KAPSARC-DP00503",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "KBEAT — تحليل كفاءة المباني",
+      "issuing_authority": "KAPSARC",
+      "policy_category": "energy_efficiency",
+      "section_reference": "KBEAT portal",
+      "content": "نصائح توفير الطاقة في المنازل السعودية: 24-26°C للمكيف، عزل حراري، LED.",
+      "source_url": "https://apps.kapsarc.org/appboard/kbeat/en",
+      "is_verified": true,
+      "record_id": "KBEAT-001",
+      "y3172_node": "KB"
+    },
+    {
+      "document_title": "ML for energy consumption forecasting in KSA",
+      "issuing_authority": "MDPI Energies",
+      "policy_category": "forecasting",
+      "section_reference": "16(4):2035",
+      "content": "مرجع أكاديمي لتوقعات استهلاك الطاقة في السعودية.",
+      "source_url": "https://www.mdpi.com/1996-1073/16/4/2035",
+      "is_verified": true,
+      "record_id": "MDPI-FORECAST-001",
+      "y3172_node": "M"
+    },
+    {
+      "document_title": "DeepMind — تبريد مراكز البيانات",
+      "issuing_authority": "Google DeepMind",
+      "policy_category": "benchmark",
+      "section_reference": "Blog",
+      "content": "مثال على تحسين التبريف بالذكاء الاصطناعي؛ سردي لموجات الحر.",
+      "source_url": "https://deepmind.google/discover/blog/deepmind-ai-reduces-google-data-centre-cooling-energy-by-40/",
+      "is_verified": true,
+      "record_id": "DEEPMIND-COOLING-001",
+      "y3172_node": "M"
+    },
+    {
+      "document_title": "ITU-T Y.3172",
+      "issuing_authority": "ITU-T",
+      "policy_category": "standards",
+      "section_reference": "Recommendation",
+      "content": "إطار خط أنابيب ML: SRC, Collector, PP, Model/MLFO, Sandbox, Policy, Distributor, SINK.",
+      "source_url": "https://www.itu.int/rec/T-REC-Y.3172-201906-I",
+      "is_verified": true,
+      "record_id": "ITU-Y3172-001",
+      "y3172_node": "ALL"
+    }
+  ]
+}

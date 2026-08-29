@@ -1,0 +1,58 @@
+{
+  "framework_version": "2.0",
+  "framework_source": "ITU AI Readiness 2.0 — subset for Wafier hackathon evidence",
+  "wafier_claimed_dimensions": [
+    {
+      "id": 8,
+      "short_name": "data_governance",
+      "name": "Data Governance (PDPL)",
+      "evidence": [
+        "ConsentScreen — explicit PDPL consent",
+        "preprocessor.ts — anonymizeForExport",
+        "kb/records PDPL-*"
+      ],
+      "code_refs": ["src/components/ConsentScreen.tsx", "src/lib/preprocessor.ts"]
+    },
+    {
+      "id": 10,
+      "short_name": "ai_policies",
+      "name": "AI & Policies",
+      "evidence": [
+        "policy-engine.ts — 6 verdicts + KB-ADS-001",
+        "kb/records gaps GAP-01..06",
+        "scenarios/sc-03-ads-controversy.json"
+      ],
+      "code_refs": ["src/lib/policy-engine.ts", "scenarios/"]
+    },
+    {
+      "id": 11,
+      "short_name": "transparency",
+      "name": "Transparency & Explainability",
+      "evidence": [
+        "rag-chat.ts — citations + INSUFFICIENT_EVIDENCE",
+        "UI disclaimer: توقعات تقديرية"
+      ],
+      "code_refs": ["src/lib/rag-chat.ts", "src/components/AIAssistantScreen.tsx"]
+    },
+    {
+      "id": 12,
+      "short_name": "human_ai_collab",
+      "name": "Human–AI Collaboration",
+      "evidence": [
+        "Profile HITL — إيقاف التنبيهات ساعتين",
+        "setAlertOverride in demo-service"
+      ],
+      "code_refs": ["src/components/ProfileScreen.tsx", "src/services/demo-service.ts"]
+    },
+    {
+      "id": 13,
+      "short_name": "deployment",
+      "name": "Deployment Support",
+      "evidence": [
+        "Vite SPA + Hostinger static deploy",
+        "Optional Supabase + Capacitor Android"
+      ],
+      "code_refs": ["README.md", "capacitor.config.ts", "supabase/"]
+    }
+  ]
+}

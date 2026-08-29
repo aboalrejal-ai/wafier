@@ -2,87 +2,64 @@
 
 Arabic RTL FinTech app for household energy budget management (**ITU-T Y.3172** aligned).
 
+**English (judges):** Wafier forecasts monthly electricity spend in SAR from simulated smart-meter kWh, compares against a user budget, runs a deterministic policy node (PDPL/SDAIA guardrails), and answers questions with **verified Saudi policy citations**. Finance track — energy budgeting FinTech.
+
 ## Demo video
 
-> **TODO (team):** paste public URL after recording (≤7 min). Script: [docs/DEMO-VIDEO-SCRIPT.md](docs/DEMO-VIDEO-SCRIPT.md)
+> **TODO (team):** paste public URL after recording (≤7 min + subtitles). Script: [docs/DEMO-VIDEO-SCRIPT.md](docs/DEMO-VIDEO-SCRIPT.md)
 
 ## Team
 
 - Fatima Alsultan, Jorry Alfalah, Noor Alshammari, Shahad Alsultan  
 - King Faisal University — Budget Planning  
 
-## Problem → Solution
-
-Families hit bill shock after peak cooling months. Wafier forecasts SAR spend, compares to a monthly budget, raises graduated alerts, and answers questions with **citations from a Saudi/energy policy knowledge base**.
-
 ## Quick start
 
 ```bash
 pnpm install
 pnpm dev
+pnpm test      # unit tests
+pnpm demo      # hackathon scenarios SC-01/02/03
 ```
-
-The app talks to the live **Wafier** Supabase project (email + Google). Demo/local identity is only used if those keys are missing. After signup, confirm the email if prompted, then PDPL consent.
 
 ## Hackathon submission pack
 
 | Deliverable | Link |
 |-------------|------|
 | Technical report | [docs/TECHNICAL-REPORT.md](docs/TECHNICAL-REPORT.md) |
-| Knowledge base | [docs/KNOWLEDGE-BASE.md](docs/KNOWLEDGE-BASE.md) |
+| Knowledge base JSON | [knowledge-base.json](knowledge-base.json) |
+| Deep research | [docs/research/](docs/research/) |
+| Scenarios | [scenarios/](scenarios/) |
 | Evaluation steps | [docs/EVALUATION-SCENARIO.md](docs/EVALUATION-SCENARIO.md) |
+| Readiness assessment | [docs/HACKATHON-READINESS.md](docs/HACKATHON-READINESS.md) |
 | Checklist | [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md) |
-| Original PDF | [docs/submission/wafeer-technical-report-original.pdf](docs/submission/wafeer-technical-report-original.pdf) |
 
 ## Y.3172 (implemented)
 
-`SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor (in-app) → SINK`
+`SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor → SINK`
 
 - Financial: `src/lib/financial-engine.ts`  
 - ML + MLFO: `src/lib/ml-predictor.ts`  
-- Policy: `src/lib/policy-engine.ts`  
+- Policy (6 verdicts): `src/lib/policy-engine.ts`  
 - RAG: `src/lib/rag-chat.ts`  
 
-## Evaluation demo
+## Hackathon console (in app)
 
-1. Login → consent → Dashboard (500 SAR budget)  
-2. About → **تشغيل سيناريو موجة الحر**  
-3. Notifications: Level-2 + KB anti-ads guard; About shows audit log  
+About → three scenario buttons + links to:
+- `/hackathon/kb` — verified sources
+- `/hackathon/gaps` — GAP-01..06
+- `/hackathon/readiness` — ITU AI Readiness 2.0
 
-## Scripts
+## Environment
 
-- `pnpm dev` — development  
-- `pnpm build` — production  
-- `pnpm test` — unit tests (financial / policy / MLFO / heatwave)  
-
-## Hostinger (Deploy Web App from GitHub)
-
-Static React SPA (not a Node server).
-
-| Setting | Value |
-|--------|--------|
-| Framework | **Vite** |
-| Node | **22** (or 20) |
-| Build | `pnpm install && pnpm build` |
-| Output | **`dist`** |
-| Start command | **empty** |
-
-Env (build-time): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. التطبيق مربوط بمشروع Supabase **Wafier**. أضف في لوحة Supabase → Authentication → URL Configuration:
-
-- Site URL: نطاق Hostinger
-- Redirect URLs: `https://YOUR-DOMAIN/` و `https://YOUR-DOMAIN/consent`
-
-فعّل Google Provider إذا كان زر Google سيستخدم OAuth.
+Copy [`.env.example`](.env.example) — no API keys required for demo mode.
 
 ## Limits (do not over-claim)
 
-- Meter data is simulated in demo mode  
+- Meter data is simulated (GAP-01)  
 - Forecast is seasonal heuristics, not a trained deep model  
-- Device alerts: Web Notification API + Capacitor Local Notifications (remote FCM يحتاج `google-services.json`)
+- Policy decisions are **deterministic code** — LLM optional for explanation only
 
-## التطبيق الأصلي (Capacitor)
+## Hostinger / Capacitor
 
-- الإعداد: `capacitor.config.ts` — `appId: sa.wafier.app`
-- أندرويد: مجلد `android/` جاهز. بعد البناء: `pnpm cap:sync`
-- iOS: نفّذ `pnpm exec cap add ios` على جهاز macOS
-  
+See previous README sections for deploy and Android (`capacitor.config.ts`, `android/`).

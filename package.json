@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "format": "oxfmt",
     "test": "node scripts/test-lib.mjs",
+    "demo": "node scripts/run-demo.mjs",
     "cap:sync": "vite build && cap sync",
     "cap:android": "cap open android"
   },

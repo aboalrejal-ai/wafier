@@ -8,7 +8,12 @@ import {
   predictBill,
   selectSeasonProfile,
 } from "../lib/ml-predictor";
-import { anonymizeHouseholdId, evaluatePolicy } from "../lib/policy-engine";
+import {
+  anonymizeHouseholdId,
+  evaluateKbGuardPolicy,
+  evaluatePolicy,
+  type PolicyDecision,
+} from "../lib/policy-engine";
 import { fetchWeather, simulateMeterReading } from "../lib/weather";
 import {
   anonymizeForExport,
@@ -306,6 +311,54 @@ export class DemoDataService {
     } as DashboardData;
   }
 
+  private applyKbGuardDecision(decision: PolicyDecision) {
+    if (decision.action === "BLOCK_DATA_USE") {
+      this.pushNotification("info", decision.title, decision.detail);
+    }
+    this.audit(
+      "kb-policy",
+      `${decision.verdict}/${decision.action}: ${decision.recordId} → ${decision.sourceUrl}`,
+    );
+  }
+
+  /** SC-02 — PP gap-fill when meter day is missing */
+  async simulateDataGap() {
+    this.state.notifications = [];
+    this.audit("src", "SC-02: تهيئة سلسلة يومية مع يوم مفقود (فجوة عداد)");
+    const series = buildDemoSeriesWithGap(this.state.totalKwh);
+    const gaps = series.filter((p) => p.kwh == null).length;
+    const filled = gapFillDailySeries(series);
+    const anon = anonymizeForExport(this.state.profile.id);
+    this.state.lastAnonymizedId = anon;
+    this.audit(
+      "preprocessor",
+      `PP gap-fill: ${gaps} يوم مفقود → يوم 4 = ${filled[3]?.kwh} ك.و.س؛ anon=${anon}`,
+    );
+    await this.refreshDashboard({ forceTempC: 35 });
+    saveState(this.state);
+    return this.refreshDashboard();
+  }
+
+  /** SC-03 — Controversy: block targeted ads from consumption */
+  async simulateAdsControversy() {
+    this.state.notifications = [];
+    this.audit("src", "SC-03: طلب مزوّد وهمي — تفعيل إعلانات مستهدفة من بيانات الاستهلاك");
+    const decision = evaluateKbGuardPolicy({
+      feature: "targeted_ads_from_consumption",
+      providerName: "مزوّد إعلانات وهمي",
+    });
+    this.applyKbGuardDecision(decision);
+    saveState(this.state);
+    return this.refreshDashboard();
+  }
+
+  /** SC-01 helper — run RAG compliant path (audit only; UI uses assistant) */
+  async simulateCompliantRag() {
+    this.audit("rag", "SC-01: استعلام RAG متوافق — كيف أوفر في فاتورة الكهرباء؟");
+    saveState(this.state);
+    return this.refreshDashboard();
+  }
+
   /** Full evaluation scenario for hackathon demo video */
   async simulateHeatwave() {
     this.state.budgetAmount = 500;
@@ -325,15 +378,12 @@ export class DemoDataService {
 
     const dash = await this.refreshDashboard({ forceTempC: 42, isSandbox: false });
 
-    this.pushNotification(
-      "info",
-      "حارس سياسة KB — منع الإعلانات",
-      "تم رفض استخدام بيانات الاستهلاك للإعلانات المستهدفة (PDPL تحديد الغرض + مبادئ SDAIA). القناة الوحيدة: تنبيهات الميزانية داخل التطبيق.",
-    );
-    this.audit(
-      "kb-policy",
-      `رفض إساءة استخدام البيانات للإعلان؛ anon=${anonymizedId}; MLFO=${dash.forecast?.season_profile}`,
-    );
+    const adsDecision = evaluateKbGuardPolicy({
+      feature: "targeted_ads_from_consumption",
+      providerName: "مزوّد إعلانات وهمي",
+    });
+    this.applyKbGuardDecision(adsDecision);
+    this.audit("heatwave", `موجة حر مكتملة؛ anon=${anonymizedId}; MLFO=${dash.forecast?.season_profile}`);
     saveState(this.state);
     return this.refreshDashboard({ forceTempC: 42 });
   }

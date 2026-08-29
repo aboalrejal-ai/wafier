@@ -5,25 +5,45 @@
 - Demo mode (no Supabase env) is enough.
 - Login with any email + password (≥4 chars) → accept PDPL consent.
 
-## Scenario A — Heatwave (Y.3172 path)
+## SC-01 — Compliant RAG (Normal)
 
-1. Open **About** (`عن Wafier` from Profile).
-2. Press **تشغيل سيناريو موجة الحر**.
-3. Observe audit trail on About (SRC → Collector → Sandbox → PP anonymize → MLFO summer → Policy L2 → Distributor).
-4. Open **Notifications**: Level-2 / heatwave + KB anti-ads guard notice.
-5. Dashboard/Forecast: higher kWh / summer season profile.
+1. Open **About** → **SC-01 — RAG متوافق** (or AI Assistant).
+2. Ask: **كيف أوفر في فاتورة الكهرباء؟**
+3. Verify reply includes saving tips and **citation URLs**.
+4. CLI: `pnpm demo 1`
 
-## Scenario B — Controversy
+## SC-02 — Operational failure (PP gap-fill)
 
-After Step 3, confirm notification: **حارس سياسة KB — منع الإعلانات**  
-Meaning: consumption data must not feed targeted ads (PDPL purpose limitation + SDAIA ethics). Corrective action is **pre-agreed via KB**, not ad-hoc.
+1. About → **SC-02 — فجوة بيانات PP**.
+2. Audit trail shows `preprocessor` gap-fill for missing day.
+3. Dashboard/forecast still loads — **no crash**.
+4. CLI: `pnpm demo 2`
+
+## SC-03 — Controversy (ads)
+
+1. About → **SC-03 — جدل إعلانات**.
+2. Notification: **حارس سياسة KB — منع الإعلانات**.
+3. Audit: `kb-policy` → `VIOLATION` / `BLOCK_DATA_USE` / PDPL-ADS-001.
+4. CLI: `pnpm demo 3`
+
+## Bonus — Heatwave (combined Y.3172 path)
+
+1. About → **موجة حر — سيناريو كامل**.
+2. Sandbox → PP anonymize → MLFO summer → Policy L2 → KB guard.
+3. Notifications + audit log on About.
 
 ## HITL
 
-Profile → **إيقاف التنبيهات ساعتين (HITL)** calls `setAlertOverride` so Policy returns no alerts until expiry.
+Profile → **إيقاف التنبيهات ساعتين (HITL)** → Policy returns no alerts until expiry.
 
-## Not demonstrated in UI (documented limits)
+## Hackathon pages
 
-- Live AMI meter API
-- Remote FCM/APNs من سيرفر (التسجيل جاهز ويحتاج مفاتيح Firebase)
-- RLS unauthorized-access live probe (schema supports RLS when Supabase configured)
+- `/hackathon/kb` — verified sources browser
+- `/hackathon/gaps` — GAP-01..06 matrix
+- `/hackathon/readiness` — ITU Readiness 2.0 dimensions
+
+## Documented limits
+
+- Live AMI meter API (GAP-01)
+- Remote FCM/APNs (needs Firebase keys)
+- ML is heuristic seasonal — not trained NN

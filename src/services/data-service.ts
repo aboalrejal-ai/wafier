@@ -256,4 +256,24 @@ export async function runEvaluationScenario() {
   return fetchDashboard();
 }
 
+export async function runScenarioHeatwave() {
+  if (!isSupabaseConfigured) return demoService.simulateHeatwave();
+  return runEvaluationScenario();
+}
+
+export async function runScenarioDataGap() {
+  if (!isSupabaseConfigured) return demoService.simulateDataGap();
+  return fetchDashboard();
+}
+
+export async function runScenarioAdsControversy() {
+  if (!isSupabaseConfigured) return demoService.simulateAdsControversy();
+  return fetchDashboard();
+}
+
+export async function runScenarioCompliantRag() {
+  if (!isSupabaseConfigured) return demoService.simulateCompliantRag();
+  return fetchDashboard();
+}
+
 export { demoService };

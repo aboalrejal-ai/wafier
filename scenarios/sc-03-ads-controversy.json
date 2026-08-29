@@ -1,0 +1,22 @@
+{
+  "id": "sc-03-ads-controversy",
+  "title": "Controversial — Block targeted ads from consumption data",
+  "synthetic": true,
+  "track": "finance",
+  "trigger": {
+    "type": "policy_request",
+    "feature": "targeted_ads_from_consumption",
+    "providerName": "مزوّد إعلانات وهمي"
+  },
+  "expected": {
+    "verdict": "VIOLATION",
+    "action": "BLOCK_DATA_USE",
+    "recordId": "PDPL-ADS-001",
+    "notificationTitle": "حارس سياسة KB — منع الإعلانات"
+  },
+  "steps": [
+    "About → تشغيل سيناريو الجدل (إعلانات)",
+    "Notification: KB policy guard",
+    "Audit log: kb-policy VIOLATION"
+  ]
+}

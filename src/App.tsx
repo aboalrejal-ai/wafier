@@ -5,6 +5,9 @@ import { AuthProvider, useAuth, setDemoSession } from "./contexts/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ConsentScreen from "./components/ConsentScreen";
 import AboutScreen from "./components/AboutScreen";
+import GapsScreen from "./components/hackathon/GapsScreen";
+import KnowledgeBaseScreen from "./components/hackathon/KnowledgeBaseScreen";
+import ReadinessScreen from "./components/hackathon/ReadinessScreen";
 import PrivacyScreen from "./components/PrivacyScreen";
 import LoginScreen from "./components/LoginScreen";
 import DashboardScreen from "./components/DashboardScreen";
@@ -125,6 +128,9 @@ function AppShell() {
           <Route path="/profile" element={isDesktop ? <DesktopProfile onNavigate={nav} /> : <ProfileScreen onNavigate={nav} />} />
           <Route path="/ai" element={isDesktop ? <DesktopAIAssistant onNavigate={nav} /> : <AIAssistantScreen onNavigate={nav} />} />
           <Route path="/about" element={<AboutScreen />} />
+          <Route path="/hackathon/kb" element={<KnowledgeBaseScreen onBack={() => navigate(-1)} />} />
+          <Route path="/hackathon/gaps" element={<GapsScreen onBack={() => navigate(-1)} />} />
+          <Route path="/hackathon/readiness" element={<ReadinessScreen onBack={() => navigate(-1)} />} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
