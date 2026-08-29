@@ -67,7 +67,12 @@ Static React SPA (not a Node server).
 | Output | **`dist`** |
 | Start command | **empty** |
 
-Env (build-time): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (optional for demo).
+Env (build-time): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. التطبيق مربوط بمشروع Supabase **Wafier**. أضف في لوحة Supabase → Authentication → URL Configuration:
+
+- Site URL: نطاق Hostinger
+- Redirect URLs: `https://YOUR-DOMAIN/` و `https://YOUR-DOMAIN/consent`
+
+فعّل Google Provider إذا كان زر Google سيستخدم OAuth.
 
 ## Limits (do not over-claim)
 

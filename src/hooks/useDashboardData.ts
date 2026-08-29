@@ -1,4 +1,5 @@
 import { useAppStore } from "../stores/app-store";
+import { firstNameOf } from "../lib/userStorage";
 
 export function useDashboardData() {
   const d = useAppStore((s) => s.dashboard);
@@ -19,6 +20,6 @@ export function useDashboardData() {
     notifications: d?.notifications ?? [],
     historicalBills: d?.historicalBills ?? [],
     currentKwh: d?.currentKwh ?? 0,
-    greetingName: d?.profile.full_name?.split(" ")[0] ?? "جوري",
+    greetingName: firstNameOf(d?.profile?.full_name || "مستخدم"),
   };
 }

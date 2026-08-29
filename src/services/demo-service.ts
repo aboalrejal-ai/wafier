@@ -47,12 +47,12 @@ interface DemoState {
 const DEFAULT_STATE: DemoState = {
   profile: {
     id: "demo-user",
-    full_name: "جوري الفلاح",
-    email: "jorry@wafier.sa",
-    phone: "+966501234567",
+    full_name: "مستخدم",
+    email: "",
+    phone: null,
     city: "الرياض",
     consent_at: null,
-    member_since: "2024-04-01",
+    member_since: new Date().toISOString(),
     alert_override_until: null,
   },
   budgetAmount: 500,
@@ -125,6 +125,21 @@ export class DemoDataService {
 
   updateProfile(data: Partial<Profile>) {
     this.state.profile = { ...this.state.profile, ...data };
+    saveState(this.state);
+  }
+
+  applyIdentity(data: { email: string; full_name: string; city?: string; member_since?: string }) {
+    const previousEmail = this.state.profile.email;
+    if (previousEmail && previousEmail !== data.email) {
+      this.state = structuredClone(DEFAULT_STATE);
+    }
+    this.state.profile = {
+      ...this.state.profile,
+      email: data.email,
+      full_name: data.full_name,
+      city: data.city || this.state.profile.city,
+      member_since: data.member_since || this.state.profile.member_since,
+    };
     saveState(this.state);
   }
 

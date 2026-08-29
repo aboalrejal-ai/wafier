@@ -16,7 +16,7 @@ import DesktopDashboard from "./components/desktop/DesktopDashboard";
 import DesktopForecast from "./components/desktop/DesktopForecast";
 import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
-import { signIn, signUp, resetPassword } from "./services/data-service";
+import { signIn, signUp, resetPassword, signInWithGoogle, isSupabaseConfigured } from "./services/data-service";
 import { useDashboard } from "./hooks/useDashboard";
 import { initPushRegistration } from "./lib/notification-distributor";
 
@@ -36,14 +36,19 @@ function useIsDesktop() {
 
 function LoginRoute() {
   const navigate = useNavigate();
-  const { refreshSession } = useAuth();
+  const { refreshSession, user, loading, hasConsent } = useAuth();
   const isDesktop = useIsDesktop();
 
+  useEffect(() => {
+    if (loading || !user) return;
+    navigate(hasConsent ? "/dashboard" : "/consent", { replace: true });
+  }, [loading, user, hasConsent, navigate]);
+
   const handleLogin = async (email: string, password: string) => {
-    const { user, error } = await signIn(email, password);
+    const { user: signedIn, error } = await signIn(email, password);
     if (error) throw error;
-    if (user) {
-      setDemoSession(email);
+    if (signedIn) {
+      if (!isSupabaseConfigured) setDemoSession(email);
       await refreshSession();
       navigate("/consent");
     }
@@ -52,9 +57,14 @@ function LoginRoute() {
   const handleSignUp = async (email: string, password: string, name: string) => {
     const { error } = await signUp(email, password, name);
     if (error) throw error;
-    setDemoSession(email);
+    if (!isSupabaseConfigured) setDemoSession(email);
     await refreshSession();
     navigate("/consent");
+  };
+
+  const handleGoogle = async () => {
+    const { error } = await signInWithGoogle();
+    if (error) throw error;
   };
 
   if (isDesktop) {
@@ -63,6 +73,7 @@ function LoginRoute() {
         onLogin={handleLogin}
         onSignUp={handleSignUp}
         onResetPassword={resetPassword}
+        onGoogleLogin={handleGoogle}
       />
     );
   }
@@ -71,6 +82,7 @@ function LoginRoute() {
       onLogin={handleLogin}
       onSignUp={handleSignUp}
       onResetPassword={resetPassword}
+      onGoogleLogin={handleGoogle}
     />
   );
 }

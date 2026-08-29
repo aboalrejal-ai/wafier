@@ -6,31 +6,119 @@ import {
   kwhToSar,
   disaggregateDevices,
 } from "../lib/financial-engine";
-import { predictBill, generateHistoricalBills } from "../lib/ml-predictor";
-import { evaluatePolicy } from "../lib/policy-engine";
+import { generateHistoricalBills } from "../lib/ml-predictor";
 import { fetchWeather } from "../lib/weather";
+import { login as localLogin, nameFromEmail, resolveDisplayName, signup as localSignup } from "../lib/userStorage";
 import type { DashboardData, Profile } from "../types/database";
+import type { User } from "@supabase/supabase-js";
 
 export { isSupabaseConfigured };
+
+function metaName(user: User): string {
+  return resolveDisplayName({
+    email: user.email,
+    metadata: user.user_metadata as Record<string, unknown>,
+  });
+}
+
+async function ensureUserRecords(user: User): Promise<{ profile: Profile; householdId: string; budget: DashboardData["budget"] }> {
+  const supabase = getSupabase()!;
+  const displayName = metaName(user);
+
+  let { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      email: user.email ?? "",
+      full_name: displayName,
+    });
+    const created = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+    profile = created.data;
+  } else if (!profile.full_name || profile.full_name === "جوري الفلاح") {
+    await supabase.from("profiles").update({ full_name: displayName, email: user.email ?? profile.email }).eq("id", user.id);
+    profile = { ...profile, full_name: displayName, email: user.email ?? profile.email };
+  }
+
+  let { data: household } = await supabase.from("households").select("*").eq("user_id", user.id).maybeSingle();
+  if (!household) {
+    const inserted = await supabase.from("households").insert({ user_id: user.id, name: "منزلي" }).select("*").maybeSingle();
+    household = inserted.data;
+  }
+
+  let { data: budget } = await supabase.from("budgets").select("*").eq("household_id", household?.id).maybeSingle();
+  if (!budget && household?.id) {
+    const inserted = await supabase.from("budgets").insert({ household_id: household.id, monthly_amount: 500 }).select("*").maybeSingle();
+    budget = inserted.data;
+  }
+
+  const resolved: Profile = {
+    id: user.id,
+    full_name: profile?.full_name || displayName,
+    email: profile?.email || user.email || "",
+    phone: profile?.phone ?? null,
+    city: profile?.city || "الرياض",
+    consent_at: profile?.consent_at ?? null,
+    member_since: profile?.member_since || new Date().toISOString(),
+    alert_override_until: profile?.alert_override_until ?? null,
+  };
+
+  return {
+    profile: resolved,
+    householdId: household?.id ?? "",
+    budget: budget ?? {
+      id: "local-budget",
+      household_id: household?.id ?? "",
+      monthly_amount: 500,
+      alert_l1_pct: 50,
+      alert_l2_pct: 75,
+    },
+  };
+}
 
 export async function signIn(email: string, password: string) {
   const supabase = getSupabase();
   if (!supabase) {
-    if (email && password.length >= 4) {
-      demoService.updateProfile({ email });
-      return { user: { id: "demo-user", email }, error: null };
-    }
-    return { user: null, error: new Error("البريد أو كلمة المرور غير صحيحة") };
+    const result = localLogin(email, password, true);
+    if (!result.ok) return { user: null, error: new Error(result.error) };
+    demoService.applyIdentity({
+      email: result.user.email,
+      full_name: result.user.name,
+      city: result.user.city || "الرياض",
+      member_since: result.user.createdAt,
+    });
+    return { user: { id: "demo-user", email: result.user.email }, error: null };
   }
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   return { user: data.user, error };
 }
 
+export async function signInWithGoogle() {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return { error: new Error("Google يحتاج ربط قاعدة Wafier") };
+  }
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${window.location.origin}/consent`,
+      queryParams: { prompt: "select_account" },
+    },
+  });
+  return { error };
+}
+
 export async function signUp(email: string, password: string, fullName: string) {
   const supabase = getSupabase();
   if (!supabase) {
-    demoService.updateProfile({ email, full_name: fullName });
-    return { user: { id: "demo-user", email }, error: null };
+    const result = localSignup(fullName, email, password, true);
+    if (!result.ok) return { user: null, error: new Error(result.error) };
+    demoService.applyIdentity({
+      email: result.user.email,
+      full_name: result.user.name,
+      city: result.user.city || "الرياض",
+      member_since: result.user.createdAt,
+    });
+    return { user: { id: "demo-user", email: result.user.email }, error: null };
   }
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -50,7 +138,9 @@ export async function signOut() {
 export async function resetPassword(email: string) {
   const supabase = getSupabase();
   if (!supabase) return { error: null };
-  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/login`,
+  });
   return { error };
 }
 
@@ -77,36 +167,35 @@ export async function fetchDashboard(): Promise<DashboardData> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
 
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-  const { data: household } = await supabase.from("households").select("*").eq("user_id", user.id).single();
-  const { data: budget } = await supabase.from("budgets").select("*").eq("household_id", household?.id).single();
+  const ensured = await ensureUserRecords(user);
+
   const { data: readings } = await supabase
     .from("meter_readings")
     .select("*")
-    .eq("household_id", household?.id)
+    .eq("household_id", ensured.householdId)
     .order("recorded_at", { ascending: false })
     .limit(100);
   const { data: forecastRow } = await supabase
     .from("bill_forecasts")
     .select("*")
-    .eq("household_id", household?.id)
+    .eq("household_id", ensured.householdId)
     .order("created_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
   const { data: notifications } = await supabase
     .from("notifications")
     .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  const totalKwh = readings?.reduce((s, r) => s + r.kwh, 0) ?? 890;
+  const totalKwh = readings && readings.length > 0 ? readings.reduce((s, r) => s + Number(r.kwh), 0) : 890;
   const spend = kwhToSar(totalKwh);
-  const budgetAmount = budget?.monthly_amount ?? 500;
-  const weather = await fetchWeather(profile?.city ?? "الرياض");
+  const budgetAmount = Number(ensured.budget.monthly_amount) || 500;
+  const weather = await fetchWeather(ensured.profile.city ?? "الرياض");
 
   return {
-    profile: profile as Profile,
-    budget: budget!,
+    profile: ensured.profile,
+    budget: ensured.budget,
     currentKwh: totalKwh,
     currentSpendSar: spend,
     remainingSar: calculateRemaining(budgetAmount, spend),
@@ -128,8 +217,10 @@ export async function updateBudget(amount: number) {
   if (!isSupabaseConfigured) return demoService.setBudget(amount);
   const supabase = getSupabase()!;
   const { data: { user } } = await supabase.auth.getUser();
-  const { data: household } = await supabase.from("households").select("id").eq("user_id", user!.id).single();
-  await supabase.from("budgets").update({ monthly_amount: amount }).eq("household_id", household!.id);
+  const { data: household } = await supabase.from("households").select("id").eq("user_id", user!.id).maybeSingle();
+  if (household?.id) {
+    await supabase.from("budgets").update({ monthly_amount: amount }).eq("household_id", household.id);
+  }
   return fetchDashboard();
 }
 
@@ -157,11 +248,11 @@ export async function runEvaluationScenario() {
   if (!isSupabaseConfigured) return demoService.simulateHeatwave();
   const supabase = getSupabase()!;
   const { data: { user } } = await supabase.auth.getUser();
-  const { data: household } = await supabase.from("households").select("id").eq("user_id", user!.id).single();
+  const { data: household } = await supabase.from("households").select("id").eq("user_id", user!.id).maybeSingle();
   await supabase.functions.invoke("ingest-meter-reading", {
-    body: { household_id: household!.id, kwh: 15, source: "heatwave_sim" },
+    body: { household_id: household?.id, kwh: 15, source: "heatwave_sim" },
   });
-  await supabase.functions.invoke("evaluate-policy", { body: { household_id: household!.id } });
+  await supabase.functions.invoke("evaluate-policy", { body: { household_id: household?.id } });
   return fetchDashboard();
 }
 

@@ -18,6 +18,7 @@ import { useAppStore, getFilteredChartData } from "../stores/app-store";
 import { useAuth } from "../contexts/AuthContext";
 import { updateProfile } from "../services/data-service";
 import { demoService } from "../services/data-service";
+import { formatMemberSince, resolveDisplayName } from "../lib/userStorage";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileScreenProps {
@@ -43,6 +44,8 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   const queryClient = useQueryClient();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const displayName = resolveDisplayName({ fullName: profile?.full_name, email: profile?.email });
+  const memberSince = profile?.member_since ? formatMemberSince(profile.member_since) : "عضو جديد";
   const chartDataFiltered = getFilteredChartData(historicalBills.length ? historicalBills : chartData, period);
 
   const markAllRead = () => {
@@ -149,10 +152,10 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ textAlign: "end" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
-                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{profile?.full_name ?? "مستخدم Wafier"}</p>
+                    <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{displayName}</p>
                     <span style={{ color: "hsl(var(--color-sa-600))", fontSize: 14 }}>✓</span>
                   </div>
-                  <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>عضو منذ أبريل 2024</p>
+                  <p style={{ margin: "3px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>{memberSince}</p>
                 </div>
                 <div style={{
                   width: 50, height: 50, borderRadius: "50%",

@@ -6,6 +6,7 @@ import NotificationsPanel from "../panels/NotificationsPanel";
 import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { demoService } from "../../services/data-service";
+import { formatMemberSince, resolveDisplayName } from "../../lib/userStorage";
 
 interface DesktopProfileProps {
   onNavigate: (screen: Screen) => void;
@@ -35,7 +36,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
   const [period] = useState("آخر 6 أشهر");
   const [showNotifications, setShowNotifications] = useState(false);
-  const { notifications } = useDashboardData();
+  const { notifications, profile } = useDashboardData();
   const queryClient = useQueryClient();
 
   const markAllRead = () => {
@@ -76,9 +77,9 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 6 }}>
               <span style={{ color: "rgba(255,255,255,0.7)", fontSize: 14 }}>✓</span>
-              <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>مستخدم Wafier</p>
+              <p style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "#fff" }}>{resolveDisplayName({ fullName: profile?.full_name, email: profile?.email })}</p>
             </div>
-            <p style={{ margin: "0 0 20px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>عضو منذ أبريل 2024</p>
+            <p style={{ margin: "0 0 20px", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{profile?.member_since ? formatMemberSince(profile.member_since) : "عضو جديد"}</p>
             <div style={{ display: "flex", gap: 10 }}>
               <button onClick={() => onNavigate("ai")} style={{ flex: 1, padding: "9px 0", borderRadius: 10, background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.18)", color: "#fff", fontSize: 12, fontWeight: 600, fontFamily: "inherit", cursor: "pointer" }}>
                 🤖 مساعد AI
