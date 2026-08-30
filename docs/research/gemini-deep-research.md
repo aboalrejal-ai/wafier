@@ -1,80 +1,79 @@
-# Gemini Deep Research — Wafier Finance/Energy Track
+# Gemini Deep Research — Prompt لـ Wafier
 
-**Date:** 2026-08-30  
-**Tool:** Gemini Deep Research (Pass 1 of 3)  
-**Track:** Finance — household energy budgeting FinTech
+## وش تسوي أنت
 
----
-
-## Executive summary
-
-Wafier maps household kWh to SAR using SEC residential tariff tiers, forecasts end-of-month spend, and enforces PDPL purpose limitation when a hypothetical provider requests targeted advertising from consumption data. Primary anchors: **PDPL**, **SDAIA AI Ethics**, **SEC/KAUST ML context**, **KAPSARC/KBEAT efficiency**, **ITU-T Y.3172**.
-
----
-
-## Verified regulatory records
-
-| ID | Title | Authority | Section | Summary | URL | Node |
-|----|-------|-----------|---------|---------|-----|------|
-| PDPL-OVERVIEW | Personal Data Protection Law | SDAIA | Overview | Governs processing of personal data including household identifiers and consumption patterns tied to individuals. | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | PP, P |
-| PDPL-PURPOSE | PDPL — Purpose limitation | SDAIA | Art. 5 (purpose) | Personal data must be collected for specified, explicit, legitimate purposes; secondary use (e.g. ads) requires separate legal basis/consent. | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | P, KB |
-| SDAIA-ETHICS | National AI Ethics Principles | SDAIA | Principles portal | AI systems should be transparent, explainable, fair; users must understand predictions are not financial guarantees. | https://sdaia.gov.sa/ | M, P |
-| SAMA-OB | Open Banking Framework | SAMA | Framework | Regulates secure consumer-permissioned financial data sharing; sets expectations for third-party FinTech access to banking data (boundary for Wafier: utility data ≠ open banking but same governance mindset). | https://openbanking.sama.gov.sa/index-en.html | KB |
-| SAMA-CYBER | Cybersecurity Framework (reference) | SAMA | CSF | Financial sector cybersecurity expectations; relevant when Wafier links budgets to bank accounts in future integrations. | https://www.sama.gov.sa/en-US/RulesInstructions/CyberSecurity/Cyber%20Security%20Framework/Pages/default.aspx | KB |
-| SEC-KAUST-ML | KAUST & SEC ML for network losses | KAUST / SEC | News release | Legitimizes ML use in Saudi electricity sector; contextual for Wafier forecasting narrative. | https://www.kaust.edu.sa/news/kaust-helps-slash-sec-profit-losses-using-ml | SRC, M |
-| KAPSARC-DP00503 | AI & data center energy efficiency | KAPSARC | DP00503 | Energy efficiency and AI intersection; supports conservation recommendations in RAG. | https://www.kapsarc.org/media/ip0dt4i1/dp00503-v1.pdf | KB |
-| KBEAT-PORTAL | KBEAT building energy tool | KAPSARC | KBEAT | Household energy saving guidance for Saudi buildings. | https://apps.kapsarc.org/appboard/kbeat/en | KB |
-| MDPI-KSA-FORECAST | ML energy forecasting in KSA | MDPI Energies | Paper 16(4):2035 | Academic benchmark for Saudi consumption forecasting methods. | https://www.mdpi.com/1996-1073/16/4/2035 | M |
-| ITU-Y3172 | ITU-T Y.3172 | ITU-T | Rec. Y.3172 | ML pipeline nodes: SRC, Collector, PP, Model/MLFO, Sandbox, Policy, Distributor, SINK. | https://www.itu.int/rec/T-REC-Y.3172-201906-I | All |
-| CMA-FINTECH | Fintech Lab — CMA | CMA | Fintech portal | Sandbox for innovative financial products; boundary reference for consumer FinTech in KSA. | https://fintech.cma.org.sa/ | KB |
+1. انسخ الـ prompt اللي تحت (من أول سطر لآخر سطر داخل الصندوق).
+2. افتح **Gemini** → **Deep Research** (أو Google AI Studio Deep Research).
+3. الصق الـ prompt وشغّل البحث وانتظر لين يخلص.
+4. **احذف كل شي تحت خط «نتيجة البحث»** في هذا الملف.
+5. **الصق نتيجة البحث كاملة** تحت الخط.
+6. احفظ الملف وقل لي: «حدّثت gemini-deep-research — اقرأه وحدّث KB».
 
 ---
 
-## SEC residential tariff (implementation reference)
+## PROMPT — انسخ من هنا
 
-Wafier implements tiered residential rates consistent with public SEC practice:
+```text
+Perform a comprehensive Deep Research on official Saudi Arabia (KSA) and international policies, regulations, and guidelines for a FinTech + household energy budgeting AI application.
 
-- Tier 1: up to 6,000 kWh/month @ 0.18 SAR/kWh  
-- Tier 2: above 6,000 kWh @ 0.30 SAR/kWh  
-- VAT 15% + fixed fee  
+PROJECT CONTEXT (do not skip):
+- Solution name: Wafier
+- Hackathon: ITU AI Readiness Hackathon — Kingdom of Saudi Arabia
+- Track: Finance (FinTech)
+- Use case: Arabic RTL app that forecasts household electricity bill spend in SAR from meter-like kWh data, compares to a monthly budget, raises graduated alerts, and answers user questions with citations from a verified knowledge base.
+- Architecture: ITU-T Y.3172 ML pipeline (SRC → Collector → Preprocessor → Model/MLFO → Policy → Distributor → SINK). Policy node must be deterministic (not LLM-based decisions).
+- Data: synthetic/demo meter data for hackathon; regulations must be REAL and publicly verifiable.
 
-**Evidence in code:** `src/lib/financial-engine.ts`  
-**Public context:** KAUST/SEC ML collaboration (not a tariff decree URL — tariff numbers validated against team SEC practice).
+SCOPE — extract authentic public sources only:
 
----
+1) Saudi national regulations (verify exact titles, issuing authority, section/article, decree reference if available, and working direct URLs — prefer .gov.sa):
+   - Saudi Central Bank (SAMA): Open Banking Framework; consumer protection; cybersecurity / technology risk rules relevant to FinTech apps that may later link bank accounts. Do NOT invent a document titled "Financial AI Rules" — verify exact official names.
+   - Capital Market Authority (CMA): Fintech Lab / sandbox rules if relevant to consumer FinTech positioning.
+   - Saudi Electricity Company (SEC) or energy regulator: residential electricity tariff structure; any public policy on smart meters / AMI / third-party access to consumption data.
+   - SDAIA: National AI Ethics Principles; any published AI governance guidance.
+   - Saudi Personal Data Protection Law (PDPL): consent; purpose limitation; anonymization; secondary use (e.g. advertising from consumption data); cross-border transfers.
+   - National energy efficiency: KAPSARC, KBEAT, MEWA, or official Saudi energy efficiency programs.
 
-## Policy Gap Matrix (initial)
+2) International benchmarks (clearly label as benchmark, not Saudi law):
+   - ITU-T Recommendation Y.3172 — map each pipeline node to Wafier's energy-budget use case only. Do NOT claim Y.3172 is a finance-specific regulation.
+   - FATF or ISO references only if directly relevant to algorithmic transparency, fraud, or data governance for consumer finance apps.
 
-| Gap ID | Type | Description | Wafier response |
-|--------|------|-------------|-----------------|
-| GAP-01 | potential_gap | No unified public smart-meter API for third-party household apps | Simulated meter in demo; documented in report |
-| GAP-02 | ambiguity | Liability when AI bill forecast is materially wrong | Disclaimers + SDAIA transparency; no binding remedy text found |
-| GAP-03 | potential_gap | Sector-specific energy data rules beyond general PDPL | PDPL applied; dedicated energy AI regulation sparse |
-| GAP-04 | potential_gap | No national standard for auditing household energy ML models | Sandbox path in Y.3172 demo |
-| GAP-05 | potential_gap | No machine-readable national regulation repository for RAG | Curated `knowledge-base.json` + manual verification |
-| GAP-06 | ambiguity | Targeted ads from consumption data — enforcement path unclear | KB-ADS-001 deterministic block in policy node |
+OUTPUT FORMAT (Markdown):
 
----
+A) Executive summary (½ page) — what Wafier must comply with in KSA.
 
-## UNVERIFIED / needs primary PDF
+B) Regulatory records table — minimum 15 rows, each with:
+   - record_id (e.g. PDPL-ART-5, SAMA-OB-001)
+   - document_title (exact official title)
+   - issuing_authority
+   - section_reference (article / chapter / page if found)
+   - content (300–600 words faithful summary of the cited provision — no hallucination)
+   - source_url (direct working link — not homepage only if possible)
+   - verification_status: VERIFIED | UNVERIFIED | HISTORICAL
+   - y3172_node: SRC | C | PP | M | P | D | SINK | KB | ALL
+   - relevance_to_wafier (1–2 sentences)
 
-| Item | Status | Note |
-|------|--------|------|
-| Royal Decree text for PDPL individual articles | UNVERIFIED in this pass | Portal overview used; verify article numbers in official gazette if cited in enforcement |
-| SEC official AMI third-party API specification | UNVERIFIED | No public OpenAPI found |
+C) Policy Gap Matrix — minimum 6 gaps discovered in Saudi/international policy landscape (NOT software bugs), each with:
+   - gap_id (GAP-01 … GAP-06)
+   - gap_type: violation | ambiguity | conflict | potential_gap | insufficient_evidence
+   - title
+   - description
+   - recommendation_for_policymakers
+   - related_record_ids
 
----
+D) UNVERIFIED list — anything you could not confirm from primary sources.
 
-## Y.3172 mapping for Wafier
+E) Suggested RAG chunks — 25–40 chunks (300–800 words each) derived ONLY from VERIFIED records.
 
+RULES:
+- Every URL must be real. If you cannot verify, mark UNVERIFIED and do not present as enforceable law.
+- No confidential data, no fabricated decree numbers.
+- Prefer primary .gov.sa sources over blogs and law-firm summaries.
+- Output in English for records; Arabic summaries optional for key PDPL/SDAIA provisions.
 ```
-SRC (budget cap, meter kWh, weather)
-  → C (ingestMeterReading)
-  → PP (gapFill + anonymize)
-  → M/MLFO (predictBill seasonal)
-  → [Sandbox] (isSandbox — no distributor alert)
-  → P (evaluatePolicy + evaluateKbGuardPolicy)
-  → D (in-app + Web/Local notifications)
-  → SINK (React UI)
-KB/RAG ← parallel citations in assistant
-```
+
+---
+
+## نتيجة البحث (الصق هنا بعد ما يخلص Gemini)
+
+<!-- احذف هذا التعليق والصق البحث الكامل من Gemini تحت هذا السطر -->

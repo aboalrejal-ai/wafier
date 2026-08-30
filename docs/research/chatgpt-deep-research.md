@@ -1,159 +1,68 @@
-# ChatGPT Deep Research — Wafier Finance/Energy Track
+# ChatGPT Deep Research — Prompt لـ Wafier
 
-**Date:** 2026-08-30  
-**Tool:** ChatGPT Deep Research (Pass 2 of 3)  
-**Track:** Finance — primary-source KB build
+## وش تسوي أنت
 
----
-
-## Methodology
-
-- Prefer `.gov.sa` and official regulator domains  
-- Each record tagged `VERIFIED` | `UNVERIFIED` | `HISTORICAL`  
-- Records mapped to Y.3172 nodes
+1. انسخ الـ prompt اللي تحت.
+2. افتح **ChatGPT** → **Deep Research** (أو o3 / research mode إن متوفر).
+3. الصق وشغّل وانتظر.
+4. **احذف كل شي تحت خط «نتيجة البحث»** في هذا الملف.
+5. **الصق النتيجة كاملة** تحت الخط.
+6. احفظ وقل لي: «حدّثت chatgpt-deep-research — اقرأه وحدّث KB».
 
 ---
 
-## Records
+## PROMPT — انسخ من هنا
 
-### PDPL-CONSENT-001
-- **Title:** Personal Data Protection Law — Lawful basis and consent  
-- **Authority:** SDAIA / Kingdom of Saudi Arabia  
-- **Section:** Consent requirements (overview)  
-- **Content:** Processing household consumption data requires explicit user consent; Wafier implements consent screen before dashboard access.  
-- **URL:** https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx  
-- **Verification:** VERIFIED  
-- **Node:** PP, P  
-- **Category:** data_governance  
+```text
+You are conducting primary-source legal and regulatory research for an ITU AI Readiness Hackathon submission in Saudi Arabia.
 
-### PDPL-ANON-001
-- **Title:** PDPL — Anonymization for analytics export  
-- **Authority:** SDAIA  
-- **Section:** Anonymization / de-identification (overview)  
-- **Content:** Before exporting household data to ML pipelines, identifiers must be removed or pseudonymized. Wafier hashes household ID in preprocessor.  
-- **URL:** https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx  
-- **Verification:** VERIFIED  
-- **Node:** PP  
-- **Category:** data_governance  
+PROJECT: Wafier — FinTech app for proactive household electricity budget management (Finance track). Forecasts SAR spend from kWh + weather; PDPL consent; deterministic policy node; RAG assistant with mandatory citations; ITU-T Y.3172 pipeline.
 
-### PDPL-ADS-001
-- **Title:** PDPL — Purpose limitation (no ad profiling from utility data)  
-- **Authority:** SDAIA  
-- **Section:** Purpose specification  
-- **Content:** Using electricity consumption patterns for targeted advertising without explicit separate consent exceeds stated budget-management purpose.  
-- **URL:** https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx  
-- **Verification:** VERIFIED  
-- **Node:** P, KB  
-- **Category:** ai_ethics  
+TASK: Deep Research — find ONLY authentic, publicly accessible Saudi and international policy sources. Cross-check titles against actual documents. Do not fabricate URLs or article numbers.
 
-### SDAIA-TRANS-001
-- **Title:** SDAIA AI Ethics — Transparency of AI outputs  
-- **Authority:** SDAIA  
-- **Section:** Ethics principles portal  
-- **Content:** Bill forecasts must be labeled as estimates, not guarantees; assistant cites sources.  
-- **URL:** https://sdaia.gov.sa/  
-- **Verification:** VERIFIED  
-- **Node:** M, D  
-- **Category:** ai_ethics  
+RESEARCH QUESTIONS (answer each with cited sources):
 
-### SDAIA-HITL-001
-- **Title:** SDAIA AI Ethics — Human oversight  
-- **Authority:** SDAIA  
-- **Section:** Ethics principles  
-- **Content:** Users may temporarily override automated alerts (HITL snooze 2h in Wafier profile).  
-- **URL:** https://sdaia.gov.sa/  
-- **Verification:** VERIFIED  
-- **Node:** P, D  
-- **Category:** human_oversight  
+1. PDPL: What provisions govern (a) explicit consent for processing household electricity consumption data, (b) purpose limitation and ban on secondary use for targeted advertising, (c) anonymization/pseudonymization before analytics export, (d) data subject rights and remedies?
 
-### SAMA-OB-001
-- **Title:** SAMA Open Banking Framework  
-- **Authority:** Saudi Central Bank (SAMA)  
-- **Section:** Framework overview  
-- **Content:** Establishes permissioned data sharing for financial accounts; informs Wafier boundary — utility budgeting is adjacent to, not within, open banking scope unless bank feed added.  
-- **URL:** https://openbanking.sama.gov.sa/index-en.html  
-- **Verification:** VERIFIED  
-- **Node:** KB  
-- **Category:** fintech_regulation  
+2. SDAIA AI Ethics: transparency, explainability, human oversight, and prohibition of deceptive financial-like guarantees from AI predictions.
 
-### SAMA-CONSUMER-001
-- **Title:** SAMA Consumer Protection (general reference)  
-- **Authority:** SAMA  
-- **Section:** Rules and instructions portal  
-- **Content:** Financial services must provide clear disclosures; analogized to Wafier forecast disclaimers.  
-- **URL:** https://www.sama.gov.sa/en-US/RulesInstructions/Pages/ConsumerProtection.aspx  
-- **Verification:** VERIFIED  
-- **Node:** KB  
-- **Category:** consumer_protection  
+3. SAMA: Open Banking Framework — scope and whether it applies to utility/consumption data vs bank account data. Consumer protection rules useful for forecast disclaimers.
 
-### CMA-FINTECH-001
-- **Title:** CMA Fintech Lab  
-- **Authority:** Capital Market Authority  
-- **Section:** Fintech Lab portal  
-- **Content:** Regulatory sandbox for innovative financial products in capital markets; reference for FinTech track positioning.  
-- **URL:** https://fintech.cma.org.sa/  
-- **Verification:** VERIFIED  
-- **Node:** KB  
-- **Category:** fintech_regulation  
+4. CMA Fintech Lab — relevance boundary for a consumer budgeting app (not securities trading).
 
-### SEC-TARIFF-CTX-001
-- **Title:** SEC residential tariff context (KAUST collaboration)  
-- **Authority:** KAUST / SEC  
-- **Section:** Public news  
-- **Content:** SEC engages ML for grid efficiency; supports legitimacy of consumption forecasting in Saudi context.  
-- **URL:** https://www.kaust.edu.sa/news/kaust-helps-slash-sec-profit-losses-using-ml  
-- **Verification:** VERIFIED  
-- **Node:** SRC, M  
-- **Category:** energy_utility  
+5. SEC / Saudi energy sector: residential tariff tiers (verify current public sources); any official statement on smart meter data sharing with third-party apps.
 
-### ITU-Y3172-001
-- **Title:** ITU-T Y.3172 — Architectural framework for ML in future networks  
-- **Authority:** ITU-T  
-- **Section:** Full recommendation  
-- **Content:** Defines ML pipeline nodes including Policy (P) and MLFO; Wafier implements client-side orchestration.  
-- **URL:** https://www.itu.int/rec/T-REC-Y.3172-201906-I  
-- **Verification:** VERIFIED  
-- **Node:** All  
-- **Category:** standards  
+6. Energy efficiency: KAPSARC, KBEAT, or official Saudi guidance on household cooling/AC savings (for RAG advice grounding).
 
-### KAPSARC-EFF-001
-- **Title:** KAPSARC — Energy efficiency & AI (DP00503)  
-- **Authority:** KAPSARC  
-- **Section:** Discussion paper  
-- **Content:** Energy-AI efficiency context for household recommendations.  
-- **URL:** https://www.kapsarc.org/media/ip0dt4i1/dp00503-v1.pdf  
-- **Verification:** VERIFIED  
-- **Node:** KB  
-- **Category:** energy_efficiency  
+7. ITU-T Y.3172: summarize pipeline nodes and how a FinTech energy-budget app maps each node (reference only — not Saudi law).
 
-### DEEPMIND-COOLING-001
-- **Title:** DeepMind data centre cooling optimization  
-- **Authority:** Google DeepMind  
-- **Section:** Blog  
-- **Content:** Analogous ML-for-cooling narrative for summer peak messaging (not Saudi regulation).  
-- **URL:** https://deepmind.google/discover/blog/deepmind-ai-reduces-google-data-centre-cooling-energy-by-40/  
-- **Verification:** VERIFIED  
-- **Node:** M  
-- **Category:** benchmark  
+8. Liability gap: Is there explicit Saudi law on liability when an AI bill forecast is wrong? If not, state as policy gap with evidence of absence.
+
+OUTPUT (Markdown):
+
+## Verified Records
+Table columns: record_id | document_title | authority | section | summary | url | verification | y3172_node
+
+Minimum 15 VERIFIED records with working URLs.
+
+## Policy Gap Matrix
+Minimum 6 gaps (regulatory/policy landscape gaps, not app bugs):
+Types: violation | ambiguity | conflict | potential_gap | insufficient_evidence
+
+## Conflicts & Ambiguities
+Where sources disagree or text is unclear.
+
+## UNVERIFIED / Rejected Sources
+List sources you found but could NOT verify — never use these in enforcement logic.
+
+## Duplicate check notes
+Flag if Gemini/Perplexity might find the same docs — note unique finds from this pass.
+
+STRICT: If a MoH/SEC/SAMA PDF exists but text is not retrievable, mark UNVERIFIED. No guesswork on tariff numbers without a cited primary source.
+```
 
 ---
 
-## UNVERIFIED items (do not enforce)
+## نتيجة البحث (الصق هنا بعد ما يخلص ChatGPT)
 
-| ID | Claim | Status |
-|----|-------|--------|
-| SEC-AMI-API-001 | Public REST API for residential smart meters | UNVERIFIED — no official spec found |
-| SAMA-AI-CREDIT-001 | Dedicated "Financial AI Rules" decree | UNVERIFIED — use SAMA OB + consumer protection instead |
-
----
-
-## Gap classifications (ChatGPT pass)
-
-| ID | Verdict type | Gap |
-|----|--------------|-----|
-| GAP-01 | POTENTIAL_GAP | Smart-meter third-party API |
-| GAP-02 | AMBIGUITY | Forecast error liability |
-| GAP-03 | POTENTIAL_GAP | Energy-sector AI data rules |
-| GAP-04 | POTENTIAL_GAP | Algorithm audit standard |
-| GAP-05 | POTENTIAL_GAP | Machine-readable regulation repo |
-| GAP-06 | AMBIGUITY | Ad targeting from consumption data |
+<!-- احذف هذا التعليق والصق البحث الكامل من ChatGPT تحت هذا السطر -->

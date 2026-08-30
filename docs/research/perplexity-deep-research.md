@@ -1,89 +1,69 @@
-# Perplexity Deep Research — Wafier Finance/Energy Track
+# Perplexity Deep Research — Prompt لـ Wafier
 
-**Date:** 2026-08-30  
-**Tool:** Perplexity Deep Research (Pass 3 of 3)  
-**Focus:** Liability, smart meters, cross-border data, advertising
+## وش تسوي أنت
 
----
-
-## 1. Liability when AI bill forecast is wrong
-
-**Finding:** Saudi PDPL provides data-subject rights and remedies for unlawful processing; SDAIA ethics require transparency that predictions are non-binding. No dedicated "energy forecast liability" statute was located in public portals.
-
-| Aspect | Source | URL | Status |
-|--------|--------|-----|--------|
-| Data subject rights / remedies | PDPL overview | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | VERIFIED |
-| Non-deceptive AI outputs | SDAIA ethics | https://sdaia.gov.sa/ | VERIFIED |
-| Financial disclosure analogy | SAMA consumer protection | https://www.sama.gov.sa/en-US/RulesInstructions/Pages/ConsumerProtection.aspx | VERIFIED |
-
-**Wafier implementation:** UI disclaimer + RAG template "تقديري وليس ضماناً مالياً"  
-**Gap:** GAP-02 — AMBIGUITY — no explicit SAR penalty schedule for wrong household forecasts
+1. انسخ الـ prompt اللي تحت.
+2. افتح **Perplexity** → **Research** (وضع البحث العميق / Pro Research إن متوفر).
+3. الصق وشغّل وانتظر.
+4. **احذف كل شي تحت خط «نتيجة البحث»** في هذا الملف.
+5. **الصق النتيجة كاملة** تحت الخط.
+6. احفظ وقل لي: «حدّثت perplexity-deep-research — اقرأه وحدّث KB».
 
 ---
 
-## 2. Smart meter / AMI third-party access
+## PROMPT — انسخ من هنا
 
-**Finding:** SEC and KAUST public materials discuss ML for grid optimization but do not publish an open household AMI API for FinTech apps.
+```text
+Deep Research request — ITU AI Readiness Hackathon KSA, Finance track.
 
-| Source | Relevance | URL | Status |
-|--------|-----------|-----|--------|
-| KAUST-SEC ML | Sector legitimacy | https://www.kaust.edu.sa/news/kaust-helps-slash-sec-profit-losses-using-ml | VERIFIED |
-| SEC corporate site | Utility operator | https://www.se.com.sa/ | VERIFIED |
+Application: Wafier — household electricity budget FinTech. Converts kWh to SAR (SEC-style residential tariff), forecasts end-of-month spend, policy alerts at 50%/75%/forecast-over-budget, RAG Q&A with government citations, PDPL consent, synthetic demo data.
 
-**Gap:** GAP-01 — POTENTIAL_GAP — Wafier uses simulated meter readings in demo
+Find authoritative Saudi (.gov.sa preferred) and international sources. Provide working URLs and exact document names. Mark unverifiable items UNVERIFIED.
 
----
+Focus areas for this pass (third independent review):
 
-## 3. Cross-border data transfers
+1. CONSUMER PROTECTION & LIABILITY
+   - SAMA consumer protection rules applicable to FinTech disclosures
+   - PDPL remedies when automated predictions affect consumer decisions
+   - Whether "bill shock prevention" apps need specific licensing in KSA
 
-**Finding:** PDPL governs transfers outside KSA; Wafier demo is client-side/localStorage; optional Supabase requires operator configuration in KSA-compliant regions.
+2. SMART METER / AMI / UTILITY DATA ACCESS
+   - SEC or regulator public documents on smart meter data, third-party API, or privacy of consumption telemetry
+   - Gap analysis if no open API exists for household apps
 
-| Source | URL | Status |
-|--------|-----|--------|
-| PDPL overview | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | VERIFIED |
+3. CROSS-BORDER & CLOUD
+   - PDPL rules on transferring household consumption data outside KSA (Supabase/cloud hosting angle)
 
-**Wafier:** Documented in privacy screen; anonymization before ML export path
+4. ADVERTISING & PROFILING
+   - PDPL + SDAIA on using utility consumption patterns for targeted advertising
+   - Controversial scenario: partner requests ad targeting from consumption data — which provisions apply?
 
----
+5. OPEN BANKING BOUNDARY
+   - SAMA Open Banking: what data categories are in scope; confirm utility meters are out of scope unless integrated
 
-## 4. Advertising / profiling from consumption
+6. INTERNATIONAL BENCHMARKS
+   - ITU-T Y.3172 (architecture reference for hackathon scoring)
+   - ISO/IEC 27001 or FATF only if directly cited for FinTech data governance
 
-**Finding:** PDPL purpose limitation + SDAIA ethics prohibit deceptive or undisclosed secondary use. Targeted ads from utility consumption without separate consent is a **policy violation** in Wafier's controversial scenario.
+DELIVERABLES (Markdown):
 
-| Provision | URL | Enforcement in Wafier |
-|-----------|-----|----------------------|
-| PDPL purpose limitation | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | KB-ADS-001 → BLOCK_DATA_USE |
-| SDAIA ethics | https://sdaia.gov.sa/ | Audit + notification |
+### A. Source table (min 12 rows)
+| record_id | title | authority | section | excerpt/summary | url | status |
 
-**Gap:** GAP-06 — AMBIGUITY — regulatory enforcement body for ad-tech misuse of utility data not spelled out in single decree
+### B. Policy Gap Matrix (min 6 rows)
+| gap_id | type | title | description | recommendation | related_records |
 
----
+### C. Perplexity unique findings
+What this search found that might be missed by generic ChatGPT/Gemini passes (specific PDFs, Arabic pages, recent 2024–2026 circulars).
 
-## 5. Open banking boundary
+### D. URL verification checklist
+For top 10 URLs: does link open? direct PDF or landing page? .gov.sa?
 
-SAMA Open Banking applies to **financial account** data, not SEC meter telemetry. Wafier stays in utility budgeting unless future bank-feed integration — then SAMA OB rules apply.
-
-- https://openbanking.sama.gov.sa/index-en.html — VERIFIED
-
----
-
-## 6. Policy Gap Matrix (Perplexity consolidated)
-
-| ID | Type | Description | Recommendation |
-|----|------|-------------|----------------|
-| GAP-01 | potential_gap | No open AMI API | National utility data access framework |
-| GAP-02 | ambiguity | Forecast liability | Sector guidance on AI estimate disclaimers + redress |
-| GAP-03 | potential_gap | Energy-specific AI data rules | Extend PDPL with SEC sector circular |
-| GAP-04 | potential_gap | No algorithm audit standard | Adopt Y.3172 sandbox + external audit |
-| GAP-05 | potential_gap | No machine-readable law repo | SDAIA/BOE structured regulation API |
-| GAP-06 | ambiguity | Consumption → ads | Explicit ban + consent model in PDPL guidance |
+Rules: No fabricated Royal Decree numbers. Prefer primary sources. English output. Flag HISTORICAL if superseded.
+```
 
 ---
 
-## 7. Records unique to this pass
+## نتيجة البحث (الصق هنا بعد ما يخلص Perplexity)
 
-| ID | Title | URL | Node |
-|----|-------|-----|------|
-| SEC-PORTAL-001 | Saudi Electricity Company | https://www.se.com.sa/ | SRC |
-| SAMA-CP-001 | SAMA Consumer Protection portal | https://www.sama.gov.sa/en-US/RulesInstructions/Pages/ConsumerProtection.aspx | KB |
-| PDPL-TRANSFER-001 | PDPL cross-border transfers (overview) | https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx | PP |
+<!-- احذف هذا التعليق والصق البحث الكامل من Perplexity تحت هذا السطر -->
