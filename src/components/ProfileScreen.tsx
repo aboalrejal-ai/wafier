@@ -282,7 +282,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
           إيقاف التنبيهات ساعتين (HITL)
         </button>
 
-        <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>عن Wafier</button>
+        <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>عن Wafir</button>
         <button onClick={async () => { await signOut(); window.location.href = "/login"; }} style={{ background: "none", border: "none", color: "hsl(var(--color-gray-500))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>تسجيل الخروج</button>
       </div>
     </div>

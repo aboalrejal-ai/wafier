@@ -95,7 +95,7 @@ export async function signIn(email: string, password: string) {
 export async function signInWithGoogle() {
   const supabase = getSupabase();
   if (!supabase) {
-    return { error: new Error("Google يحتاج ربط قاعدة Wafier") };
+    return { error: new Error("Google يحتاج ربط قاعدة Wafir") };
   }
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",

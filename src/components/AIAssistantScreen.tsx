@@ -193,7 +193,7 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
 export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps) {
   const { spend, budget, forecast } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "مرحباً! أنا مساعد Wafier الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
+    { role: "ai", text: "مرحباً! أنا مساعد Wafir الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -264,7 +264,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
             </svg>
           </div>
           <div>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0D121C", lineHeight: 1 }}>Wafier AI</p>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#0D121C", lineHeight: 1 }}>Wafir AI</p>
             <p style={{ margin: "2px 0 0", fontSize: 10, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
           </div>
         </div>
@@ -286,7 +286,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
               </svg>
             </div>
-            <p style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "#0D121C" }}>Wafier AI</p>
+            <p style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "#0D121C" }}>Wafir AI</p>
             <p style={{ margin: 0, fontSize: 13, color: "#4D5761" }}>كيف يمكنني مساعدتك اليوم؟</p>
           </div>
         )}
@@ -460,7 +460,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 send(input);
               }
             }}
-            placeholder="اسأل Wafier AI..."
+            placeholder="اسأل Wafir AI..."
             dir="rtl"
             rows={1}
             style={{

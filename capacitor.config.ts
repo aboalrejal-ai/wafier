@@ -4,7 +4,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "sa.wafier.app",
-  appName: "Wafier",
+  appName: "Wafir",
   webDir: "dist",
   android: {
     allowMixedContent: true,

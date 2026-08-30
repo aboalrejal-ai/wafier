@@ -90,7 +90,7 @@ export async function initPushRegistration(): Promise<void> {
   });
 
   await PushNotifications.addListener("pushNotificationReceived", (notification) => {
-    void deliverExternalNotification(notification.title ?? "Wafier", notification.body ?? "");
+    void deliverExternalNotification(notification.title ?? "Wafir", notification.body ?? "");
   });
 }
 

@@ -1,4 +1,4 @@
-# Gemini Deep Research — Prompt لـ Wafier
+# Gemini Deep Research — Prompt لـ Wafir
 
 ## وش تسوي أنت
 
@@ -17,7 +17,7 @@
 Perform a comprehensive Deep Research on official Saudi Arabia (KSA) and international policies, regulations, and guidelines for a FinTech + household energy budgeting AI application.
 
 PROJECT CONTEXT (do not skip):
-- Solution name: Wafier
+- Solution name: Wafir
 - Hackathon: ITU AI Readiness Hackathon — Kingdom of Saudi Arabia
 - Track: Finance (FinTech)
 - Use case: Arabic RTL app that forecasts household electricity bill spend in SAR from meter-like kWh data, compares to a monthly budget, raises graduated alerts, and answers user questions with citations from a verified knowledge base.
@@ -35,12 +35,12 @@ SCOPE — extract authentic public sources only:
    - National energy efficiency: KAPSARC, KBEAT, MEWA, or official Saudi energy efficiency programs.
 
 2) International benchmarks (clearly label as benchmark, not Saudi law):
-   - ITU-T Recommendation Y.3172 — map each pipeline node to Wafier's energy-budget use case only. Do NOT claim Y.3172 is a finance-specific regulation.
+   - ITU-T Recommendation Y.3172 — map each pipeline node to Wafir's energy-budget use case only. Do NOT claim Y.3172 is a finance-specific regulation.
    - FATF or ISO references only if directly relevant to algorithmic transparency, fraud, or data governance for consumer finance apps.
 
 OUTPUT FORMAT (Markdown):
 
-A) Executive summary (½ page) — what Wafier must comply with in KSA.
+A) Executive summary (½ page) — what Wafir must comply with in KSA.
 
 B) Regulatory records table — minimum 15 rows, each with:
    - record_id (e.g. PDPL-ART-5, SAMA-OB-001)

@@ -1,8 +1,8 @@
-import readiness from "../../../kb/framework/wafier-readiness.json";
+import readiness from "../../../kb/framework/wafir-readiness.json";
 import SyntheticNotice from "../SyntheticNotice";
 
 export default function ReadinessScreen({ onBack }: { onBack?: () => void }) {
-  const dims = readiness.wafier_claimed_dimensions;
+  const dims = readiness.wafir_claimed_dimensions;
 
   return (
     <div style={{ minHeight: "100dvh", background: "hsl(var(--color-gray-25))", direction: "rtl", padding: "24px 20px 40px" }}>

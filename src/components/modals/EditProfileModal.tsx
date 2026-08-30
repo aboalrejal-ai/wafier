@@ -7,7 +7,7 @@ interface EditProfileModalProps {
 }
 
 export default function EditProfileModal({ onClose, initial, onSave }: EditProfileModalProps) {
-  const [name, setName] = useState(initial?.name ?? "مستخدم Wafier");
+  const [name, setName] = useState(initial?.name ?? "مستخدم Wafir");
   const [email, setEmail] = useState(initial?.email ?? "user@wafier.sa");
   const [city, setCity] = useState(initial?.city ?? "الأحساء");
   const [saved, setSaved] = useState(false);

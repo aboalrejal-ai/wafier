@@ -1,7 +1,7 @@
 {
   "framework_version": "2.0",
-  "framework_source": "ITU AI Readiness 2.0 — subset for Wafier hackathon evidence",
-  "wafier_claimed_dimensions": [
+  "framework_source": "ITU AI Readiness 2.0 — subset for Wafir hackathon evidence",
+  "wafir_claimed_dimensions": [
     {
       "id": 8,
       "short_name": "data_governance",
@@ -18,7 +18,7 @@
       "short_name": "ai_policies",
       "name": "AI & Policies",
       "evidence": [
-        "policy-engine.ts — 6 verdicts + KB-ADS-001",
+        "policy-engine.ts — 6 verdicts + PDPL-ADS-001",
         "kb/records gaps GAP-01..06",
         "scenarios/sc-03-ads-controversy.json"
       ],

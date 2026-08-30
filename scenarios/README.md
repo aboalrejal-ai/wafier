@@ -1,4 +1,4 @@
-# Wafier Hackathon Scenarios
+# Wafir Hackathon Scenarios
 
 Three mandatory evaluation scenarios for ITU AI Readiness Hackathon.
 

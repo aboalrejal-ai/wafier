@@ -1,4 +1,4 @@
-# Demo video script (≤7 minutes) — Wafier
+# Demo video script (≤7 minutes) — Wafir
 
 **Language:** Arabic (UI) + short English labels OK for judges.  
 **Subtitles:** recommended.

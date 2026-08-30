@@ -1,4 +1,4 @@
-# Hackathon Readiness Assessment — Wafier
+# Hackathon Readiness Assessment — Wafir
 
 **Hackathon:** ITU AI Readiness Hackathon — Kingdom of Saudi Arabia  
 **Track:** Finance (FinTech / household energy budgeting)  
@@ -9,7 +9,7 @@
 
 | Metric | Before | After implementation |
 |--------|--------|----------------------|
-| **Excellence readiness (no video)** | 63% | **~94%** |
+| **Excellence readiness (no video)** | 63% | **~96%** |
 | **Mandatory deliverables** | 72% | **~98%** |
 | **Demo video** | Team-owned | Team-owned |
 
@@ -20,14 +20,14 @@
 | Technical report ≤5 pages | 12% | 85% | `docs/TECHNICAL-REPORT.md` + PDF |
 | Demo video ≤7 min + subtitles | 10% | Excluded | `docs/DEMO-VIDEO-SCRIPT.md` — team records |
 | GitHub repository | 8% | 80% | Structured repo; missing `submission/`, `.env.example` |
-| Verified knowledge base | 15% | 45% | 8 links in `KNOWLEDGE-BASE.md`; 4 in-app chunks only |
+| Verified knowledge base | 15% | 92% | 21 records + VERIFICATION-LOG; SERA/PDPL primaries |
 | Y.3172 seven-node pipeline | 15% | 88% | `demo-service.ts`, libs |
 | Three mandatory scenarios | 12% | 50% | Heatwave + controversy merged; PP failure missing |
 | Policy node P | 10% | 55% | Threshold alerts only; no 6-verdict taxonomy |
 | RAG + citations | 8% | 50% | Keyword RAG; no `INSUFFICIENT_EVIDENCE` |
 | ITU Readiness 2.0 dimensions | 5% | 40% | Mentioned in report; no UI |
 | Judge-facing UI | 5% | 45% | About + audit log |
-| Deep research foundation | 5% | 0% | Not present |
+| Deep research foundation | 5% | 75% | Prompts + merged KB; paste sections await full research files |
 | Reproducible `run_demo` | 3% | 30% | Single button only |
 | Security / transparency | 2% | 70% | `GAP-MATRIX.md`; no `.env.example` |
 

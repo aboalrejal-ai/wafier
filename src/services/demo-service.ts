@@ -260,7 +260,7 @@ export class DemoDataService {
       if (this.state.notifications.length === 0) {
         this.pushNotification(
           usagePct >= 50 ? "level1" : "info",
-          usagePct >= 50 ? "تنبيه الميزانية — المستوى 1" : "مرحباً بك في Wafier",
+          usagePct >= 50 ? "تنبيه الميزانية — المستوى 1" : "مرحباً بك في Wafir",
           usagePct >= 50
             ? `وصلت إلى ${usagePct}% من ميزانيتك (${budget} ر.س). تبقى ${remaining.toFixed(2)} ر.س.`
             : "تم ربط حسابك بنجاح. ميزانيتك الشهرية 500 ر.س.",

@@ -1,8 +1,8 @@
-# Wafier — Technical Report (AI Readiness Hackathon – KSA)
+# Wafir — Technical Report (AI Readiness Hackathon – KSA)
 
-**Team name:** wafier team  
+**Team name:** wafir team  
 **Members:** Fatima Alsultan, Jorry Alfalah, Noor Alshammari, Shahad Alsultan  
-**Solution name:** Wafier — Proactive Bill Prediction and Budget Planning  
+**Solution name:** Wafir — Proactive Bill Prediction and Budget Planning  
 **Contact / Org:** King Faisal University — Budget Planning  
 **Designation:** Students  
 
@@ -12,9 +12,9 @@
 
 ## 1. Introduction
 
-Households often discover electricity overspend only when the monthly bill arrives. Peak summer cooling makes this worse. **Wafier** is an Arabic RTL personal FinTech app that forecasts end-of-month SAR spend from meter-like kWh + weather context, compares forecasts to a user budget, and raises graduated alerts.
+Households often discover electricity overspend only when the monthly bill arrives. Peak summer cooling makes this worse. **Wafir** is an Arabic RTL personal FinTech app that forecasts end-of-month SAR spend from meter-like kWh + weather context, compares forecasts to a user budget, and raises graduated alerts.
 
-The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox) and Saudi policy references (PDPL, SDAIA AI Ethics, SAMA Open Banking context, SEC tariff practice). **18 VERIFIED** KB records in `knowledge-base.json` (merged from three deep-research passes in `docs/research/`).
+The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox) and Saudi policy references (PDPL, SDAIA AI Ethics, SAMA Open Banking context, SERA residential tariff). **21 VERIFIED** KB records in `knowledge-base.json` (merged corpus + `.gov.sa` URL verification; deep-research paste files in `docs/research/`).
 
 ---
 
@@ -22,9 +22,9 @@ The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox
 
 **Problem.** Families lack proactive, explainable energy-budget control tied to local tariffs and heatwaves.
 
-**Gaps Wafier addresses (as implemented).**
+**Gaps Wafir addresses (as implemented).**
 
-| Gap | How Wafier responds (in code) |
+| Gap | How Wafir responds (in code) |
 |-----|-------------------------------|
 | Late bill shock | `predictBill` + Level-2 policy when forecast > budget or temp ≥40°C |
 | Opaque advice | `ragChat` with citations; `INSUFFICIENT_EVIDENCE` when no KB match |
@@ -40,15 +40,15 @@ The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox
 
 | Node | Role | Code | Policy source |
 |------|------|------|---------------|
-| SRC | Budget, kWh, weather | `demo-service.ts` | SEC-TARIFF-001 |
+| SRC | Budget, kWh, weather | `demo-service.ts` | SERA-TARIFF-001 |
 | C | Meter ingest | `ingestMeterReading` | GAP-01 |
 | PP | Gap-fill + anonymize | `preprocessor.ts` | PDPL-ANON-001 |
 | M/MLFO | Seasonal forecast | `ml-predictor.ts` | MDPI-FORECAST-001 |
 | Sandbox | No false alert | `isSandbox` path | ITU-Y3172-001 |
-| P | Budget + KB guard | `policy-engine.ts` | PDPL-ADS-001, SDAIA-ETHICS-001 |
+| P | Budget + KB guard | `policy-engine.ts` | PDPL-ADS-001, SDAIA-AI-ETHICS-001 |
 | D | Notifications | `notification-distributor.ts` | SDAIA-HITL-001 |
 | SINK | RTL UI | React screens | — |
-| KB/RAG | 18 verified chunks | `rag-chat.ts`, `/hackathon/kb` | `knowledge-base.json` |
+| KB/RAG | 21 verified chunks | `rag-chat.ts`, `/hackathon/kb` | `knowledge-base.json` |
 
 ---
 
@@ -62,7 +62,7 @@ The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox
 | D12 | Human–AI Collaboration | HITL 2h alert snooze |
 | D13 | Deployment | Vite SPA, Hostinger, Capacitor, Supabase optional |
 
-See `kb/framework/wafier-readiness.json` and `/hackathon/readiness` UI.
+See `kb/framework/wafir-readiness.json` and `/hackathon/readiness` UI.
 
 ---
 
@@ -83,7 +83,7 @@ Targeted ads request → `VIOLATION` / `BLOCK_DATA_USE` / PDPL-ADS-001.
 |----|------|-----|----------------|
 | GAP-01 | potential_gap | No open AMI API | National utility data access framework |
 | GAP-02 | ambiguity | Forecast error liability | Sector guidance on AI estimates |
-| GAP-03 | potential_gap | Energy-specific AI data rules | SEC circular under PDPL |
+| GAP-03 | potential_gap | Energy-specific AI data rules | PDPL + SERA tariff circular |
 | GAP-04 | potential_gap | No algorithm audit standard | Y.3172 sandbox + external audit |
 | GAP-05 | potential_gap | No machine-readable law repo | Government structured regulation API |
 | GAP-06 | ambiguity | Consumption → ads enforcement | Explicit PDPL marketing guidance |

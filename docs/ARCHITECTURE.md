@@ -1,4 +1,4 @@
-# Wafier Architecture
+# Wafir Architecture
 
 ```
 SRC (meter sim, weather, budget)

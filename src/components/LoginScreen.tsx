@@ -71,7 +71,7 @@ export default function LoginScreen({ onLogin, onSignUp, onResetPassword, onGoog
             </svg>
           </div>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "hsl(var(--color-gray-950))", letterSpacing: "-0.5px" }}>
-            Wafier
+            Wafir
           </h1>
           <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-sa-600))", fontWeight: 500 }}>
             إدارة الطاقة والحلول الذكية

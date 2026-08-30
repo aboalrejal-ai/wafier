@@ -120,8 +120,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-ETHICS-001",
-      sourceUrl: "https://sdaia.gov.sa/",
+      recordId: "SDAIA-AI-ETHICS-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
     });
   }
 
@@ -133,8 +133,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-ETHICS-001",
-      sourceUrl: "https://sdaia.gov.sa/",
+      recordId: "SDAIA-AI-ETHICS-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
     });
   }
 
@@ -146,8 +146,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-ETHICS-001",
-      sourceUrl: "https://sdaia.gov.sa/",
+      recordId: "SDAIA-AI-ETHICS-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
     });
   }
 

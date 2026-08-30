@@ -40,7 +40,7 @@ export default function DesktopLogin({ onLogin, onSignUp, onResetPassword, onGoo
           <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.15)", border: "1.5px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
             <svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
           </div>
-          <h1 style={{ margin: "0 0 8px", fontSize: 42, fontWeight: 800, color: "#fff" }}>Wafier</h1>
+          <h1 style={{ margin: "0 0 8px", fontSize: 42, fontWeight: 800, color: "#fff" }}>Wafir</h1>
           <p style={{ margin: 0, fontSize: 15, color: "rgba(255,255,255,0.65)" }}>إدارة الطاقة والحلول المالية الذكية</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 40 }}>
             {[

@@ -1,4 +1,4 @@
-# Perplexity Deep Research — Prompt لـ Wafier
+# Perplexity Deep Research — Prompt لـ Wafir
 
 ## وش تسوي أنت
 
@@ -16,7 +16,7 @@
 ```text
 Deep Research request — ITU AI Readiness Hackathon KSA, Finance track.
 
-Application: Wafier — household electricity budget FinTech. Converts kWh to SAR (SEC-style residential tariff), forecasts end-of-month spend, policy alerts at 50%/75%/forecast-over-budget, RAG Q&A with government citations, PDPL consent, synthetic demo data.
+Application: Wafir — household electricity budget FinTech. Converts kWh to SAR (SEC-style residential tariff), forecasts end-of-month spend, policy alerts at 50%/75%/forecast-over-budget, RAG Q&A with government citations, PDPL consent, synthetic demo data.
 
 Find authoritative Saudi (.gov.sa preferred) and international sources. Provide working URLs and exact document names. Mark unverifiable items UNVERIFIED.
 

@@ -74,7 +74,7 @@ export default function AboutScreen({ onBack }: { onBack?: () => void }) {
       </button>
 
       <div style={{ maxWidth: 560, margin: "0 auto" }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, margin: "0 0 8px" }}>Wafier</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 800, margin: "0 0 8px" }}>Wafir</h1>
         <p style={{ color: "hsl(var(--color-sa-600))", fontWeight: 600, margin: "0 0 12px" }}>
           Proactive Bill Prediction and Budget Planning
         </p>

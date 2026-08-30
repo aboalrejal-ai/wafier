@@ -65,7 +65,7 @@ export default function ConsentScreen() {
             fontSize: 15, fontWeight: 700, cursor: accepted && privacy ? "pointer" : "not-allowed", fontFamily: "inherit",
           }}
         >
-          متابعة إلى Wafier
+          متابعة إلى Wafir
         </button>
       </div>
     </div>

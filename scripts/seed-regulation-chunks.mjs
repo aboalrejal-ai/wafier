@@ -21,7 +21,7 @@ function sql(s) {
   return `'${String(s).replace(/'/g, "''")}'`;
 }
 
-const out = `-- Wafier KB seed (${verified.length} chunks)\n${lines.join("\n")}\n`;
+const out = `-- Wafir KB seed (${verified.length} chunks)\n${lines.join("\n")}\n`;
 const target = join(__dirname, "../supabase/seed-regulation-chunks.sql");
 writeFileSync(target, out);
 console.log(`Wrote ${verified.length} INSERT statements to supabase/seed-regulation-chunks.sql`);

@@ -137,7 +137,7 @@ interface DesktopAIAssistantProps {
 export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantProps) {
   const { spend, budget, forecast } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "مرحباً! أنا مساعد Wafier الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
+    { role: "ai", text: "مرحباً! أنا مساعد Wafir الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -190,7 +190,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ textAlign: "end" }}>
-              <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafier AI</h1>
+              <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafir AI</h1>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
             </div>
             <div style={{
@@ -221,7 +221,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
                   </svg>
                 </div>
-                <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 700, color: "#0D121C" }}>Wafier AI</p>
+                <p style={{ margin: "0 0 6px", fontSize: 26, fontWeight: 700, color: "#0D121C" }}>Wafir AI</p>
                 <p style={{ margin: 0, fontSize: 15, color: "#4D5761" }}>كيف يمكنني مساعدتك اليوم؟</p>
               </div>
             )}
@@ -379,7 +379,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
                 }}
-                placeholder="اسأل Wafier AI..."
+                placeholder="اسأل Wafir AI..."
                 dir="rtl"
                 rows={1}
                 style={{

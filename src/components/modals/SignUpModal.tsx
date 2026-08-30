@@ -67,7 +67,7 @@ export default function SignUpModal({ onClose, onSignUp }: SignUpModalProps) {
             </button>
             <div style={{ textAlign: "end" }}>
               <h2 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>إنشاء حساب جديد</h2>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>انضم إلى Wafier وابدأ التوفير</p>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>انضم إلى Wafir وابدأ التوفير</p>
             </div>
           </div>
 

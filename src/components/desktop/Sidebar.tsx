@@ -79,7 +79,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
             <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
           </div>
           <div style={{ textAlign: "start" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafier</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>Wafir</div>
             <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>إدارة الطاقة والحلول الذكية</div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
         })}
         <button onClick={() => onNavigate("about")} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer", background: current === "about" ? "#F3FCF6" : "transparent", color: "#111927", fontSize: 14, fontFamily: "inherit", marginTop: 8, textAlign: "start" }}>
           <span>ℹ️</span>
-          <span>عن Wafier</span>
+          <span>عن Wafir</span>
         </button>
       </nav>
 

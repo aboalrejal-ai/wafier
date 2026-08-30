@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Hackathon scenario runner — mirrors samaam run_demo.py for Wafier libs.
+ * Hackathon scenario runner — mirrors samaam run_demo.py for Wafir libs.
  * Usage: node scripts/run-demo.mjs [1|2|3]
  */
 
@@ -116,7 +116,7 @@ const arg = process.argv[2];
 const runners = { 1: runSc01, 2: runSc02, 3: runSc03 };
 const list = arg && runners[arg] ? [runners[arg]] : [runSc01, runSc02, runSc03];
 
-console.log("Wafier Hackathon Demo Runner");
+console.log("Wafir Hackathon Demo Runner");
 console.log("Sample spend 890 kWh →", kwhToSar(890), "SAR");
 
 let allOk = true;

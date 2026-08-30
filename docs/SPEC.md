@@ -1,4 +1,4 @@
-# Wafier — Product Specification (honest)
+# Wafir — Product Specification (honest)
 
 **Team:** Fatima Alsultan, Jorry Alfalah, Noor Alshammari, Shahad Alsultan  
 **Contact:** King Faisal University — Budget Planning  

@@ -91,7 +91,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
               </svg>
             </div>
-            <span style={{ fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>Wafier</span>
+            <span style={{ fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>Wafir</span>
           </div>
           <p style={{ margin: "2px 0 0", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
             إدارة الطاقة والحلول المالية

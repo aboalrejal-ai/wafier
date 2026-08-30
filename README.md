@@ -1,8 +1,8 @@
-# Wafier — Proactive Bill Prediction and Budget Planning
+# Wafir — Proactive Bill Prediction and Budget Planning
 
 Arabic RTL FinTech app for household energy budget management (**ITU-T Y.3172** aligned).
 
-**English (judges):** Wafier forecasts monthly electricity spend in SAR from simulated smart-meter kWh, compares against a user budget, runs a deterministic policy node (PDPL/SDAIA guardrails), and answers questions with **verified Saudi policy citations**. Finance track — energy budgeting FinTech.
+**English (judges):** Wafir forecasts monthly electricity spend in SAR from simulated smart-meter kWh, compares against a user budget, runs a deterministic policy node (PDPL/SDAIA guardrails), and answers questions with **verified Saudi policy citations**. Finance track — energy budgeting FinTech.
 
 ## Demo video
 

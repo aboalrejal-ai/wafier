@@ -22,7 +22,7 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 | SC-01 compliant RAG | `scenarios/sc-01-compliant-rag.json` |
 | SC-02 PP failure | `scenarios/sc-02-pp-gap-fill.json` |
 | SC-03 controversy | `scenarios/sc-03-ads-controversy.json` |
-| ITU Readiness 2.0 (5 dims) | `kb/framework/wafier-readiness.json` |
+| ITU Readiness 2.0 (5 dims) | `kb/framework/wafir-readiness.json` |
 | Synthetic data notice | `SyntheticNotice` component |
 | Honest limitations | [GAP-MATRIX.md](./GAP-MATRIX.md) |
 

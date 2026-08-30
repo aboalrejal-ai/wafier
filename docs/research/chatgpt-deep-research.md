@@ -1,4 +1,4 @@
-# ChatGPT Deep Research — Prompt لـ Wafier
+# ChatGPT Deep Research — Prompt لـ Wafir
 
 ## وش تسوي أنت
 
@@ -16,7 +16,7 @@
 ```text
 You are conducting primary-source legal and regulatory research for an ITU AI Readiness Hackathon submission in Saudi Arabia.
 
-PROJECT: Wafier — FinTech app for proactive household electricity budget management (Finance track). Forecasts SAR spend from kWh + weather; PDPL consent; deterministic policy node; RAG assistant with mandatory citations; ITU-T Y.3172 pipeline.
+PROJECT: Wafir — FinTech app for proactive household electricity budget management (Finance track). Forecasts SAR spend from kWh + weather; PDPL consent; deterministic policy node; RAG assistant with mandatory citations; ITU-T Y.3172 pipeline.
 
 TASK: Deep Research — find ONLY authentic, publicly accessible Saudi and international policy sources. Cross-check titles against actual documents. Do not fabricate URLs or article numbers.
 
