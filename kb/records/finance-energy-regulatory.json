@@ -218,6 +218,19 @@
       "node": "KB"
     },
     {
+      "id": "NSDAI-001",
+      "title": "National Strategy for Data & AI (NSDAI)",
+      "authority": "SDAIA",
+      "section": "Vision 2030; Skills, Policy, Investment, Research, Ecosystem",
+      "content": "الاستراتيجية الوطنية للبيانات والذكاء الاصطناعي — توجه وطني لقيادة المملكة في الاقتصاد القائم على البيانات. مرجع ITUAIReadiness InputDocs Saudi_Arabia_NSDAI.pdf.",
+      "url": "https://sdaia.gov.sa/en/SDAIA/SdaiaStrategies/Documents/NSDAI.pdf",
+      "year": 2020,
+      "lang": "en",
+      "verification": "VERIFIED",
+      "category": "national_strategy",
+      "node": "KB"
+    },
+    {
       "id": "SDAIA-HITL-001",
       "title": "SDAIA — Human oversight",
       "authority": "SDAIA",

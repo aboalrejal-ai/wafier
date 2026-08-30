@@ -1,7 +1,9 @@
 # Wafir Knowledge Base (authentic public sources)
 
-**Submission file:** [`knowledge-base.json`](../knowledge-base.json) (**41** VERIFIED + **1** ISO benchmark)  
+**Submission file:** [`knowledge-base.json`](../knowledge-base.json) (**42** VERIFIED + **1** ISO benchmark)  
 **Structured corpus:** [`kb/records/finance-energy-regulatory.json`](../kb/records/finance-energy-regulatory.json)  
+**ITU manifest:** [`kb/InputDocs/Inputs.md`](../kb/InputDocs/Inputs.md)  
+**Framework source:** [`docs/ITU-FRAMEWORK-SOURCE.md`](../docs/ITU-FRAMEWORK-SOURCE.md)  
 **Verification log:** [`kb/VERIFICATION-LOG.md`](../kb/VERIFICATION-LOG.md)  
 **Deep research (complete):** [`docs/research/`](../docs/research/)
 

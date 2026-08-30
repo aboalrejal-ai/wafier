@@ -20,12 +20,12 @@
 | Technical report ≤5 pages | 12% | 85% | `docs/TECHNICAL-REPORT.md` + PDF |
 | Demo video ≤7 min + subtitles | 10% | Excluded | `docs/DEMO-VIDEO-SCRIPT.md` — team records |
 | GitHub repository | 8% | 80% | Structured repo; missing `submission/`, `.env.example` |
-| Verified knowledge base | 15% | 98% | 41 records + 3 deep-research files |
+| Verified knowledge base | 15% | 98% | 42 records + Inputs.md manifest |
 | Y.3172 seven-node pipeline | 15% | 88% | `demo-service.ts`, libs |
 | Three mandatory scenarios | 12% | 50% | Heatwave + controversy merged; PP failure missing |
 | Policy node P | 10% | 55% | Threshold alerts only; no 6-verdict taxonomy |
 | RAG + citations | 8% | 50% | Keyword RAG; no `INSUFFICIENT_EVIDENCE` |
-| ITU Readiness 2.0 dimensions | 5% | 40% | Mentioned in report; no UI |
+| ITU Readiness 2.0 dimensions | 5% | 85% | 7 dims with official names; `dimensions.json` copied |
 | Judge-facing UI | 5% | 45% | About + audit log |
 | Deep research foundation | 5% | 100% | `docs/research/*.md` complete (ChatGPT/Gemini/Perplexity) |
 | Reproducible `run_demo` | 3% | 30% | Single button only |
@@ -62,6 +62,6 @@
 
 ## References
 
-- Official guide: `ITU-AI-Readiness-26/docs/ITU-AI-Readiness-KSA-Guide.md`
+- Official ITU framework: [docs/ITU-FRAMEWORK-SOURCE.md](ITU-FRAMEWORK-SOURCE.md) + [CrashingGuru/ITUAIReadiness](https://github.com/CrashingGuru/ITUAIReadiness)
 - Internal gap matrix: `docs/GAP-MATRIX.md`
 - Submission checklist: `docs/SUBMISSION-CHECKLIST.md`

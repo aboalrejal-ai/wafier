@@ -1,58 +1,77 @@
 {
   "framework_version": "2.0",
-  "framework_source": "ITU AI Readiness 2.0 — subset for Wafir hackathon evidence",
-  "wafir_claimed_dimensions": [
+  "framework_source": "ITU AI Ready - Analysis Towards a Standardized Readiness Framework, Report 2.0, January 2026",
+  "upstream_repo": "https://github.com/CrashingGuru/ITUAIReadiness",
+  "official_dimensions_file": "kb/framework/dimensions.json",
+  "wafir_evidence_by_dimension": [
+    {
+      "id": 1,
+      "itu_metrics": ["d1_m10 Personal Data Standards", "d1_m09 Privacy and Security"],
+      "evidence": [
+        "ConsentScreen — explicit PDPL consent before processing",
+        "preprocessor.ts — pseudonymizeForExport (privacy-by-design)",
+        "KB records PDPL-* with verified sdaia.gov.sa / dgp.sdaia.gov.sa URLs"
+      ],
+      "code_refs": ["src/components/ConsentScreen.tsx", "src/lib/preprocessor.ts", "knowledge-base.json"]
+    },
+    {
+      "id": 5,
+      "itu_metrics": ["d5_m01 Automation Level", "d5_m02 Benefits", "d5_m12 Cost Reduction"],
+      "evidence": [
+        "Y.3172 pipeline SRC→C→PP→M→P→D→SINK with audit trail",
+        "Graduated budget alerts when forecast exceeds SAR budget",
+        "pnpm demo — reproducible SC-01/02/03 evaluation path"
+      ],
+      "code_refs": ["src/services/demo-service.ts", "src/lib/policy-engine.ts", "scripts/run-demo.mjs"]
+    },
+    {
+      "id": 6,
+      "itu_metrics": ["d6_m02 Local Language Models", "d6_m04 Usability Level"],
+      "evidence": [
+        "Arabic RTL mobile + desktop UI (IBM Plex Sans Arabic)",
+        "AI Assistant — natural-language Q&A with policy citations",
+        "Forecast disclaimers: توقعات تقديرية"
+      ],
+      "code_refs": ["src/components/AIAssistantScreen.tsx", "src/index.css", "src/lib/rag-chat.ts"]
+    },
     {
       "id": 8,
-      "short_name": "data_governance",
-      "name": "Data Governance (PDPL)",
+      "itu_metrics": ["d8_m01 Co-creation Ease", "d8_m03 Exchange Value"],
       "evidence": [
-        "ConsentScreen — explicit PDPL consent",
-        "preprocessor.ts — anonymizeForExport",
-        "kb/records PDPL-*"
+        "Profile HITL — إيقاف التنبيهات ساعتين (human override)",
+        "RAG co-creation: user question shaped by verified KB chunks",
+        "setAlertOverride in demo-service"
       ],
-      "code_refs": ["src/components/ConsentScreen.tsx", "src/lib/preprocessor.ts"]
+      "code_refs": ["src/components/ProfileScreen.tsx", "src/services/demo-service.ts", "src/lib/rag-chat.ts"]
     },
     {
       "id": 10,
-      "short_name": "ai_policies",
-      "name": "AI & Policies",
+      "itu_metrics": ["d10_m04 Horizontal Policies", "d10_m06 Safety Policies", "d10_m07 Explainability Metrics", "d10_m10 Data Sovereignty"],
       "evidence": [
-        "policy-engine.ts — 6 verdicts + PDPL-ADS-001",
-        "kb/records gaps GAP-01..06",
-        "scenarios/sc-03-ads-controversy.json"
+        "policy-engine.ts — 6 deterministic verdicts + PDPL-ADS-001",
+        "GAP-01..06 Policy Gap Matrix in report + /hackathon/gaps",
+        "scenarios/sc-03-ads-controversy.json — policy sandbox for ads controversy"
       ],
-      "code_refs": ["src/lib/policy-engine.ts", "scenarios/"]
+      "code_refs": ["src/lib/policy-engine.ts", "scenarios/", "src/components/hackathon/GapsScreen.tsx"]
     },
     {
       "id": 11,
-      "short_name": "transparency",
-      "name": "Transparency & Explainability",
+      "itu_metrics": ["d11_m07 Regional Language Support", "d11_m08 Offline/local-language access"],
       "evidence": [
-        "rag-chat.ts — citations + INSUFFICIENT_EVIDENCE",
-        "UI disclaimer: توقعات تقديرية"
+        "Arabic-first RTL interface for household energy budgeting",
+        "Local tariff + Saudi policy context in RAG (not generic English-only advice)"
       ],
-      "code_refs": ["src/lib/rag-chat.ts", "src/components/AIAssistantScreen.tsx"]
-    },
-    {
-      "id": 12,
-      "short_name": "human_ai_collab",
-      "name": "Human–AI Collaboration",
-      "evidence": [
-        "Profile HITL — إيقاف التنبيهات ساعتين",
-        "setAlertOverride in demo-service"
-      ],
-      "code_refs": ["src/components/ProfileScreen.tsx", "src/services/demo-service.ts"]
+      "code_refs": ["src/App.tsx", "src/lib/kb-data.ts", "knowledge-base.json"]
     },
     {
       "id": 13,
-      "short_name": "deployment",
-      "name": "Deployment Support",
+      "itu_metrics": ["d13_m01 AI-Enabled Devices", "d13_m02 Data Centers", "d13_m03 Digital Services"],
       "evidence": [
-        "Vite SPA + Hostinger static deploy",
-        "Optional Supabase + Capacitor Android"
+        "Vite SPA — static deploy on Hostinger",
+        "Optional Supabase edge functions (rag-chat, predict-bill, evaluate-policy)",
+        "Capacitor Android wrapper (sa.wafier.app)"
       ],
-      "code_refs": ["README.md", "capacitor.config.ts", "supabase/"]
+      "code_refs": ["README.md", "capacitor.config.ts", "supabase/functions/"]
     }
   ]
 }

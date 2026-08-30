@@ -14,7 +14,7 @@
 
 Households often discover electricity overspend only when the monthly bill arrives. Peak summer cooling makes this worse. **Wafir** is an Arabic RTL personal FinTech app that forecasts end-of-month SAR spend from meter-like kWh + weather context, compares forecasts to a user budget, and raises graduated alerts.
 
-The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox) and Saudi policy references merged from three independent deep-research passes (ChatGPT, Gemini, Perplexity) in `docs/research/`. **41 VERIFIED** KB records (+1 ISO benchmark) in `knowledge-base.json`.
+The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox) and Saudi policy references merged from three independent deep-research passes (ChatGPT, Gemini, Perplexity) in `docs/research/`. **42 VERIFIED** KB records (+1 ISO benchmark) in `knowledge-base.json`. Framework alignment: [`docs/ITU-FRAMEWORK-SOURCE.md`](ITU-FRAMEWORK-SOURCE.md) ↔ [CrashingGuru/ITUAIReadiness](https://github.com/CrashingGuru/ITUAIReadiness).
 
 ---
 
@@ -48,19 +48,27 @@ The solution is grounded in **ITU-T Y.3172** (ML pipeline nodes + MLFO + sandbox
 | P | Budget + KB guard | `policy-engine.ts` | PDPL-ADS-001, SDAIA-AI-ETHICS-PDF-001 |
 | D | Notifications | `notification-distributor.ts` | SDAIA-HITL-001 |
 | SINK | RTL UI | React screens | SAMA-CP-RULEBOOK-001 (analog) |
-| KB/RAG | 41 verified chunks | `rag-chat.ts`, `/hackathon/kb` | `knowledge-base.json` |
+| KB/RAG | 42 verified chunks | `rag-chat.ts`, `/hackathon/kb` | `knowledge-base.json` |
+
+**Y.3172 ↔ ITU Readiness dimensions** (per ITUAIReadiness `ITU-T_Y.3172_summary.txt`): D5 AI Integration in Workflows, D10 AI & Policies, D13 Digital Infrastructure (Y.3172 nodes as AI-enabled devices).
 
 ---
 
-## 4. ITU AI Readiness 2.0 — five claimed dimensions
+## 4. ITU AI Readiness 2.0 — dimension mapping (official names)
 
-| ID | Dimension | Evidence |
-|----|-----------|----------|
-| D8 | Data Governance | PDPL consent, `anonymizeForExport` (pseudonymization) |
-| D10 | AI & Policies | 6 verdicts, GAP-01..06 matrix, SC-03 |
-| D11 | Transparency | RAG citations, forecast disclaimers |
-| D12 | Human–AI Collaboration | HITL 2h alert snooze |
-| D13 | Deployment | Vite SPA, Hostinger, Capacitor, Supabase optional |
+Official 13-dimension definitions: `kb/framework/dimensions.json` (from [ITUAIReadiness](https://github.com/CrashingGuru/ITUAIReadiness)). Wafir documents **seven dimensions with code evidence**:
+
+| ID | Official ITU dimension | Wafir evidence |
+|----|------------------------|----------------|
+| D1 | Data/Model Marketplace | PDPL personal-data standards — consent, pseudonymization (`ConsentScreen`, `preprocessor.ts`) |
+| D5 | Level of Integration of AI in Workflows | Y.3172 pipeline audit, budget alerts, `pnpm demo` |
+| D6 | Human Interface | Arabic RTL UI, AI assistant with citations |
+| D8 | Collaboration with AI | HITL 2h alert snooze, human-shaped RAG queries |
+| D10 | AI & Policies | 6 verdicts, GAP-01..06 matrix, SC-03 policy sandbox |
+| D11 | AI for Inclusion | Arabic-first RTL, local Saudi tariff/policy context |
+| D13 | Digital Infrastructure | Vite SPA, Hostinger, optional Supabase/Capacitor |
+
+PDPL/data governance maps to **D1** (Personal Data Standards) and **D10** (Horizontal Policies, Data Sovereignty) — not D8 (Collaboration with AI).
 
 See `kb/framework/wafir-readiness.json` and `/hackathon/readiness` UI.
 

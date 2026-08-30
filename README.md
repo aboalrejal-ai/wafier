@@ -34,6 +34,23 @@ pnpm demo      # hackathon scenarios SC-01/02/03
 | Readiness assessment | [docs/HACKATHON-READINESS.md](docs/HACKATHON-READINESS.md) |
 | Checklist | [docs/SUBMISSION-CHECKLIST.md](docs/SUBMISSION-CHECKLIST.md) |
 
+## Official ITU Framework Reference
+
+Wafir aligns evidence to the **ITU AI Readiness Framework 2.0** from the official training repository:
+
+| Resource | Path |
+|----------|------|
+| Upstream repo | [github.com/CrashingGuru/ITUAIReadiness](https://github.com/CrashingGuru/ITUAIReadiness) |
+| 13 dimensions (official JSON) | [kb/framework/dimensions.json](kb/framework/dimensions.json) |
+| Wafir evidence mapping | [kb/framework/wafir-readiness.json](kb/framework/wafir-readiness.json) |
+| KB manifest (Inputs.md style) | [kb/InputDocs/Inputs.md](kb/InputDocs/Inputs.md) |
+| Alignment doc | [docs/ITU-FRAMEWORK-SOURCE.md](docs/ITU-FRAMEWORK-SOURCE.md) |
+
+```bash
+git clone https://github.com/CrashingGuru/ITUAIReadiness
+# Compare: ITUAIReadiness/simulation/data/framework/dimensions.json ↔ kb/framework/dimensions.json
+```
+
 ## Y.3172 (implemented)
 
 `SRC → Collector → Preprocessor → Model (MLFO) → Policy → Distributor → SINK`
@@ -48,7 +65,7 @@ pnpm demo      # hackathon scenarios SC-01/02/03
 About → three scenario buttons + links to:
 - `/hackathon/kb` — verified sources
 - `/hackathon/gaps` — GAP-01..06
-- `/hackathon/readiness` — ITU AI Readiness 2.0
+- `/hackathon/readiness` — ITU Readiness 2.0 (official dimension names from `dimensions.json`)
 
 ## Environment
 

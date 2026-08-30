@@ -22,7 +22,7 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 | SC-01 compliant RAG | `scenarios/sc-01-compliant-rag.json` |
 | SC-02 PP failure | `scenarios/sc-02-pp-gap-fill.json` |
 | SC-03 controversy | `scenarios/sc-03-ads-controversy.json` |
-| ITU Readiness 2.0 (5 dims) | `kb/framework/wafir-readiness.json` |
+| ITU Readiness 2.0 (7 dims, official names) | `kb/framework/dimensions.json`, `wafir-readiness.json` |
 | Synthetic data notice | `SyntheticNotice` component |
 | Honest limitations | [GAP-MATRIX.md](./GAP-MATRIX.md) |
 
@@ -30,7 +30,7 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 
 - [x] `pnpm test` and `pnpm demo` pass
 - [x] Deep research pasted in `docs/research/`
-- [x] KB merged (41 records)
+- [x] KB merged (42 records)
 - [ ] **Team:** Record video ≤7 min + subtitles → paste URL in README
 - [ ] **Team:** Export PDF from `docs/TECHNICAL-REPORT.md`
 - [ ] **Team:** Open 5–10 KB links in Incognito
