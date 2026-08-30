@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const kb = JSON.parse(readFileSync(join(__dirname, "../kb/records/finance-energy-regulatory.json"), "utf8"));
 
-const verified = kb.records.filter((r) => r.verification === "VERIFIED");
+const verified = kb.records.filter((r) => r.verification === "VERIFIED" || r.verification === "VERIFIED_BENCHMARK");
 const lines = verified.map(
   (r) =>
     `INSERT INTO regulation_chunks (source, title, content, url) VALUES (${sql(r.authority)}, ${sql(r.title)}, ${sql(r.content)}, ${sql(r.url)}) ON CONFLICT DO NOTHING;`,

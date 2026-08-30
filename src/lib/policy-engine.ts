@@ -47,14 +47,14 @@ export interface AdsPolicyRequest {
 
 const KB_ADS_RECORD = {
   id: "PDPL-ADS-001",
-  url: "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
-  title: "PDPL — منع إعلانات من بيانات الاستهلاك",
+  url: "https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PDPL/",
+  title: "Wafir policy — no ads from consumption data",
 };
 
-const PDPL_ANON_RECORD = {
+const PDPL_PSEUDO_RECORD = {
   id: "PDPL-ANON-001",
-  url: "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
-  title: "PDPL — إخفاء الهوية للتحليل",
+  url: "https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PersonalDataDestruction/",
+  title: "PDPL — Pseudonymization for ML export",
 };
 
 /** Deterministic KB guard — no LLM in decision path. */
@@ -66,7 +66,7 @@ export function evaluateKbGuardPolicy(request: AdsPolicyRequest): PolicyDecision
       recordId: KB_ADS_RECORD.id,
       sourceUrl: KB_ADS_RECORD.url,
       title: "حارس سياسة KB — منع الإعلانات",
-      detail: `رفض طلب${request.providerName ? ` من ${request.providerName}` : ""}: بيانات الاستهلاك لا تُستخدم للإعلانات المستهدفة (PDPL تحديد الغرض + SDAIA).`,
+      detail: `رفض طلب${request.providerName ? ` من ${request.providerName}` : ""}: سياسة خصوصية Wafir + تحديد الغرض PDPL — لا إعادة استخدام بيانات الاستهلاك للإعلانات دون أساس/موافقة منفصلة.`,
     };
   }
   return {
@@ -84,19 +84,19 @@ export function evaluateAnonymizationPolicy(exported: boolean): PolicyDecision {
     return {
       verdict: "INSUFFICIENT_EVIDENCE",
       action: "REQUIRE_HITL",
-      recordId: PDPL_ANON_RECORD.id,
-      sourceUrl: PDPL_ANON_RECORD.url,
-      title: "تصدير بدون إخفاء هوية",
-      detail: "يجب تطبيق إخفاء الهوية قبل تصدير بيانات الأسرة لمسار ML.",
+      recordId: PDPL_PSEUDO_RECORD.id,
+      sourceUrl: PDPL_PSEUDO_RECORD.url,
+      title: "تصدير بدون إخفاء هوية كافٍ",
+      detail: "يجب تطبيق pseudonymization (وليس anonymization كاملاً) قبل تصدير بيانات الأسرة لمسار ML.",
     };
   }
   return {
     verdict: "COMPLIANT",
     action: "PROCEED",
-    recordId: PDPL_ANON_RECORD.id,
-    sourceUrl: PDPL_ANON_RECORD.url,
-    title: "إخفاء هوية مُطبّق",
-    detail: "تم إخفاء معرف الأسرة قبل المعالجة.",
+    recordId: PDPL_PSEUDO_RECORD.id,
+    sourceUrl: PDPL_PSEUDO_RECORD.url,
+    title: "Pseudonymization مُطبّق",
+    detail: "تم استبدال معرف الأسرة بمعرف مجهول (pseudonymization) قبل المعالجة — لا يُعد anonymization كاملاً.",
   };
 }
 
@@ -120,8 +120,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-AI-ETHICS-001",
-      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
+      recordId: "SDAIA-AI-ETHICS-PDF-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/wcm/connect/4c56ed1c-1b82-447d-ac29-638f5f99c12e/ai-principles-EN.pdf",
     });
   }
 
@@ -133,8 +133,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-AI-ETHICS-001",
-      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
+      recordId: "SDAIA-AI-ETHICS-PDF-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/wcm/connect/4c56ed1c-1b82-447d-ac29-638f5f99c12e/ai-principles-EN.pdf",
     });
   }
 
@@ -146,8 +146,8 @@ export function evaluateBudgetPolicy(input: PolicyInput): PolicyAlert[] {
       type: "warning",
       verdict: "COMPLIANT",
       action: "WARN",
-      recordId: "SDAIA-AI-ETHICS-001",
-      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/services/AIEthicsAssessment/",
+      recordId: "SDAIA-AI-ETHICS-PDF-001",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/wcm/connect/4c56ed1c-1b82-447d-ac29-638f5f99c12e/ai-principles-EN.pdf",
     });
   }
 
@@ -172,7 +172,7 @@ export function evaluatePolicy(input: PolicyInput): PolicyAlert[] {
   return evaluateBudgetPolicy(input);
 }
 
-/** PDPL anonymization — hash household id for ML export */
+/** PDPL pseudonymization — hash household id for ML export (not full anonymization). */
 export function anonymizeHouseholdId(householdId: string): string {
   let hash = 0;
   for (let i = 0; i < householdId.length; i++) {

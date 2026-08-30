@@ -1,5 +1,13 @@
 # Changelog — Wafir Hackathon Readiness
 
+## v1.2-full-research-merge (2026-08-30)
+
+### Changed
+- Pasted full deep research into `docs/research/` (ChatGPT, Gemini, Perplexity)
+- KB expanded to **41 VERIFIED** + ISO 42001 benchmark + 6 GAP (merged from all three passes)
+- Legal wording: no unverified 24°C; SC-03 framed as Wafir privacy control; pseudonymization labels
+- SAMA consumer rules as analog benchmark; SERA consumption tariff URL updated
+
 ## v1.1-research-kb-wafir (2026-08-30)
 
 ### Changed

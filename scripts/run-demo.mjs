@@ -56,7 +56,7 @@ function evaluateKbGuardPolicy(request) {
       verdict: "VIOLATION",
       action: "BLOCK_DATA_USE",
       recordId: "PDPL-ADS-001",
-      sourceUrl: "https://sdaia.gov.sa/ar/SDAIA/about/Pages/AboutPDPL.aspx",
+      sourceUrl: "https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PDPL/",
       title: "حارس سياسة KB — منع الإعلانات",
       detail: "رفض استخدام بيانات الاستهلاك للإعلانات المستهدفة.",
     };

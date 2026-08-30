@@ -1,22 +1,21 @@
 # Deep Research — دليل سريع
 
-**لا تبحث هنا.** هذا الملف فقط يوجّهك للثلاثة prompts.
+**الأبحاث الثلاثة مكتملة** (2026-08-30) — النتائج تحت «نتيجة البحث» في كل ملف.
 
-| الأداة | الملف | وش تسوي |
-|--------|-------|---------|
-| Gemini / Google Deep Research | [gemini-deep-research.md](./gemini-deep-research.md) | انسخ الـ prompt → شغّل → الصق النتيجة تحت «نتيجة البحث» |
-| ChatGPT Deep Research | [chatgpt-deep-research.md](./chatgpt-deep-research.md) | نفس الشي |
-| Perplexity Research | [perplexity-deep-research.md](./perplexity-deep-research.md) | نفس الشي |
+| الأداة | الملف | الحالة |
+|--------|-------|--------|
+| ChatGPT Deep Research | [chatgpt-deep-research.md](./chatgpt-deep-research.md) | مكتمل (~R1–R20) |
+| Gemini Deep Research | [gemini-deep-research.md](./gemini-deep-research.md) | مكتمل (~650 سطر) |
+| Perplexity Research | [perplexity-deep-research.md](./perplexity-deep-research.md) | مكتمل (VR-* + GAP-01..12) |
 
-## بعد ما تخلص الثلاثة
+## الدمج في المشروع
 
-1. افتح كل رابط في الأبحاث وتأكد يشتغل (Incognito).
-2. قل لي: **«حدّثت الثلاثة ملفات — اقرأها وحدّث knowledge base والتطبيق»**
-3. أنا أدمج النتائع الحقيقية في:
-   - `kb/records/finance-energy-regulatory.json`
-   - `knowledge-base.json`
-   - `src/lib/regulation-chunks.ts` / RAG
+- `kb/records/finance-energy-regulatory.json` — 40 VERIFIED + 1 benchmark + 1 UNVERIFIED
+- `knowledge-base.json` — `node scripts/export-knowledge-base.mjs`
+- `kb/VERIFICATION-LOG.md`
 
-## ملاحظة
+## قبل التسليم
 
-المحتوى اللي كان مكتوب سابقاً في ملفات البحث كان **مسودة من عندي** — **مو** نتيجة Deep Research حقيقية. استبدله بنتائجك أنت.
+1. افتح 5–10 روابط من `knowledge-base.json` في Incognito.
+2. سجّل الفيديو ≤7 دق + subtitles.
+3. الصق رابط الفيديو في `README.md`.

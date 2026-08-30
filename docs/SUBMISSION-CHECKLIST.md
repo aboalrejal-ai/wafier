@@ -8,7 +8,7 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 | Demo video ≤7 min + subtitles | ☐ Team recording | Script: [DEMO-VIDEO-SCRIPT.md](./DEMO-VIDEO-SCRIPT.md) |
 | GitHub code (public) | ☑ Ready | This repository |
 | Knowledge base (authentic links) | ☑ Ready | [knowledge-base.json](../knowledge-base.json) + [kb/](../kb/) |
-| Deep research (3 passes) | ☑ Ready | [docs/research/](./research/) |
+| Deep research (3 passes) | ☑ Complete | [docs/research/](./research/) — pasted 2026-08-30 |
 | Three scenarios | ☑ Ready | [scenarios/](../scenarios/) + `pnpm demo` |
 | Policy Gap Matrix | ☑ Ready | Report §5 + `/hackathon/gaps` |
 | `.env.example` (no secrets) | ☑ Ready | [.env.example](../.env.example) |
@@ -28,7 +28,10 @@ Deadline reference: Aug 31 23:59 KSA (from official template).
 
 ## Pre-submit
 
-- [ ] `pnpm test` and `pnpm demo` pass
-- [ ] Video URL in README
-- [ ] Links open in incognito
-- [ ] Submit 24h before deadline if possible
+- [x] `pnpm test` and `pnpm demo` pass
+- [x] Deep research pasted in `docs/research/`
+- [x] KB merged (41 records)
+- [ ] **Team:** Record video ≤7 min + subtitles → paste URL in README
+- [ ] **Team:** Export PDF from `docs/TECHNICAL-REPORT.md`
+- [ ] **Team:** Open 5–10 KB links in Incognito
+- [ ] Submit before deadline (31/8/2026 23:59 KSA)

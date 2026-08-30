@@ -1,6 +1,6 @@
 /**
  * Preprocessor (PP) node — ITU-T Y.3172
- * Gap-fill + PDPL anonymization helpers used before Model inference.
+ * Gap-fill + PDPL pseudonymization helpers used before Model inference.
  */
 
 import { anonymizeHouseholdId } from "./policy-engine";

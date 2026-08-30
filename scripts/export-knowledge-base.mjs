@@ -7,8 +7,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const kb = JSON.parse(
   readFileSync(join(root, "kb/records/finance-energy-regulatory.json"), "utf8"),
 );
+const verifiedStatuses = new Set(["VERIFIED", "VERIFIED_BENCHMARK"]);
 const out = kb.records
-  .filter((r) => r.verification === "VERIFIED")
+  .filter((r) => verifiedStatuses.has(r.verification))
   .map((r) => ({
     document_title: r.title,
     issuing_authority: r.authority,
