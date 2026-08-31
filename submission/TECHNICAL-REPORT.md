@@ -16,7 +16,11 @@
 
 > Cap: ≤5 pages. Demo telemetry is **synthetic** (hackathon use only); Knowledge Base documents are authentic public sources. This report describes only capabilities present in the repository (demo path + optional Supabase). Limitations are stated explicitly.
 
-**Project resources.** Live Demo: https://wafier.aboalrejal.com/ · GitHub: https://github.com/aboalrejal-ai/wafier · Demo video: https://www.youtube.com/watch?v=bRYwjbxs9t4
+**Project resources**
+
+- Live Demo: https://wafier.aboalrejal.com/  
+- GitHub: https://github.com/aboalrejal-ai/wafier  
+- Demo video: https://www.youtube.com/watch?v=bRYwjbxs9t4
 
 ---
 

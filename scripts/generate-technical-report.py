@@ -274,11 +274,23 @@ def build_docx():
         rv = p.add_run(v)
         set_run_font(rv, size=9)
 
-    add_body(
-        doc,
-        "Team Members. Mohammed Nadher Aboalrejal — Mentor — aboalrejal.ai@gmail.com — Technical Lead, System Architect, Technical Report Author. Fatima Alsultan (KFU, Chemical Engineering, 2nd Year) — fatima.alsultan2105@gmail.com — Document research, concept ideation, policy gap analysis, report structuring. Shahad Alsultan (KFU, Civil Engineering, 2nd Year) — shahadalsultan2026@outlook.com — Video production, report drafting. Jorry Alfalah (KFU, Electrical Engineering, 2nd Year) — Jurryraed90@hotmail.com — App UI design, logo. Noor Alshammari (KFU, Chemical Engineering, 2nd Year) — noornaser.sh1@gmail.com — App UI templates, logo.",
-        size=8.5,
-    )
+    members_heading = doc.add_paragraph()
+    compact_paragraph(members_heading, after=20)
+    mh = members_heading.add_run("Team Members")
+    set_run_font(mh, size=9, bold=True)
+
+    members = [
+        "Mohammed Nadher Aboalrejal — Mentor — aboalrejal.ai@gmail.com — Technical Lead, System Architect, Technical Report Author",
+        "Fatima Alsultan (KFU, Chemical Engineering, 2nd Year) — fatima.alsultan2105@gmail.com — Document research, concept ideation, policy gap analysis, report structuring",
+        "Shahad Alsultan (KFU, Civil Engineering, 2nd Year) — shahadalsultan2026@outlook.com — Video production, report drafting (Introduction and Nodes)",
+        "Jorry Alfalah (KFU, Electrical Engineering, 2nd Year) — Jurryraed90@hotmail.com — App UI design, logo design",
+        "Noor Alshammari (KFU, Chemical Engineering, 2nd Year) — noornaser.sh1@gmail.com — App UI templates, logo design",
+    ]
+    for member in members:
+        p = doc.add_paragraph()
+        compact_paragraph(p, after=12)
+        run = p.add_run("• " + member)
+        set_run_font(run, size=8.5)
 
     cap = doc.add_paragraph()
     compact_paragraph(cap, after=40)
@@ -287,17 +299,21 @@ def build_docx():
     )
     set_run_font(rc, size=8.5, color=MUTED)
 
-    res = doc.add_paragraph()
-    compact_paragraph(res, after=40)
-    rr = res.add_run("Project resources. Live Demo: ")
-    set_run_font(rr, size=9)
-    add_hyperlink(res, "https://wafier.aboalrejal.com/", "https://wafier.aboalrejal.com/", size=9)
-    r2 = res.add_run("  ·  GitHub: ")
-    set_run_font(r2, size=9)
-    add_hyperlink(res, "https://github.com/aboalrejal-ai/wafier", "https://github.com/aboalrejal-ai/wafier", size=9)
-    r3 = res.add_run("  ·  Demo video: ")
-    set_run_font(r3, size=9)
-    add_hyperlink(res, "https://www.youtube.com/watch?v=bRYwjbxs9t4", "https://www.youtube.com/watch?v=bRYwjbxs9t4", size=9)
+    res_h = doc.add_paragraph()
+    compact_paragraph(res_h, after=20)
+    rh = res_h.add_run("Project resources")
+    set_run_font(rh, size=9, bold=True)
+
+    for label, url in [
+        ("Live Demo: ", "https://wafier.aboalrejal.com/"),
+        ("GitHub: ", "https://github.com/aboalrejal-ai/wafier"),
+        ("Demo video: ", "https://www.youtube.com/watch?v=bRYwjbxs9t4"),
+    ]:
+        p = doc.add_paragraph()
+        compact_paragraph(p, after=12)
+        run = p.add_run("• " + label)
+        set_run_font(run, size=9)
+        add_hyperlink(p, url, url, size=9)
 
     add_heading(doc, "1. Introduction")
     add_body(
@@ -514,7 +530,7 @@ def build_html():
   p {{ margin: 0 0 6px; }}
   .meta {{ font-size: 9.5pt; margin: 0 0 2px; }}
   .muted {{ color: #475569; font-size: 8.5pt; }}
-  .members {{ font-size: 8.5pt; line-height: 1.35; }}
+  .members {{ font-size: 8.5pt; line-height: 1.3; margin: 0 0 2px; }}
   img.logo {{ height: 28px; }}
   img.diagram {{ width: 100%; height: auto; margin: 4px 0 8px; }}
   a {{ color: #0f766e; }}
@@ -533,9 +549,17 @@ def build_html():
 <p class="meta"><b>Team name:</b> wafir team &nbsp;·&nbsp; <b>Track:</b> Finance (household energy budgeting / FinTech)</p>
 <p class="meta"><b>Solution name:</b> Wafir — Proactive Bill Prediction and Budget Planning</p>
 <p class="meta"><b>Contact / Org:</b> King Faisal University — Budget Planning &nbsp;·&nbsp; <b>Designation:</b> Students</p>
-<p class="members"><b>Team Members.</b> Mohammed Nadher Aboalrejal — Mentor — aboalrejal.ai@gmail.com — Technical Lead, System Architect, Technical Report Author. Fatima Alsultan (KFU, Chemical Engineering, 2nd Year) — fatima.alsultan2105@gmail.com — research, ideation, policy gap analysis, report structuring. Shahad Alsultan (KFU, Civil Engineering, 2nd Year) — shahadalsultan2026@outlook.com — video, report drafting. Jorry Alfalah (KFU, Electrical Engineering, 2nd Year) — Jurryraed90@hotmail.com — UI, logo. Noor Alshammari (KFU, Chemical Engineering, 2nd Year) — noornaser.sh1@gmail.com — UI templates, logo.</p>
+<p class="members"><b>Team Members</b></p>
+<p class="members">• Mohammed Nadher Aboalrejal — Mentor — aboalrejal.ai@gmail.com — Technical Lead, System Architect, Technical Report Author</p>
+<p class="members">• Fatima Alsultan (KFU, Chemical Engineering, 2nd Year) — fatima.alsultan2105@gmail.com — Document research, concept ideation, policy gap analysis, report structuring</p>
+<p class="members">• Shahad Alsultan (KFU, Civil Engineering, 2nd Year) — shahadalsultan2026@outlook.com — Video production, report drafting (Introduction and Nodes)</p>
+<p class="members">• Jorry Alfalah (KFU, Electrical Engineering, 2nd Year) — Jurryraed90@hotmail.com — App UI design, logo design</p>
+<p class="members">• Noor Alshammari (KFU, Chemical Engineering, 2nd Year) — noornaser.sh1@gmail.com — App UI templates, logo design</p>
 <p class="muted">Cap: ≤5 pages. Demo telemetry is <b>synthetic</b> (hackathon use only); Knowledge Base documents are authentic public sources. This report describes only capabilities present in the repository (demo path + optional Supabase). Limitations are stated explicitly.</p>
-<p><b>Project resources.</b> Live Demo: <a href="https://wafier.aboalrejal.com/">https://wafier.aboalrejal.com/</a> · GitHub: <a href="https://github.com/aboalrejal-ai/wafier">https://github.com/aboalrejal-ai/wafier</a> · Demo video: <a href="https://www.youtube.com/watch?v=bRYwjbxs9t4">https://www.youtube.com/watch?v=bRYwjbxs9t4</a></p>
+<p><b>Project resources</b></p>
+<p>• Live Demo: <a href="https://wafier.aboalrejal.com/">https://wafier.aboalrejal.com/</a></p>
+<p>• GitHub: <a href="https://github.com/aboalrejal-ai/wafier">https://github.com/aboalrejal-ai/wafier</a></p>
+<p>• Demo video: <a href="https://www.youtube.com/watch?v=bRYwjbxs9t4">https://www.youtube.com/watch?v=bRYwjbxs9t4</a></p>
 
 <h2>1. Introduction</h2>
 <p>Households in Saudi Arabia often discover electricity overspend only when the monthly bill arrives. Peak summer cooling makes this worse. <b>Wafir</b> is an Arabic RTL personal FinTech app that forecasts end-of-month SAR spend from <b>simulated</b> meter-like kWh plus weather context, compares the forecast to a user budget, and raises graduated alerts.</p>
