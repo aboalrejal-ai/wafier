@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Wafir — Technical Report (AI Readiness Hackathon – KSA)</title>
+<style>
+  @page { size: letter; margin: 0.55in 0.65in 0.5in 0.65in; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Calibri, "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
+    font-size: 10pt;
+    line-height: 1.28;
+    color: #0f172a;
+  }
+  h1 { font-size: 15pt; margin: 4px 0 8px; color: #0f172a; }
+  h2 { font-size: 11.5pt; color: #0f766e; margin: 11px 0 5px; border-bottom: 1px solid #ccfbf1; padding-bottom: 2px; }
+  h3 { font-size: 10.5pt; margin: 8px 0 3px; color: #134e4a; }
+  p { margin: 0 0 6px; }
+  .meta { font-size: 9.5pt; margin: 0 0 2px; }
+  .muted { color: #475569; font-size: 8.5pt; }
+  .members { font-size: 8.5pt; line-height: 1.35; }
+  img.logo { height: 28px; }
+  img.diagram { width: 100%; height: auto; margin: 4px 0 8px; }
+  a { color: #0f766e; }
+  [lang="ar"], bdi[dir="rtl"] { unicode-bidi: isolate; direction: rtl; font-family: "IBM Plex Sans Arabic", "Geeza Pro", "Arial Unicode MS", sans-serif; }
+  table { width: 100%; border-collapse: collapse; margin: 4px 0 8px; font-size: 8pt; }
+  th { background: #0f766e; color: #fff; text-align: left; padding: 3px 5px; font-weight: 700; }
+  td { border: 1px solid #e5e7eb; padding: 3px 5px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .gap { font-size: 8.5pt; margin-bottom: 5px; }
+  .step { margin-bottom: 7px; }
+</style>
+</head>
+<body>
+<img class="logo" src="wafir-logo.jpg" alt="Wafir"/>
+<h1>Wafir — Technical Report (AI Readiness Hackathon – KSA)</h1>
+<p class="meta"><b>Team name:</b> wafir team &nbsp;·&nbsp; <b>Track:</b> Finance (household energy budgeting / FinTech)</p>
+<p class="meta"><b>Solution name:</b> Wafir — Proactive Bill Prediction and Budget Planning</p>
+<p class="meta"><b>Contact / Org:</b> King Faisal University — Budget Planning &nbsp;·&nbsp; <b>Designation:</b> Students</p>
+<p class="members"><b>Team Members.</b> Mohammed Nadher Aboalrejal — Mentor — aboalrejal.ai@gmail.com — Technical Lead, System Architect, Technical Report Author. Fatima Alsultan (KFU, Chemical Engineering, 2nd Year) — fatima.alsultan2105@gmail.com — research, ideation, policy gap analysis, report structuring. Shahad Alsultan (KFU, Civil Engineering, 2nd Year) — shahadalsultan2026@outlook.com — video, report drafting. Jorry Alfalah (KFU, Electrical Engineering, 2nd Year) — Jurryraed90@hotmail.com — UI, logo. Noor Alshammari (KFU, Chemical Engineering, 2nd Year) — noornaser.sh1@gmail.com — UI templates, logo.</p>
+<p class="muted">Cap: ≤5 pages. Demo telemetry is <b>synthetic</b> (hackathon use only); Knowledge Base documents are authentic public sources. This report describes only capabilities present in the repository (demo path + optional Supabase). Limitations are stated explicitly.</p>
+<p><b>Project resources.</b> Live Demo: <a href="https://wafier.aboalrejal.com/">https://wafier.aboalrejal.com/</a> · GitHub: <a href="https://github.com/aboalrejal-ai/wafier">https://github.com/aboalrejal-ai/wafier</a> · Demo video: <a href="https://www.youtube.com/watch?v=bRYwjbxs9t4">https://www.youtube.com/watch?v=bRYwjbxs9t4</a></p>
+
+<h2>1. Introduction</h2>
+<p>Households in Saudi Arabia often discover electricity overspend only when the monthly bill arrives. Peak summer cooling makes this worse. <b>Wafir</b> is an Arabic RTL personal FinTech app that forecasts end-of-month SAR spend from <b>simulated</b> meter-like kWh plus weather context, compares the forecast to a user budget, and raises graduated alerts.</p>
+<p>The pipeline follows <b>ITU-T Y.3172</b> (SRC → C → PP → M → P → D → SINK, plus Sandbox). Policy grounding uses a verified Knowledge Base of Saudi and ITU public sources (<code>knowledge-base.json</code>, 42 VERIFIED records + 1 ISO benchmark), compiled from three independent deep-research passes in <code>docs/research/</code>. Framework names follow ITU AI Readiness Report 2.0 (<code>kb/framework/dimensions.json</code>).</p>
+<p>Honest limit: meter ingest is simulated; the forecast is rule-based seasonal projection, not a trained neural model.</p>
+
+<h2>2. Use case and gaps in existing solutions</h2>
+<p><b>Problem.</b> Families lack proactive, explainable energy-budget control tied to local tariffs and heatwaves. <b>Beneficiaries:</b> Saudi households managing a monthly electricity budget; secondary value for energy/privacy policy readers via the gap matrix.</p>
+<table>
+<thead><tr><th>Gap in existing tools</th><th>How Wafir responds (implemented)</th></tr></thead>
+<tbody>
+<tr><td>Late bill shock</td><td>Seasonal forecast vs budget; Level-2 warning if predicted SAR &gt; budget or temperature ≥40°C</td></tr>
+<tr><td>Opaque advice</td><td>RAG over verified chunks with citation URLs; if nothing matches: Arabic INSUFFICIENT_EVIDENCE, no invented law</td></tr>
+<tr><td>No privacy gate</td><td>PDPL consent screen before processing; preprocessor pseudonymizes household id before ML export</td></tr>
+<tr><td>Ads from consumption</td><td>Deterministic policy node blocks targeted_ads_from_consumption (PDPL-ADS-001)</td></tr>
+<tr><td>No orchestration evidence</td><td>Demo path SRC→C→PP→M→P→D with audit log; reproducible via <code>pnpm demo</code></td></tr>
+</tbody>
+</table>
+
+<h2>3. Y.3172 architecture (mapped documents)</h2>
+<p>Sandbox is a Y.3172 supporting component (parallel validation). MLFO is seasonal-profile switching <b>inside M</b>, not an eighth official node. Y.3172 ↔ Readiness (ITU summary): D5 workflows, D10 policies, D13 infrastructure.</p>
+<img class="diagram" src="y3172-pipeline.png" alt="ITU-T Y.3172 pipeline"/>
+<table>
+<thead><tr><th>Node</th><th>Role in Wafir</th><th>Supporting document</th></tr></thead>
+<tbody>
+<tr><td>SRC</td><td>Budget 500 SAR, simulated kWh, weather (OpenWeather if key set, else simulated)</td><td><a href="https://www.sera.gov.sa/en/consumer/electric-tariff/electric-tariff-categories/consumption-tariff">SERA residential tariff</a></td></tr>
+<tr><td>C</td><td>Demo collector / heatwave aggregation (simulateMeterReading). No consumer AMI API — GAP-01</td><td><a href="https://www.se.com.sa/en/Open-Data/Data-Sharing/">SEC data sharing</a></td></tr>
+<tr><td>PP</td><td>Gap-fill missing daily kWh; hash household id (pseudonymization, not full anonymization)</td><td><a href="https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PersonalDataDestruction/">PDPL destruction / pseudonymisation</a></td></tr>
+<tr><td>M + MLFO</td><td>Rule-based SAR forecast; summer profile at ≥38°C (method reference, not trained weights)</td><td><a href="https://www.mdpi.com/1996-1073/16/4/2035">MDPI KSA energy forecasting</a></td></tr>
+<tr><td>Sandbox</td><td>isSandbox: forecast without distributor alerts</td><td><a href="https://www.itu.int/rec/T-REC-Y.3172-201906-I">ITU-T Y.3172</a></td></tr>
+<tr><td>P</td><td>Budget L1/L1b/L2 + ads guard (no LLM in the decision)</td><td><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf">PDPL official text + PDPL-ADS-001</a></td></tr>
+<tr><td>D</td><td>In-app + Web/Local notifications (FCM needs keys)</td><td><a href="https://dgp.sdaia.gov.sa/wps/wcm/connect/4c56ed1c-1b82-447d-ac29-638f5f99c12e/ai-principles-EN.pdf">SDAIA AI Ethics (human oversight)</a></td></tr>
+<tr><td>SINK</td><td>Arabic RTL React UI. SAMA analog; not Open Banking integration</td><td><a href="https://rulebook.sama.gov.sa/en/financial-consumer-protection-principles-and-rules">SAMA consumer protection</a></td></tr>
+</tbody>
+</table>
+
+<h2>4. ITU AI Readiness 2.0 — six factors and selected dimensions</h2>
+<p>Official names: <code>kb/framework/dimensions.json</code> (ITU AI Readiness Report 2.0). PDPL / purpose limitation maps to <b>D10</b>, not D8.</p>
+<table>
+<thead><tr><th>Factor</th><th>Wafir evidence</th></tr></thead>
+<tbody>
+<tr><td>Data</td><td>Public Saudi/ITU documents in knowledge-base.json (not private household dumps)</td></tr>
+<tr><td>Research</td><td>Three deep-research passes in docs/research/ (ChatGPT, Gemini, Perplexity), then human merge</td></tr>
+<tr><td>Deployment Support</td><td>Vite SPA on Hostinger; optional Supabase; Capacitor wrapper</td></tr>
+<tr><td>Standards</td><td>Y.3172 node mapping + ITU-T Y.3172 citation</td></tr>
+<tr><td>Open Source and Code</td><td>Public GitHub https://github.com/aboalrejal-ai/wafier</td></tr>
+<tr><td>Sandbox Environments</td><td>isSandbox heatwave path — forecast without pushing alerts</td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>ID</th><th>Official ITU dimension</th><th>Wafir evidence</th></tr></thead>
+<tbody>
+<tr><td>D5</td><td>Level of Integration of AI in Workflows</td><td>Pipeline audit, graduated alerts, pnpm demo</td></tr>
+<tr><td>D6</td><td>Human Interface</td><td>Arabic RTL UI + AI assistant with citations</td></tr>
+<tr><td>D7</td><td>Strategy Alignment</td><td>KB NSDAI-001 (Vision 2030 / SDAIA NSDAI PDF). Use-case aligned to national strategy; we do <b>not</b> claim to implement NSDAI</td></tr>
+<tr><td>D8</td><td>Collaboration with AI</td><td>HITL: 2-hour alert snooze on Profile; user question shapes RAG</td></tr>
+<tr><td>D10</td><td>AI &amp; Policies</td><td>Six verdicts; SC-03 policy sandbox; GAP-01..06; PDPL consent + purpose limitation</td></tr>
+<tr><td>D11</td><td>AI for Inclusion</td><td>Arabic-first interface; local SERA/KAPSARC context</td></tr>
+<tr><td>D13</td><td>Digital Infrastructure</td><td>Hosted SPA; optional Supabase; simulated meter as Y.3172 SRC stand-in</td></tr>
+</tbody>
+</table>
+
+<h2>5. Three evaluation scenarios + Policy Gap Matrix</h2>
+<p>Reproducible proof: <code>pnpm demo</code> (or <code>node scripts/run-demo.mjs</code>). Demo data are synthetic.</p>
+
+<div class="step"><h3>SC-01 — Compliant RAG (<code>scenarios/sc-01-compliant-rag.json</code>)</h3>
+<p><b>Scenario.</b> User asks in the AI Assistant: <b><bdi dir="rtl" lang="ar">كيف أوفر في فاتورة الكهرباء؟</bdi></b> &nbsp; <b>Step 1.</b> The household submits a normal saving question. Context is synthetic. &nbsp; <b>Step 2.</b> Wafir retrieves verified KB chunks by keyword matching over curated records (not a live web search). If no chunk matches, the assistant returns <bdi dir="rtl" lang="ar">لا توجد أدلة كافية…</bdi> (INSUFFICIENT_EVIDENCE) and invents no URLs. &nbsp; <b>Step 3.</b> For this query the grounded reply gives qualitative saving tips (runtime, efficient AC / SASO 2663, insulation, LED, night-time loads) with citation URLs. Expected verdict: <b>COMPLIANT</b>. Tips are not a guaranteed SAR saving.</p></div>
+
+<div class="step"><h3>SC-02 — Operational failure (<code>scenarios/sc-02-pp-gap-fill.json</code>)</h3>
+<p><b>Scenario.</b> In a 7-day kWh series, <b>day 4 is missing</b> (kwh: null); other days are 29.67. &nbsp; <b>Step 1.</b> Collector/preprocessor sees an incomplete series (simulated meter gap, not a live AMI outage). &nbsp; <b>Step 2.</b> The missing day is filled from neighbouring values (demo expected fill = 29.67). Household id is pseudonymized for export. &nbsp; <b>Step 3.</b> Forecast and dashboard continue; the audit log records the gap-fill; the app does not crash. Expected: graceful degradation. The filled value is not claimed as a real meter reading.</p></div>
+
+<div class="step"><h3>SC-03 — Controversy / targeted ads (<code>scenarios/sc-03-ads-controversy.json</code>)</h3>
+<p><b>Scenario.</b> A dummy provider requests <code>targeted_ads_from_consumption</code>. &nbsp; <b>Step 1.</b> The request arrives as a policy check (About → controversy scenario), not as a live ad SDK. &nbsp; <b>Step 2.</b> Policy node evaluateKbGuardPolicy runs <b>deterministically</b> (no LLM). &nbsp; <b>Step 3.</b> Result <b>VIOLATION / BLOCK_DATA_USE / PDPL-ADS-001</b>. In-app notice: <bdi dir="rtl" lang="ar">حارس سياسة KB — منع الإعلانات</bdi>. Audit stores the verdict and the PDPL knowledge-center URL. &nbsp; <b>Step 4 (corrective).</b> Consumption data is not released for ads. This is a <b>Wafir purpose-limitation control</b>. PDPL Art.26 allows consented marketing of non-sensitive data; we do not claim a statutory total advertising ban. HITL snooze remains available on Profile for budget alerts.</p></div>
+
+<p>Classifications below are from sources <b>we reviewed</b>; they are not a claim that Saudi law is silent in every forum.</p>
+<table>
+<thead><tr><th>ID</th><th>Type</th><th>Gap</th><th>Recommendation</th></tr></thead>
+<tbody>
+<tr><td>GAP-01</td><td>potential_gap</td><td>No consumer-authorized AMI API</td><td>Open-Utility style authorization (like Open Banking)</td></tr>
+<tr><td>GAP-02</td><td>potential_gap</td><td>AI forecast liability allocation</td><td>Sector guidance; general civil law may apply (CIVIL-LAW-120)</td></tr>
+<tr><td>GAP-03</td><td>potential_gap</td><td>Energy-sector AI data rules</td><td>PDPL + SERA PDP under explicit sector policy</td></tr>
+<tr><td>GAP-04</td><td>potential_gap</td><td>No mandatory energy algorithm-audit standard</td><td>Y.3172 sandbox + ISO 42001 as a benchmark (not a certification)</td></tr>
+<tr><td>GAP-05</td><td>potential_gap</td><td>No machine-readable law repository</td><td>Government structured-regulation API</td></tr>
+<tr><td>GAP-06</td><td>ambiguity</td><td>Consumption → ads repurposing</td><td>Explicit PDPL/sector guidance; Wafir blocks silent reuse</td></tr>
+</tbody>
+</table>
+<p class="gap"><b>GAP-01.</b> In the sources we reviewed, we did not find a consumer-authorized AMI API comparable to Open Banking that would let Wafir pull live meter data with user consent. Wafir therefore uses simulated kWh. Recommendation: an Open-Utility style authorization framework.</p>
+<p class="gap"><b>GAP-02.</b> We did not find sector-specific rules allocating liability when an energy forecast is wrong. General civil-law harmful-act principles may still apply (CIVIL-LAW-120). Recommendation: sector guidance; until then Wafir labels forecasts as estimates.</p>
+<p class="gap"><b>GAP-03.</b> PDPL and SERA data-protection pages exist, but energy-AI processing (forecasting, sharing, secondary use) is not spelled out as a sector playbook in the sources we checked. Recommendation: PDPL + SERA PDP under explicit sector policy.</p>
+<p class="gap"><b>GAP-04.</b> We did not find a mandatory energy-sector algorithm-audit standard for household bill models. Recommendation: use the Y.3172 sandbox pattern and ISO/IEC 42001 as a benchmark, not a claimed certification.</p>
+<p class="gap"><b>GAP-05.</b> Official texts are published as HTML/PDF, not as a queryable regulation API. Wafir therefore curates verified chunks rather than scraping live law. Recommendation: a government structured-regulation API.</p>
+<p class="gap"><b>GAP-06.</b> PDPL purpose limitation and Art.25–27 constrain marketing, but Art.26 still allows consented marketing of non-sensitive data. Whether electricity-consumption profiles may be reused for ads is not spelled out for this use case. Wafir blocks silent repurposing by policy (SC-03). Recommendation: explicit PDPL/sector guidance on energy-data repurposing.</p>
+
+<h2>6. Knowledge base (authentic sources) and repository links</h2>
+<p>Full corpus: <code>knowledge-base.json</code> (42 VERIFIED + 1 ISO benchmark). Ten primary citations for judges:</p>
+<table>
+<thead><tr><th>#</th><th>Document</th><th>Authority</th><th>URL</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>PDPL official EN (Art.4–6, 10–15, 25–27)</td><td>SDAIA</td><td><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf">sdaia.gov.sa PDF</a></td></tr>
+<tr><td>2</td><td>PDPL Art.26 direct marketing</td><td>SDAIA</td><td><a href="https://dgp.sdaia.gov.sa/wps/portal/pdp/knowledgecenter/details/PDPL2/">dgp.sdaia.gov.sa PDPL2</a></td></tr>
+<tr><td>3</td><td>AI Ethics Principles v1.0</td><td>SDAIA</td><td><a href="https://dgp.sdaia.gov.sa/wps/wcm/connect/4c56ed1c-1b82-447d-ac29-638f5f99c12e/ai-principles-EN.pdf">ai-principles-EN.pdf</a></td></tr>
+<tr><td>4</td><td>NSDAI (Vision 2030)</td><td>SDAIA</td><td><a href="https://sdaia.gov.sa/en/SDAIA/SdaiaStrategies/Documents/NSDAI.pdf">NSDAI.pdf</a></td></tr>
+<tr><td>5</td><td>SERA residential consumption tariff</td><td>SERA</td><td><a href="https://www.sera.gov.sa/en/consumer/electric-tariff/electric-tariff-categories/consumption-tariff">sera.gov.sa tariff</a></td></tr>
+<tr><td>6</td><td>SEC data sharing</td><td>SEC</td><td><a href="https://www.se.com.sa/en/Open-Data/Data-Sharing/">se.com.sa Open Data</a></td></tr>
+<tr><td>7</td><td>KBEAT — Building Energy Assessment Tool</td><td>KAPSARC</td><td><a href="https://apps.kapsarc.org/appboard/kbeat/en">apps.kapsarc.org/kbeat</a></td></tr>
+<tr><td>8</td><td>Financial Consumer Protection Principles (analog)</td><td>SAMA</td><td><a href="https://rulebook.sama.gov.sa/en/financial-consumer-protection-principles-and-rules">rulebook.sama.gov.sa</a></td></tr>
+<tr><td>9</td><td>ITU-T Y.3172 ML pipeline architecture</td><td>ITU</td><td><a href="https://www.itu.int/rec/T-REC-Y.3172-201906-I">itu.int Y.3172</a></td></tr>
+<tr><td>10</td><td>ISO/IEC 42001:2023 (benchmark only)</td><td>ISO</td><td><a href="https://www.iso.org/standard/81230.html">iso.org 81230</a></td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>Deliverable</th><th>Location</th></tr></thead>
+<tbody>
+<tr><td>GitHub</td><td><a href="https://github.com/aboalrejal-ai/wafier">https://github.com/aboalrejal-ai/wafier</a></td></tr>
+<tr><td>Live demo</td><td><a href="https://wafier.aboalrejal.com/">https://wafier.aboalrejal.com/</a></td></tr>
+<tr><td>Demo video</td><td><a href="https://www.youtube.com/watch?v=bRYwjbxs9t4">https://www.youtube.com/watch?v=bRYwjbxs9t4</a></td></tr>
+<tr><td>Knowledge base</td><td><code>knowledge-base.json</code></td></tr>
+<tr><td>Scenarios</td><td><code>scenarios/</code></td></tr>
+<tr><td>Reproducible demo</td><td><code>pnpm demo</code></td></tr>
+</tbody>
+</table>
+<p>Distributor: in-app + Web Notification API + Capacitor Local Notifications.</p>
+</body>
+</html>
