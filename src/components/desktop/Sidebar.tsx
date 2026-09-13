@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useAppStore } from "../../stores/app-store";
 import { formatMemberSince, resolveDisplayName } from "../../lib/userStorage";
 import { useT } from "../../i18n";
+import { Icons } from "../Icons";
 
 interface SidebarProps {
   current: Screen;
@@ -24,60 +25,12 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
     ? formatMemberSince(dashboard.profile.member_since)
     : t("profile.memberNew");
 
-  const navItems: { id: Screen; label: string; icon: React.ReactNode }[] = [
-    {
-      id: "dashboard",
-      label: t("nav.dashboard"),
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="5" width="20" height="15" rx="2" />
-          <path d="M2 10h20M6 15h4M14 15h4" />
-        </svg>
-      ),
-    },
-    {
-      id: "forecast",
-      label: t("nav.forecast"),
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-        </svg>
-      ),
-    },
-    {
-      id: "ai",
-      label: t("nav.ai"),
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
-          <path d="M19 14.5l.7 1.9 1.8.7-1.8.7-.7 1.9-.7-1.9-1.8-.7 1.8-.7z" />
-        </svg>
-      ),
-    },
-    {
-      id: "profile",
-      label: t("nav.profile"),
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="8" r="4" />
-          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-        </svg>
-      ),
-    },
-    {
-      id: "about",
-      label: t("nav.about"),
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 16v-4" />
-          <path d="M12 8h.01" />
-        </svg>
-      ),
-    },
+  const navItems: { id: Screen; label: string; Icon: typeof Icons.LayoutDashboard }[] = [
+    { id: "dashboard", label: t("nav.dashboard"), Icon: Icons.LayoutDashboard },
+    { id: "forecast", label: t("nav.forecast"), Icon: Icons.FileText },
+    { id: "ai", label: t("nav.ai"), Icon: Icons.Sparkles },
+    { id: "profile", label: t("nav.profile"), Icon: Icons.User },
+    { id: "about", label: t("nav.about"), Icon: Icons.Info },
   ];
 
   const handleLogout = async () => {
@@ -97,6 +50,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
         borderInlineEnd: "1px solid var(--border)",
         height: "100%",
         overflow: "hidden",
+        transition: "background var(--duration-medium) var(--ease-out-expo), border-color var(--duration-medium) var(--ease-out-expo)",
       }}
     >
       <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid var(--border)" }}>
@@ -113,12 +67,10 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
               flexShrink: 0,
             }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-            </svg>
+            <Icons.Zap size={22} color="white" fill="white" strokeWidth={1.5} />
           </div>
           <div style={{ textAlign: "start" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.5px" }}>{t("common.wafir")}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.5px" }}>{t("common.wafir")}</div>
             <div style={{ fontSize: 11, color: "var(--muted-foreground)", marginTop: 2 }}>{t("sidebar.tagline")}</div>
           </div>
         </div>
@@ -134,16 +86,19 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
             letterSpacing: "0.08em",
             textTransform: "uppercase",
             textAlign: "start",
+            fontFamily: "var(--font-mono)",
           }}
         >
           {t("nav.mainMenu")}
         </p>
         {navItems.map((item) => {
           const active = current === item.id;
+          const Icon = item.Icon;
           return (
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
+              className="tool-btn"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -161,7 +116,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
                 textAlign: "start",
               }}
             >
-              <span style={{ color: active ? "var(--primary-soft-text)" : "var(--muted-foreground)", display: "flex" }}>{item.icon}</span>
+              <Icon size={20} strokeWidth={1.8} style={{ color: active ? "var(--primary-soft-text)" : "var(--muted-foreground)", flexShrink: 0 }} />
               <span>{item.label}</span>
             </button>
           );
@@ -182,9 +137,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
               flexShrink: 0,
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="hsl(var(--color-sa-600))">
-              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-            </svg>
+            <Icons.Zap size={18} color="hsl(var(--color-sa-600))" fill="hsl(var(--color-sa-600))" strokeWidth={1.5} />
           </div>
           <div style={{ textAlign: "start" }}>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "var(--foreground)" }}>{profileName}</p>
@@ -193,6 +146,7 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
         </div>
         <button
           onClick={handleLogout}
+          className="tool-btn"
           style={{
             width: "100%",
             padding: "9px 0",

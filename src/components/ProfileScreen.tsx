@@ -23,6 +23,7 @@ import { demoService } from "../services/data-service";
 import { formatMemberSince, resolveDisplayName } from "../lib/userStorage";
 import { useT } from "../i18n";
 import { useQueryClient } from "@tanstack/react-query";
+import { Icons } from "./Icons";
 
 interface ProfileScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -144,7 +145,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               <PeriodPicker value={period} onChange={setPeriodStore} />
               <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>توقعات الفاتورة</h2>
-                <span style={{ fontSize: 16 }}>📊</span>
+                <Icons.FileText size={16} strokeWidth={1.8} style={{ color: "hsl(var(--color-sa-600))" }} />
               </div>
             </div>
 
@@ -202,7 +203,9 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             display: "flex", alignItems: "center", gap: 16,
           }}>
             <div style={{ textAlign: "start", flex: 1 }}>
-              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
+              <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))", display: "flex", alignItems: "center", gap: 6 }}>
+                نصيحة ذكية <Icons.Lightbulb size={14} strokeWidth={1.8} />
+              </p>
               <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6 }}>
                 أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.
               </p>

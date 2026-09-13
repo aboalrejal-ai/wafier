@@ -18,7 +18,7 @@ export default function KnowledgeBaseScreen({ onBack }: { onBack?: () => void })
         </button>
       )}
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 8px" }}>قاعدة المعرفة</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px" }}>قاعدة المعرفة</h1>
         <p style={{ fontSize: 13, color: "hsl(var(--color-gray-600))", margin: "0 0 12px" }}>
           {VERIFIED_RECORDS.length} سجل VERIFIED · روابط حكومية/رسمية
         </p>

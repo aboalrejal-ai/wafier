@@ -9,6 +9,7 @@ import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { useBudgetMutation } from "../../hooks/useDashboard";
 import { useT } from "../../i18n";
+import { DeviceIcon } from "../Icons";
 
 interface DesktopForecastProps {
   onNavigate: (screen: Screen) => void;
@@ -61,13 +62,13 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
             {/* Total bill */}
             <div style={{ background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: "16px 24px", textAlign: "center" }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, color: "rgba(255,255,255,0.65)" }}>إجمالي التوقع</p>
-              <p style={{ margin: 0, fontSize: 36, fontWeight: 800, color: "#fff" }} dir="ltr">48.45 <span style={{ fontSize: 14, fontWeight: 400 }}>ر.س</span></p>
+              <p style={{ margin: 0, fontSize: 36, fontWeight: 700, color: "#fff" }} dir="ltr">48.45 <span style={{ fontSize: 14, fontWeight: 400 }}>ر.س</span></p>
               <p style={{ margin: "4px 0 0", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>التكلفة الإجمالية حتى الآن</p>
             </div>
             <div style={{ width: 1, height: 60, background: "rgba(255,255,255,0.15)" }} />
             <div style={{ textAlign: "center" }}>
               <p style={{ margin: "0 0 4px", fontSize: 12, color: "rgba(255,255,255,0.65)" }}>التوقع النهائي</p>
-              <p style={{ margin: 0, fontSize: 36, fontWeight: 800, color: "#fff" }} dir="ltr">{forecast.toFixed(2)} <span style={{ fontSize: 14, fontWeight: 400 }}>ر.س</span></p>
+              <p style={{ margin: 0, fontSize: 36, fontWeight: 700, color: "#fff" }} dir="ltr">{forecast.toFixed(2)} <span style={{ fontSize: 14, fontWeight: 400 }}>ر.س</span></p>
               <p style={{ margin: "4px 0 0", fontSize: 11, color: "rgba(255,255,255,0.5)" }}>بنهاية الشهر</p>
             </div>
           </div>
@@ -109,7 +110,7 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{device.label}</h3>
                     <div style={{ width: 50, height: 50, borderRadius: 14, background: "hsl(var(--color-sa-25))", display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--color-sa-600))" }}>
-                      {device.type === "ac" ? "❄️" : "💡"}
+                      <DeviceIcon type={device.type} />
                     </div>
                   </div>
                 </div>
@@ -127,7 +128,7 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
 
                 {/* Cost */}
                 <div style={{ background: "hsl(var(--color-gray-25))", borderRadius: 10, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 18, fontWeight: 800, color: "hsl(var(--color-gray-950))" }} dir="ltr">{device.cost.toFixed(2)} <span style={{ fontSize: 12, fontWeight: 500 }}>ر.س</span></span>
+                  <span style={{ fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }} dir="ltr">{device.cost.toFixed(2)} <span style={{ fontSize: 12, fontWeight: 500 }}>ر.س</span></span>
                   <span style={{ fontSize: 12, color: "hsl(var(--color-gray-500))" }}>التكلفة حتى الآن</span>
                 </div>
               </div>

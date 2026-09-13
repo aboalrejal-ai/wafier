@@ -5,6 +5,8 @@ import type { AppPage } from "./CommandPalette";
 import type { Screen } from "../App";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { useT } from "../i18n";
+import { DeviceIcon, Icons } from "./Icons";
+import MotionCard from "./MotionCard";
 
 interface DashboardScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -146,30 +148,30 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {[
-              { icon: "☀️", label: t("dashboard.temperature"), value: `${weather.temp_c}°C`, sub: weather.description },
-              { icon: "💧", label: t("dashboard.humidity"), value: `${weather.humidity}%`, sub: "" },
-              { icon: "⚡", label: t("dashboard.energyUse"), value: `${(spend / Math.max(budget, 1) * 1.25).toFixed(2)} kW`, sub: "" },
-              { icon: "🌤️", label: t("dashboard.weatherStatus"), value: "", sub: weather.description },
+              { Icon: Icons.Thermometer, label: t("dashboard.temperature"), value: `${weather.temp_c}°C`, sub: weather.description },
+              { Icon: Icons.Droplets, label: t("dashboard.humidity"), value: `${weather.humidity}%`, sub: "" },
+              { Icon: Icons.Zap, label: t("dashboard.energyUse"), value: `${(spend / Math.max(budget, 1) * 1.25).toFixed(2)} kW`, sub: "" },
+              { Icon: Icons.CloudSun, label: t("dashboard.weatherStatus"), value: "", sub: weather.description },
             ].map((item, i) => (
-              <div key={i} style={{
-                background: "#fff", borderRadius: 14, padding: "14px 14px 10px",
-                border: "1px solid hsl(var(--color-gray-100))",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+              <MotionCard key={i} index={i} style={{
+                background: "var(--card)", borderRadius: 14, padding: "14px 14px 10px",
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow-xs)",
                 textAlign: "start",
               }}>
-                <div style={{ fontSize: 22, marginBottom: 4 }}>{item.icon}</div>
+                <div style={{ marginBottom: 4, color: "hsl(var(--color-sa-600))" }}><item.Icon size={20} strokeWidth={1.8} /></div>
                 {item.value && (
-                  <p style={{ margin: "0 0 2px", fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>
+                  <p style={{ margin: "0 0 2px", fontSize: 16, fontWeight: 700, color: "var(--foreground)" }}>
                     <span dir="ltr">{item.value}</span>
                   </p>
                 )}
                 {item.sub && (
-                  <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 600, color: "hsl(var(--color-gray-800))" }}>
+                  <p style={{ margin: "0 0 2px", fontSize: 13, fontWeight: 600, color: "var(--foreground)" }}>
                     {item.sub}
                   </p>
                 )}
-                <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>{item.label}</p>
-              </div>
+                <p style={{ margin: 0, fontSize: 11, color: "var(--muted-foreground)" }}>{item.label}</p>
+              </MotionCard>
             ))}
           </div>
         </div>
@@ -187,7 +189,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
             display: "flex", flexDirection: "column", gap: 14,
           }}>
             {devices.map((d) => (
-              <DeviceBar key={d.type} icon={<span>{d.type === "ac" ? "❄️" : d.type === "lights" ? "💡" : d.type === "tv" ? "📺" : "🗄️"}</span>} label={d.label} pct={d.pct} />
+              <DeviceBar key={d.type} icon={<DeviceIcon type={d.type} />} label={d.label} pct={d.pct} />
             ))}
           </div>
         </div>
@@ -201,7 +203,7 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
           }}>
             <div style={{ textAlign: "start", flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: 18 }}>💡</span>
+                <Icons.Lightbulb size={18} strokeWidth={1.8} style={{ color: "hsl(var(--color-sa-600))" }} />
                 <span style={{ fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{t("dashboard.billForecast")}</span>
               </div>
               <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>

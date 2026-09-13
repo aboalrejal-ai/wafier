@@ -9,7 +9,7 @@ export default function PrivacyScreen() {
         ← رجوع
       </button>
       <div style={{ maxWidth: 560, margin: "0 auto", background: "#fff", borderRadius: 16, padding: 24, border: "1px solid #E5E7EB" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 16px" }}>سياسة الخصوصية</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 16px" }}>سياسة الخصوصية</h1>
         <div style={{ fontSize: 14, lineHeight: 1.8, color: "hsl(var(--color-gray-700))" }}>
           <p><strong>1. البيانات المجمعة:</strong> قراءات العداد، الطقس، الميزانية، ومحادثات الوكيل الذكي.</p>
           <p><strong>2. الغرض:</strong> توقع الفاتورة، التنبيهات المتدرجة، ونصائح التوفير.</p>

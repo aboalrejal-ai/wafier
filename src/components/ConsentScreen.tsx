@@ -31,7 +31,7 @@ export default function ConsentScreen() {
           <div style={{ width: 56, height: 56, borderRadius: "50%", background: "hsl(var(--color-sa-600))", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
           </div>
-          <h1 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 800 }}>{t("consent.title")}</h1>
+          <h1 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 700 }}>{t("consent.title")}</h1>
           <p style={{ margin: 0, fontSize: 14, color: "hsl(var(--color-gray-500))", lineHeight: 1.6 }}>
             {t("consent.intro")}
           </p>

@@ -9,6 +9,7 @@ import type { Screen } from "../App";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { useBudgetMutation } from "../hooks/useDashboard";
 import { useT } from "../i18n";
+import { DeviceIcon } from "./Icons";
 
 interface ForecastScreenProps {
   onNavigate: (screen: Screen) => void;
@@ -112,7 +113,7 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ fontSize: 14, fontWeight: 600, color: "hsl(var(--color-gray-900))" }}>{device.label}</span>
                       <div style={{ width: 36, height: 36, borderRadius: 10, background: "hsl(var(--color-sa-25))", display: "flex", alignItems: "center", justifyContent: "center", color: "hsl(var(--color-sa-600))" }}>
-                        {device.type === "ac" ? "❄️" : device.type === "lights" ? "💡" : device.type === "tv" ? "📺" : "🗄️"}
+                        <DeviceIcon type={device.type} />
                       </div>
                     </div>
                   </div>

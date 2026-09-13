@@ -5,19 +5,11 @@ import { useDashboardData } from "../hooks/useDashboardData";
 import { useT } from "../i18n";
 import { demoService } from "../services/data-service";
 import CommandPalette, { type AppPage } from "./CommandPalette";
+import { Icons } from "./Icons";
 import LanguageIconButton from "./LanguageIconButton";
 import NotificationsPanel from "./panels/NotificationsPanel";
 import SearchTrigger from "./SearchTrigger";
 import ThemeToggle from "./ThemeToggle";
-
-function BellIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
-  );
-}
 
 const PAGE_PATH: Record<AppPage, string> = {
   dashboard: "/dashboard",
@@ -89,9 +81,11 @@ export default function AppTopBar({
           alignItems: "center",
           gap: compact ? 8 : 16,
           padding: compact ? "10px 16px" : "12px 24px",
-          background: "color-mix(in srgb, var(--background) 88%, transparent)",
-          backdropFilter: "blur(10px)",
+          background: "color-mix(in srgb, var(--background) 80%, transparent)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
           borderBottom: "1px solid var(--border)",
+          transition: "background var(--duration-medium) var(--ease-out-expo), border-color var(--duration-medium) var(--ease-out-expo)",
         }}
       >
         {showTitle && title ? (
@@ -100,7 +94,7 @@ export default function AppTopBar({
               style={{
                 margin: 0,
                 fontSize: compact ? 18 : 20,
-                fontWeight: 800,
+                fontWeight: 700,
                 color: "var(--foreground)",
                 letterSpacing: "-0.02em",
                 whiteSpace: "nowrap",
@@ -140,12 +134,13 @@ export default function AppTopBar({
           <button
             type="button"
             aria-label={t("notifications.title")}
+            className="tool-btn"
             onClick={() => setNotifOpen(true)}
             style={{
               width: 40,
               height: 40,
               borderRadius: 10,
-              border: "1px solid var(--border)",
+              border: "1px solid color-mix(in srgb, var(--border) 50%, transparent)",
               background: "var(--card)",
               color: "var(--muted-foreground)",
               cursor: "pointer",
@@ -155,7 +150,7 @@ export default function AppTopBar({
               position: "relative",
             }}
           >
-            <BellIcon />
+            <Icons.Bell size={20} strokeWidth={1.8} />
             {unread ? (
               <span
                 style={{

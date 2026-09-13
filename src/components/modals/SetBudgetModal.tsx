@@ -72,7 +72,7 @@ export default function SetBudgetModal({ onClose, onSet, initialAmount = "500" }
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               style={{
-                fontSize: 40, fontWeight: 800, color: "hsl(var(--color-gray-950))",
+                fontSize: 40, fontWeight: 700, color: "hsl(var(--color-gray-950))",
                 border: "none", outline: "none", background: "transparent",
                 width: 140, textAlign: "center", fontFamily: "inherit",
               }}

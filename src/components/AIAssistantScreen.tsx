@@ -7,6 +7,7 @@ import type { AppPage } from "./CommandPalette";
 import { ragChat } from "../lib/rag-chat";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { useT } from "../i18n";
+import { Icons, type IconName } from "./Icons";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 
@@ -27,11 +28,11 @@ const effortLabels: Record<Effort, string> = {
 
 const CARD_SHADOW = "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)";
 
-const suggestions = [
-  { icon: "💡", text: "كيف أوفر في فاتورة الكهرباء؟" },
-  { icon: "❄️", text: "ما هي أسباب ارتفاع استهلاك المكيف؟" },
-  { icon: "🌡️", text: "نصائح للموجة الحارة القادمة" },
-  { icon: "📊", text: "تحليل استهلاكي مقارنة بالشهر الماضي" },
+const suggestions: { icon: IconName; text: string }[] = [
+  { icon: "Lightbulb", text: "كيف أوفر في فاتورة الكهرباء؟" },
+  { icon: "Snowflake", text: "ما هي أسباب ارتفاع استهلاك المكيف؟" },
+  { icon: "Thermometer", text: "نصائح للموجة الحارة القادمة" },
+  { icon: "FileText", text: "تحليل استهلاكي مقارنة بالشهر الماضي" },
 ];
 
 const aiReplies: Record<string, string> = {
@@ -65,10 +66,10 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
     return () => document.removeEventListener("mousedown", h);
   }, []);
 
-  const options: { id: Effort; icon: string; label: string; desc: string }[] = [
-    { id: "high", icon: "🔬", label: "عالي", desc: "إجابات معمّقة ودقيقة" },
-    { id: "balanced", icon: "⚖️", label: "متوسط", desc: "توازن بين السرعة والجودة" },
-    { id: "fast", icon: "⚡", label: "سريع", desc: "ردود فورية" },
+  const options: { id: Effort; icon: IconName; label: string; desc: string }[] = [
+    { id: "high", icon: "Brain", label: "عالي", desc: "إجابات معمّقة ودقيقة" },
+    { id: "balanced", icon: "Scale", label: "متوسط", desc: "توازن بين السرعة والجودة" },
+    { id: "fast", icon: "Zap", label: "سريع", desc: "ردود فورية" },
   ];
 
   return (
@@ -127,7 +128,8 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
               )}
               <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
-                  {o.icon} {o.label}
+                  {(() => { const I = Icons[o.icon]; return <I size={14} strokeWidth={1.8} style={{ display: "inline", verticalAlign: "middle", marginInlineEnd: 4 }} />; })()}
+                  {o.label}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>{o.desc}</p>
               </div>
@@ -141,10 +143,10 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
 }
 
 function ReferenceSheet({ onClose }: { onClose: () => void }) {
-  const options = [
-    { icon: "📷", label: "التقاط صورة الفاتورة" },
-    { icon: "🖼️", label: "اختيار من المكتبة" },
-    { icon: "📄", label: "رفع ملف PDF" },
+  const options: { icon: IconName; label: string }[] = [
+    { icon: "Camera", label: "التقاط صورة الفاتورة" },
+    { icon: "Image", label: "اختيار من المكتبة" },
+    { icon: "FileText", label: "رفع ملف PDF" },
   ];
 
   return (
@@ -163,7 +165,9 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
         <p style={{ margin: "0 20px 12px", fontSize: 11, fontWeight: 600, color: "hsl(var(--color-gray-500))", letterSpacing: "0.06em", textAlign: "start" }}>
           أضف مرجعاً
         </p>
-        {options.map((o) => (
+        {options.map((o) => {
+          const I = Icons[o.icon];
+          return (
           <button
             key={o.label}
             onClick={onClose}
@@ -178,13 +182,12 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
           >
             <div style={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 12 }}>
               <span style={{ fontSize: 14, fontWeight: 500, color: "hsl(var(--color-gray-900))" }}>{o.label}</span>
-              <span style={{ fontSize: 22 }}>{o.icon}</span>
+              <I size={20} strokeWidth={1.8} style={{ color: "hsl(var(--color-sa-600))" }} />
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-400))" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <Icons.ChevronLeft size={14} strokeWidth={2} style={{ color: "hsl(var(--color-gray-400))" }} />
           </button>
-        ))}
+          );
+        })}
       </div>
       <style>{`
         @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
@@ -402,7 +405,9 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                   e.currentTarget.style.borderColor = "#E5E7EB";
                 }}
               >
-                <p style={{ margin: "0 0 6px", fontSize: 18 }}>{s.icon}</p>
+                <p style={{ margin: "0 0 6px", color: "hsl(var(--color-sa-600))" }}>
+                  {(() => { const I = Icons[s.icon]; return <I size={18} strokeWidth={1.8} />; })()}
+                </p>
                 <p style={{ margin: 0, fontSize: 12, color: "#4D5761", lineHeight: 1.4 }}>{s.text}</p>
               </button>
             ))}

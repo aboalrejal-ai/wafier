@@ -4,6 +4,7 @@ import SignUpModal from "../modals/SignUpModal";
 import Toast from "../ui/Toast";
 import LanguageIconButton from "../LanguageIconButton";
 import ThemeToggle from "../ThemeToggle";
+import { Icons } from "../Icons";
 import { useT } from "../../i18n";
 
 interface DesktopLoginProps {
@@ -38,9 +39,9 @@ export default function DesktopLogin({ onLogin, onSignUp, onResetPassword, onGoo
   };
 
   const features = [
-    { icon: "⚡", title: t("login.featureEnergy"), desc: t("login.featureEnergyDesc") },
-    { icon: "📊", title: t("login.featureForecast"), desc: t("login.featureForecastDesc") },
-    { icon: "💰", title: t("login.featureBudget"), desc: t("login.featureBudgetDesc") },
+    { Icon: Icons.Zap, title: t("login.featureEnergy"), desc: t("login.featureEnergyDesc") },
+    { Icon: Icons.FileText, title: t("login.featureForecast"), desc: t("login.featureForecastDesc") },
+    { Icon: Icons.Wallet, title: t("login.featureBudget"), desc: t("login.featureBudgetDesc") },
   ];
 
   return (
@@ -52,14 +53,16 @@ export default function DesktopLogin({ onLogin, onSignUp, onResetPassword, onGoo
       <div style={{ flex: "0 0 48%", background: "linear-gradient(145deg, hsl(var(--color-sa-800)) 0%, hsl(var(--color-sa-600)) 100%)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "60px 56px", overflow: "hidden", order: 2 }}>
         <div style={{ textAlign: "center", maxWidth: 360 }}>
           <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,0.15)", border: "1.5px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
+            <Icons.Zap size={36} color="white" fill="white" strokeWidth={1.5} />
           </div>
-          <h1 style={{ margin: "0 0 8px", fontSize: 42, fontWeight: 800, color: "#fff" }}>{t("common.wafir")}</h1>
+          <h1 style={{ margin: "0 0 8px", fontSize: 42, fontWeight: 700, color: "#fff" }}>{t("common.wafir")}</h1>
           <p style={{ margin: 0, fontSize: 15, color: "rgba(255,255,255,0.65)" }}>{t("login.desktopTagline")}</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 18, marginTop: 40 }}>
             {features.map((f) => (
               <div key={f.title} style={{ display: "flex", alignItems: "center", gap: 14, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "14px 18px" }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{f.icon}</div>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                  <f.Icon size={20} strokeWidth={1.8} />
+                </div>
                 <div style={{ textAlign: "start" }}>
                   <p style={{ margin: "0 0 3px", fontSize: 14, fontWeight: 600, color: "#fff" }}>{f.title}</p>
                   <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.55)" }}>{f.desc}</p>
@@ -72,7 +75,7 @@ export default function DesktopLogin({ onLogin, onSignUp, onResetPassword, onGoo
 
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "hsl(var(--color-gray-25))", padding: "48px 56px", order: 1 }}>
         <div style={{ width: "100%", maxWidth: 420 }}>
-          <h2 style={{ margin: "0 0 8px", fontSize: 28, fontWeight: 800, textAlign: "start" }}>{t("login.welcome")} 👋</h2>
+          <h2 style={{ margin: "0 0 8px", fontSize: 28, fontWeight: 700, textAlign: "start" }}>{t("login.welcome")}</h2>
           <p style={{ margin: "0 0 28px", fontSize: 14, color: "hsl(var(--color-gray-500))", textAlign: "start" }}>{t("login.desktopSubtitle")}</p>
 
           <div style={{ marginBottom: 20 }}>

@@ -1,15 +1,7 @@
+import { Icons } from "./Icons";
 import { useT } from "../i18n";
 
-function SearchIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="7" />
-      <path d="M21 21l-4.3-4.3" />
-    </svg>
-  );
-}
-
-/** Header search trigger — looks like an input, opens CommandPalette. */
+/** Header search trigger — aboalrejal search-input recipe. */
 export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () => void; compact?: boolean }) {
   const t = useT();
 
@@ -19,11 +11,12 @@ export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () 
         type="button"
         onClick={onOpen}
         aria-label={t("common.search")}
+        className="tool-btn"
         style={{
           width: 40,
           height: 40,
           borderRadius: 10,
-          border: "1px solid var(--border)",
+          border: "1px solid color-mix(in srgb, var(--border) 50%, transparent)",
           background: "var(--card)",
           color: "var(--muted-foreground)",
           cursor: "pointer",
@@ -32,7 +25,7 @@ export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () 
           justifyContent: "center",
         }}
       >
-        <SearchIcon />
+        <Icons.Search size={18} strokeWidth={2} />
       </button>
     );
   }
@@ -41,6 +34,7 @@ export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () 
     <button
       type="button"
       onClick={onOpen}
+      className="tool-btn"
       style={{
         width: "100%",
         maxWidth: 420,
@@ -50,16 +44,23 @@ export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () 
         gap: 10,
         padding: "0 14px",
         borderRadius: 10,
-        border: "1px solid var(--border)",
+        border: "1px solid color-mix(in srgb, var(--border) 50%, transparent)",
         background: "var(--surface-muted)",
         color: "var(--muted-foreground)",
         cursor: "pointer",
         fontFamily: "inherit",
         fontSize: 13,
         fontWeight: 500,
+        transition: "border-color var(--duration-fast) var(--ease-out-expo), background var(--duration-fast) var(--ease-out-expo)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "color-mix(in srgb, var(--foreground) 20%, transparent)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "color-mix(in srgb, var(--border) 50%, transparent)";
       }}
     >
-      <SearchIcon />
+      <Icons.Search size={16} strokeWidth={2} />
       <span style={{ flex: 1, textAlign: "start", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {t("common.searchPlaceholder")}
       </span>
@@ -67,15 +68,20 @@ export default function SearchTrigger({ onOpen, compact = false }: { onOpen: () 
         style={{
           fontSize: 10,
           fontWeight: 700,
-          letterSpacing: "0.06em",
+          fontFamily: "var(--font-mono)",
+          letterSpacing: "0.25em",
           padding: "3px 7px",
           borderRadius: 6,
           border: "1px solid var(--border)",
           background: "var(--card)",
           color: "var(--muted-foreground)",
+          boxShadow: "var(--shadow-xs)",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 2,
         }}
       >
-        ⌘K
+        <Icons.Command size={10} strokeWidth={2.5} />K
       </span>
     </button>
   );

@@ -7,6 +7,7 @@ import AppTopBar, { navigateToAppPage } from "../AppTopBar";
 import type { AppPage } from "../CommandPalette";
 import Toast from "../ui/Toast";
 import { useT } from "../../i18n";
+import { Icons, type IconName } from "../Icons";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 type Effort = "fast" | "balanced" | "high";
@@ -26,11 +27,11 @@ const effortLabels: Record<Effort, string> = {
 
 const CARD_SHADOW = "0 1px 3px 0 hsl(220 39% 11% / .10), 0 1px 2px 0 hsl(220 39% 11% / .06)";
 
-const suggestions = [
-  { icon: "💡", text: "كيف أوفر في فاتورة الكهرباء؟" },
-  { icon: "❄️", text: "ما هي أسباب ارتفاع استهلاك المكيف؟" },
-  { icon: "🌡️", text: "نصائح للموجة الحارة القادمة" },
-  { icon: "📊", text: "تحليل استهلاكي مقارنة بالشهر الماضي" },
+const suggestions: { icon: IconName; text: string }[] = [
+  { icon: "Lightbulb", text: "كيف أوفر في فاتورة الكهرباء؟" },
+  { icon: "Snowflake", text: "ما هي أسباب ارتفاع استهلاك المكيف؟" },
+  { icon: "Thermometer", text: "نصائح للموجة الحارة القادمة" },
+  { icon: "FileText", text: "تحليل استهلاكي مقارنة بالشهر الماضي" },
 ];
 
 const aiReplies: Record<string, string> = {
@@ -60,10 +61,10 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
     return () => document.removeEventListener("mousedown", h);
   }, []);
 
-  const options: { id: Effort; icon: string; label: string; desc: string }[] = [
-    { id: "high", icon: "🔬", label: "عالي", desc: "إجابات معمّقة ودقيقة" },
-    { id: "balanced", icon: "⚖️", label: "متوسط", desc: "توازن بين السرعة والجودة" },
-    { id: "fast", icon: "⚡", label: "سريع", desc: "ردود فورية" },
+  const options: { id: Effort; icon: IconName; label: string; desc: string }[] = [
+    { id: "high", icon: "Brain", label: "عالي", desc: "إجابات معمّقة ودقيقة" },
+    { id: "balanced", icon: "Scale", label: "متوسط", desc: "توازن بين السرعة والجودة" },
+    { id: "fast", icon: "Zap", label: "سريع", desc: "ردود فورية" },
   ];
 
   return (
@@ -121,7 +122,8 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
               )}
               <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
-                  {o.icon} {o.label}
+                  {(() => { const I = Icons[o.icon]; return <I size={14} strokeWidth={1.8} style={{ display: "inline", verticalAlign: "middle", marginInlineEnd: 4 }} />; })()}
+                  {o.label}
                 </p>
                 <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-gray-500))" }}>{o.desc}</p>
               </div>
@@ -319,7 +321,9 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                       e.currentTarget.style.borderColor = "#E5E7EB";
                     }}
                   >
-                    <p style={{ margin: "0 0 8px", fontSize: 22 }}>{s.icon}</p>
+                    <p style={{ margin: "0 0 8px", color: "hsl(var(--color-sa-600))" }}>
+                      {(() => { const I = Icons[s.icon]; return <I size={22} strokeWidth={1.8} />; })()}
+                    </p>
                     <p style={{ margin: 0, fontSize: 13, color: "#4D5761", lineHeight: 1.4 }}>{s.text}</p>
                   </button>
                 ))}

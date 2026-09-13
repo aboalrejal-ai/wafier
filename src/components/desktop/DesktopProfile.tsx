@@ -8,6 +8,7 @@ import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { formatMemberSince, resolveDisplayName } from "../../lib/userStorage";
 import { useT } from "../../i18n";
+import { Icons } from "../Icons";
 
 interface DesktopProfileProps {
   onNavigate: (screen: Screen) => void;
@@ -81,7 +82,9 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
             </div>
             <div style={{ textAlign: "start", flex: 1 }}>
-              <p style={{ margin: "0 0 6px", fontSize: 16, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
+              <p style={{ margin: "0 0 6px", fontSize: 16, fontWeight: 700, color: "hsl(var(--color-sa-700))", display: "flex", alignItems: "center", gap: 6 }}>
+                نصيحة ذكية <Icons.Lightbulb size={16} strokeWidth={1.8} />
+              </p>
               <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))", lineHeight: 1.7 }}>أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.</p>
             </div>
           </div>
@@ -95,7 +98,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>تطور المصروف خلال الأشهر</h2>
-              <span style={{ fontSize: 16 }}>📊</span>
+                <Icons.FileText size={16} strokeWidth={1.8} style={{ color: "hsl(var(--color-sa-600))" }} />
             </div>
           </div>
 

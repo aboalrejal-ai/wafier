@@ -1,9 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
-
 @import 'tailwindcss';
+@import 'tw-animate-css';
+
+@theme {
+  --font-sans: 'IBM Plex Sans Arabic', Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'IBM Plex Sans Arabic', Inter, sans-serif;
+  --font-mono: 'Inconsolata', ui-monospace, SFMono-Regular, monospace;
+  --font-arabic: 'IBM Plex Sans Arabic', sans-serif;
+
+  --transition-duration-fast: 150ms;
+  --transition-duration-medium: 250ms;
+  --transition-duration-slow: 400ms;
+
+  --animate-fade-in: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
 
 :root {
+  --font-sans: 'IBM Plex Sans Arabic', Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'IBM Plex Sans Arabic', Inter, sans-serif;
+  --font-mono: 'Inconsolata', ui-monospace, SFMono-Regular, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-medium: 250ms;
+  --duration-slow: 400ms;
+
   --color-sa-25: 140 60% 98%;
   --color-sa-50: 140 60% 97.1%;
   --color-sa-100: 140.9 56.1% 92%;
@@ -30,36 +67,32 @@
   --color-gray-900: 218.2 39.3% 11%;
   --color-gray-950: 220 36.6% 8%;
 
-  /* Semantic status colors (Nabbihni) */
-  --color-success: 146 91% 30%;   /* #079455 */
-  --color-warning: 28 97% 44%;    /* #DC6803 */
-  --color-warning-text: 26 89% 37%; /* #B54708 */
-  --color-danger: 4 74% 49%;      /* #D92D20 */
+  --color-success: 146 91% 30%;
+  --color-warning: 28 97% 44%;
+  --color-warning-text: 26 89% 37%;
+  --color-danger: 4 74% 49%;
   --color-destructive: 4 74% 49%;
-  --color-danger-hover: 6 78% 42%;  /* #B42318 */
-  --color-info: 215 87% 51%;      /* #1570EF */
+  --color-danger-hover: 6 78% 42%;
+  --color-info: 215 87% 51%;
 
-  /* Brand roles */
-  --primary: hsl(var(--color-sa-600));          /* #1B8354 */
-  --primary-hover: hsl(var(--color-sa-700));    /* #166A45 */
-  --primary-pressed: hsl(var(--color-sa-800));  /* #14573A */
-  --primary-soft: hsl(var(--color-sa-50));      /* #F3FCF6 */
-  --primary-soft-text: hsl(var(--color-sa-700));/* #166A45 */
+  --primary: hsl(var(--color-sa-600));
+  --primary-hover: hsl(var(--color-sa-700));
+  --primary-pressed: hsl(var(--color-sa-800));
+  --primary-soft: hsl(var(--color-sa-50));
+  --primary-soft-text: hsl(var(--color-sa-700));
   --primary-foreground: #ffffff;
-  --accent: hsl(var(--color-sa-500));           /* #25935F */
+  --accent: hsl(var(--color-sa-500));
   --secondary: hsl(var(--color-sa-700));
 
-  /* Surfaces & text */
-  --background: hsl(var(--color-gray-25));       /* #FCFCFD page canvas */
-  --foreground: hsl(var(--color-gray-950));      /* #0D121C default text */
+  --background: hsl(var(--color-gray-25));
+  --foreground: hsl(var(--color-gray-950));
   --card: #ffffff;
   --card-foreground: hsl(var(--color-gray-950));
-  --surface-muted: hsl(var(--color-gray-100));   /* #F3F4F6 muted controls */
+  --surface-muted: hsl(var(--color-gray-100));
   --muted: hsl(var(--color-gray-100));
-  --muted-foreground: hsl(var(--color-gray-600));/* #4D5761 secondary text */
-  --border: hsl(var(--color-gray-200));          /* #E5E7EB */
+  --muted-foreground: hsl(var(--color-gray-600));
+  --border: hsl(var(--color-gray-200));
 
-  /* Semantic aliases */
   --success: hsl(var(--color-success));
   --warning: hsl(var(--color-warning));
   --danger: hsl(var(--color-danger));
@@ -68,7 +101,6 @@
   --ring: hsl(var(--color-sa-600));
   --radius: 0.75rem;
 
-  /* Shadows (#101828 = 220 39% 11%) */
   --shadow-xs: 0 1px 2px 0 hsl(220 39% 11% / 0.05);
   --shadow-sm: 0 1px 3px 0 hsl(220 39% 11% / 0.10), 0 1px 2px 0 hsl(220 39% 11% / 0.06);
   --shadow-md: 0 4px 8px -2px hsl(220 39% 11% / 0.10), 0 2px 4px -2px hsl(220 39% 11% / 0.06);
@@ -104,10 +136,54 @@ html, body, #root {
 
 /* Direction comes from <html dir> via LanguageProvider — do not hardcode rtl here. */
 body {
-  font-family: 'IBM Plex Sans Arabic', 'Work Sans', system-ui, sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--background);
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+html[lang='ar'] body,
+html[lang='ar'] input,
+html[lang='ar'] textarea,
+html[lang='ar'] button {
+  font-family: 'IBM Plex Sans Arabic', Inter, sans-serif;
+}
+
+html[lang='ar'] h1,
+html[lang='ar'] h2 {
+  font-weight: 600;
+}
+
+*:focus-visible {
+  outline: 1px solid var(--ring);
+  outline-offset: 0.125rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.tool-btn {
+  transition: background var(--duration-fast) var(--ease-out-expo),
+    border-color var(--duration-fast) var(--ease-out-expo),
+    color var(--duration-fast) var(--ease-out-expo),
+    transform var(--duration-fast) var(--ease-out-expo),
+    box-shadow var(--duration-fast) var(--ease-out-expo);
+}
+
+.tool-btn:active {
+  transform: scale(0.95);
 }
 
 ::-webkit-scrollbar { width: 0; height: 0; }

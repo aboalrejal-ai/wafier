@@ -25,7 +25,7 @@ export default function ReadinessScreen({ onBack }: { onBack?: () => void }) {
         </button>
       )}
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
-        <h1 style={{ fontSize: 22, fontWeight: 800, margin: "0 0 8px" }}>جاهزية الذكاء الاصطناعي 2.0</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 700, margin: "0 0 8px" }}>جاهزية الذكاء الاصطناعي 2.0</h1>
         <p style={{ fontSize: 13, color: "hsl(var(--color-gray-600))", margin: "0 0 8px" }}>
           {rows.length} أبعاد بأدلة من الكود — أسماء رسمية من ITU Framework {readiness.framework_version}
         </p>

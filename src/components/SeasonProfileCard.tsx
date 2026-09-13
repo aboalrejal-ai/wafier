@@ -57,7 +57,7 @@ export default function SeasonProfileCard({
           <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))", fontWeight: 600 }}>
             Winter Profile · MLFO
           </p>
-          <h2 style={{ margin: "4px 0 0", fontSize: isDesktop ? 18 : 15, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>
+          <h2 style={{ margin: "4px 0 0", fontSize: isDesktop ? 18 : 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
             {copy.title}
           </h2>
         </div>
