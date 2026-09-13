@@ -2,7 +2,9 @@ import { useState } from "react";
 import ForgotPasswordModal from "../modals/ForgotPasswordModal";
 import SignUpModal from "../modals/SignUpModal";
 import Toast from "../ui/Toast";
-import { LanguageToggle, useT } from "../../i18n";
+import LanguageIconButton from "../LanguageIconButton";
+import ThemeToggle from "../ThemeToggle";
+import { useT } from "../../i18n";
 
 interface DesktopLoginProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -43,8 +45,9 @@ export default function DesktopLogin({ onLogin, onSignUp, onResetPassword, onGoo
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%", position: "relative" }}>
-      <div style={{ position: "absolute", top: 20, insetInlineEnd: 24, zIndex: 10 }}>
-        <LanguageToggle />
+      <div style={{ position: "absolute", top: 20, insetInlineEnd: 24, zIndex: 10, display: "flex", alignItems: "center", gap: 8 }}>
+        <LanguageIconButton />
+        <ThemeToggle />
       </div>
       <div style={{ flex: "0 0 48%", background: "linear-gradient(145deg, hsl(var(--color-sa-800)) 0%, hsl(var(--color-sa-600)) 100%)", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", padding: "60px 56px", overflow: "hidden", order: 2 }}>
         <div style={{ textAlign: "center", maxWidth: 360 }}>

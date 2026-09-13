@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import NotificationsPanel from "../panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "../AppTopBar";
+import type { AppPage } from "../CommandPalette";
 import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
-import { demoService } from "../../services/data-service";
 import { formatMemberSince, resolveDisplayName } from "../../lib/userStorage";
+import { useT } from "../../i18n";
 
 interface DesktopProfileProps {
   onNavigate: (screen: Screen) => void;
@@ -34,41 +35,26 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
+  const t = useT();
+  const navigate = useNavigate();
   const [period] = useState("آخر 6 أشهر");
-  const [showNotifications, setShowNotifications] = useState(false);
-  const { notifications, profile } = useDashboardData();
-  const queryClient = useQueryClient();
+  const { profile } = useDashboardData();
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
       <Sidebar current="profile" onNavigate={onNavigate} />
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-          <div style={{ textAlign: "start" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الملف الشخصي</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>حسابك واستهلاك الطاقة</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button
-              type="button"
-              onClick={() => setShowNotifications(true)}
-              style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-            >
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-600))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </div>
-              <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
-            </button>
-          </div>
-        </div>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--background)" }}>
+        <AppTopBar title={t("profile.title")} subtitle={t("profile.subtitle")} onNavigate={handleAppNavigate} />
+      <div style={{ flex: 1, overflowY: "auto", padding: "28px 36px" }}>
 
         <div style={{ display: "grid", gridTemplateColumns: "minmax(280px, 1fr) minmax(280px, 1.4fr)", gap: 20, marginBottom: 20, alignItems: "stretch" }}>
           <div style={{ background: "linear-gradient(135deg, hsl(var(--color-sa-950)), hsl(var(--color-sa-700)))", borderRadius: 20, padding: "28px 24px", textAlign: "center", boxShadow: "0 8px 32px hsla(var(--color-sa-800), 0.3)" }}>
@@ -137,9 +123,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
           </div>
         </div>
       </div>
-      {showNotifications && (
-        <NotificationsPanel variant="desktop" notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />
-      )}
+      </div>
     </div>
   );
 }

@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { setConsent } from "../services/data-service";
-import { LanguageToggle, useT } from "../i18n";
+import LanguageIconButton from "./LanguageIconButton";
+import ThemeToggle from "./ThemeToggle";
+import { useT } from "../i18n";
 
 export default function ConsentScreen() {
   const t = useT();
@@ -19,10 +21,11 @@ export default function ConsentScreen() {
   };
 
   return (
-    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "hsl(var(--color-gray-25))", padding: 24 }}>
-      <div style={{ maxWidth: 480, width: "100%", background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
-        <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 12 }}>
-          <LanguageToggle compact />
+    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--background)", padding: 24 }}>
+      <div style={{ maxWidth: 480, width: "100%", background: "var(--card)", borderRadius: 20, padding: "32px 28px", boxShadow: "var(--shadow-md)", position: "relative" }}>
+        <div style={{ position: "absolute", top: 16, insetInlineEnd: 16, display: "flex", alignItems: "center", gap: 8 }}>
+          <LanguageIconButton />
+          <ThemeToggle compact />
         </div>
         <div style={{ textAlign: "center", marginBottom: 24 }}>
           <div style={{ width: 56, height: 56, borderRadius: "50%", background: "hsl(var(--color-sa-600))", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>

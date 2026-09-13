@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, useAuth, setDemoSession } from "./contexts/AuthContext";
-import { LanguageProvider, useLanguage } from "./i18n";
+import { LanguageProvider, useLanguage, useT, type TranslationKey } from "./i18n";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ConsentScreen from "./components/ConsentScreen";
@@ -22,6 +23,8 @@ import DesktopForecast from "./components/desktop/DesktopForecast";
 import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
 import Sidebar from "./components/desktop/Sidebar";
+import AppTopBar, { navigateToAppPage } from "./components/AppTopBar";
+import type { AppPage } from "./components/CommandPalette";
 import { signIn, signUp, resetPassword, signInWithGoogle, isSupabaseConfigured, getSession } from "./services/data-service";
 import { useDashboard } from "./hooks/useDashboard";
 import { initPushRegistration } from "./lib/notification-distributor";
@@ -118,12 +121,12 @@ function AppShell() {
   useDashboard();
 
   const shellStyle: React.CSSProperties = isDesktop
-    ? { height: "100dvh", width: "100%", display: "flex", flexDirection: "column", background: "hsl(var(--color-gray-25))", overflow: "hidden" }
-    : { height: "100dvh", display: "flex", justifyContent: "center", alignItems: "center", background: "hsl(var(--color-gray-25))" };
+    ? { height: "100dvh", width: "100%", display: "flex", flexDirection: "column", background: "var(--background)", overflow: "hidden" }
+    : { height: "100dvh", display: "flex", justifyContent: "center", alignItems: "center", background: "var(--background)" };
 
   const innerStyle: React.CSSProperties = isDesktop
     ? { flex: 1, overflow: "hidden", display: "flex", width: "100%", height: "100%" }
-    : { width: "100%", maxWidth: 430, height: "100%", maxHeight: 900, background: "hsl(var(--color-gray-25))", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 12px 16px -4px hsl(220 39% 11% / 0.08)", position: "relative" };
+    : { width: "100%", maxWidth: 430, height: "100%", maxHeight: 900, background: "var(--background)", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "var(--shadow-lg)", position: "relative" };
 
   return (
     <div style={shellStyle}>
@@ -149,7 +152,7 @@ function AppShell() {
             path="/hackathon/kb"
             element={
               isDesktop ? (
-                <DesktopPageShell current="about" onNavigate={nav}>
+                <DesktopPageShell current="about" onNavigate={nav} titleKey="nav.hackathonKb">
                   <KnowledgeBaseScreen onBack={() => nav("about")} />
                 </DesktopPageShell>
               ) : (
@@ -161,7 +164,7 @@ function AppShell() {
             path="/hackathon/gaps"
             element={
               isDesktop ? (
-                <DesktopPageShell current="about" onNavigate={nav}>
+                <DesktopPageShell current="about" onNavigate={nav} titleKey="nav.hackathonGaps">
                   <GapsScreen onBack={() => nav("about")} />
                 </DesktopPageShell>
               ) : (
@@ -173,7 +176,7 @@ function AppShell() {
             path="/hackathon/readiness"
             element={
               isDesktop ? (
-                <DesktopPageShell current="about" onNavigate={nav}>
+                <DesktopPageShell current="about" onNavigate={nav} titleKey="nav.hackathonReadiness">
                   <ReadinessScreen onBack={() => nav("about")} />
                 </DesktopPageShell>
               ) : (
@@ -192,17 +195,30 @@ function AppShell() {
 function DesktopPageShell({
   current,
   onNavigate,
+  titleKey = "nav.about",
   children,
 }: {
   current: Screen;
   onNavigate: (screen: Screen) => void;
+  titleKey?: TranslationKey;
   children: React.ReactNode;
 }) {
+  const t = useT();
+  const navigate = useNavigate();
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
+  };
+
   return (
     <div style={{ display: "flex", height: "100%", width: "100%", overflow: "hidden" }}>
       <Sidebar current={current} onNavigate={onNavigate} />
-      <div style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", background: "hsl(var(--color-gray-25))" }}>
-        {children}
+      <div style={{ flex: 1, minWidth: 0, height: "100%", display: "flex", flexDirection: "column", background: "var(--background)" }}>
+        <AppTopBar title={t(titleKey)} onNavigate={handleAppNavigate} />
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>{children}</div>
       </div>
     </div>
   );
@@ -224,20 +240,22 @@ export default function AppRouter() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LanguageProvider>
-        <AppWithI18nBoundary>
-          <AuthProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/login" element={<LoginRoute />} />
-                <Route path="/consent" element={<ConsentScreen />} />
-                <Route path="/privacy" element={<PrivacyScreen />} />
-                <Route path="/*" element={<ProtectedRoute><AppShell /></ProtectedRoute>} />
-              </Routes>
-            </BrowserRouter>
-          </AuthProvider>
-        </AppWithI18nBoundary>
-      </LanguageProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AppWithI18nBoundary>
+            <AuthProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<LoginRoute />} />
+                  <Route path="/consent" element={<ConsentScreen />} />
+                  <Route path="/privacy" element={<PrivacyScreen />} />
+                  <Route path="/*" element={<ProtectedRoute><AppShell /></ProtectedRoute>} />
+                </Routes>
+              </BrowserRouter>
+            </AuthProvider>
+          </AppWithI18nBoundary>
+        </LanguageProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

@@ -3,7 +3,7 @@ import type { Screen } from "../../App";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAppStore } from "../../stores/app-store";
 import { formatMemberSince, resolveDisplayName } from "../../lib/userStorage";
-import { LanguageToggle, useT } from "../../i18n";
+import { useT } from "../../i18n";
 
 interface SidebarProps {
   current: Screen;
@@ -67,6 +67,17 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
         </svg>
       ),
     },
+    {
+      id: "about",
+      label: t("nav.about"),
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+      ),
+    },
   ];
 
   const handleLogout = async () => {
@@ -76,51 +87,125 @@ export default function Sidebar({ current, onNavigate, onLogout }: SidebarProps)
   };
 
   return (
-    <aside style={{ width: 280, flexShrink: 0, display: "flex", flexDirection: "column", background: "#fff", borderInlineEnd: "1px solid #E5E7EB", height: "100%", overflow: "hidden" }}>
-      <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid #E5E7EB" }}>
+    <aside
+      style={{
+        width: 280,
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        background: "var(--card)",
+        borderInlineEnd: "1px solid var(--border)",
+        height: "100%",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{ padding: "32px 24px 28px", borderBottom: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 8, background: "#1B8354", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 8,
+              background: "hsl(var(--color-sa-600))",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
+            </svg>
           </div>
           <div style={{ textAlign: "start" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "#0D121C", letterSpacing: "-0.5px" }}>{t("common.wafir")}</div>
-            <div style={{ fontSize: 11, color: "#4D5761", marginTop: 2 }}>{t("sidebar.tagline")}</div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--foreground)", letterSpacing: "-0.5px" }}>{t("common.wafir")}</div>
+            <div style={{ fontSize: 11, color: "var(--muted-foreground)", marginTop: 2 }}>{t("sidebar.tagline")}</div>
           </div>
-        </div>
-        <div style={{ marginTop: 16 }}>
-          <LanguageToggle compact />
         </div>
       </div>
 
       <nav style={{ flex: 1, padding: "20px 12px", display: "flex", flexDirection: "column", gap: 4 }}>
-        <p style={{ margin: "0 12px 10px", fontSize: 10, fontWeight: 600, color: "#9DA4AE", letterSpacing: "0.08em", textTransform: "uppercase", textAlign: "start" }}>{t("nav.mainMenu")}</p>
+        <p
+          style={{
+            margin: "0 12px 10px",
+            fontSize: 10,
+            fontWeight: 600,
+            color: "var(--muted-foreground)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            textAlign: "start",
+          }}
+        >
+          {t("nav.mainMenu")}
+        </p>
         {navItems.map((item) => {
           const active = current === item.id;
           return (
-            <button key={item.id} onClick={() => onNavigate(item.id)}
-              style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer", background: active ? "#F3FCF6" : "transparent", color: active ? "#166A45" : "#111927", fontSize: 14, fontWeight: active ? 600 : 400, fontFamily: "inherit", borderInlineStart: active ? "3px solid #1B8354" : "3px solid transparent", textAlign: "start" }}>
-              <span style={{ color: active ? "#166A45" : "#4D5761", display: "flex" }}>{item.icon}</span>
+            <button
+              key={item.id}
+              onClick={() => onNavigate(item.id)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "11px 14px",
+                borderRadius: 8,
+                border: "none",
+                cursor: "pointer",
+                background: active ? "var(--primary-soft)" : "transparent",
+                color: active ? "var(--primary-soft-text)" : "var(--foreground)",
+                fontSize: 14,
+                fontWeight: active ? 600 : 400,
+                fontFamily: "inherit",
+                borderInlineStart: active ? "3px solid hsl(var(--color-sa-600))" : "3px solid transparent",
+                textAlign: "start",
+              }}
+            >
+              <span style={{ color: active ? "var(--primary-soft-text)" : "var(--muted-foreground)", display: "flex" }}>{item.icon}</span>
               <span>{item.label}</span>
             </button>
           );
         })}
-        <button onClick={() => onNavigate("about")} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 14px", borderRadius: 8, border: "none", cursor: "pointer", background: current === "about" ? "#F3FCF6" : "transparent", color: "#111927", fontSize: 14, fontFamily: "inherit", marginTop: 8, textAlign: "start" }}>
-          <span>ℹ️</span>
-          <span>{t("nav.about")}</span>
-        </button>
       </nav>
 
-      <div style={{ padding: "16px 16px 24px", borderTop: "1px solid #E5E7EB" }}>
+      <div style={{ padding: "16px 16px 24px", borderTop: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 8, background: "hsl(var(--color-sa-600) / 0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1B8354"><path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" /></svg>
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 8,
+              background: "hsl(var(--color-sa-600) / 0.1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="hsl(var(--color-sa-600))">
+              <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
+            </svg>
           </div>
           <div style={{ textAlign: "start" }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#0D121C" }}>{profileName}</p>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: "#4D5761" }}>{memberSince}</p>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "var(--foreground)" }}>{profileName}</p>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: "var(--muted-foreground)" }}>{memberSince}</p>
           </div>
         </div>
-        <button onClick={handleLogout} style={{ width: "100%", padding: "9px 0", borderRadius: 8, border: "1px solid #E5E7EB", background: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 600, color: "#6C737F", fontFamily: "inherit" }}>
+        <button
+          onClick={handleLogout}
+          style={{
+            width: "100%",
+            padding: "9px 0",
+            borderRadius: 8,
+            border: "1px solid var(--border)",
+            background: "var(--card)",
+            cursor: "pointer",
+            fontSize: 12,
+            fontWeight: 600,
+            color: "var(--muted-foreground)",
+            fontFamily: "inherit",
+          }}
+        >
           {t("common.logout")}
         </button>
       </div>

@@ -15,6 +15,12 @@ export const en: Messages = {
     language: "Language",
     arabic: "عربي",
     english: "English",
+    theme: "Theme",
+    themeLight: "Light",
+    themeDark: "Dark",
+    search: "Search",
+    searchPlaceholder: "Search pages…",
+    noResults: "No results",
   },
   nav: {
     dashboard: "Monthly budget",
@@ -23,6 +29,9 @@ export const en: Messages = {
     profile: "Profile",
     about: "About Wafir",
     mainMenu: "Main menu",
+    hackathonKb: "Knowledge base",
+    hackathonGaps: "Policy gaps",
+    hackathonReadiness: "Hackathon readiness",
   },
   login: {
     tagline: "Energy management & smart solutions",
@@ -126,6 +135,7 @@ export const en: Messages = {
     welcome: "Hi! I'm the Wafir AI assistant 🌿\nAsk me anything about energy use, your bill, or saving tips.",
     placeholder: "Ask Wafir AI...",
     send: "Send",
+    poweredBy: "Powered by AI",
   },
   about: {
     title: "Wafir",

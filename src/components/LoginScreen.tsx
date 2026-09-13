@@ -2,7 +2,9 @@ import { useState } from "react";
 import ForgotPasswordModal from "./modals/ForgotPasswordModal";
 import SignUpModal from "./modals/SignUpModal";
 import Toast from "./ui/Toast";
-import { LanguageToggle, useT } from "../i18n";
+import LanguageIconButton from "./LanguageIconButton";
+import ThemeToggle from "./ThemeToggle";
+import { useT } from "../i18n";
 
 interface LoginScreenProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -25,8 +27,9 @@ export default function LoginScreen({ onLogin, onSignUp, onResetPassword, onGoog
 
   return (
     <div style={{ minHeight: "100%", display: "flex", flexDirection: "column", background: "hsl(var(--color-sa-25))", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: 16, insetInlineEnd: 16, zIndex: 5 }}>
-        <LanguageToggle compact />
+      <div style={{ position: "absolute", top: 16, insetInlineEnd: 16, zIndex: 5, display: "flex", alignItems: "center", gap: 8 }}>
+        <LanguageIconButton />
+        <ThemeToggle compact />
       </div>
       <div style={{ position: "relative", padding: "48px 24px 32px", textAlign: "center" }}>
         <div style={{ position: "relative", zIndex: 1, display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 8 }}>

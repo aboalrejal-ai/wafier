@@ -1,11 +1,10 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import NotificationsPanel from "../panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "../AppTopBar";
+import type { AppPage } from "../CommandPalette";
 import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
-import { demoService } from "../../services/data-service";
 import { useLanguage, useT } from "../../i18n";
 
 interface DesktopDashboardProps {
@@ -49,44 +48,31 @@ function DeviceRow({ icon, label, pct }: { icon: React.ReactNode; label: string;
 
 export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) {
   const t = useT();
+  const navigate = useNavigate();
   const { lang, isRtl } = useLanguage();
-  const [showNotifications, setShowNotifications] = useState(false);
-  const { budget, spend, remaining, usagePct, forecast, weather, devices, notifications, historicalBills, greetingName } = useDashboardData();
-  const queryClient = useQueryClient();
+  const { budget, spend, remaining, usagePct, forecast, weather, devices, historicalBills, greetingName } = useDashboardData();
   const miniChartData = historicalBills.slice(-6).map((b) => ({ month: b.month.slice(0, 3), value: b.value }));
   const dateLabel = new Date().toLocaleDateString(lang === "ar" ? "ar-SA" : "en-US", { month: "long", year: "numeric" });
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
       <Sidebar current="dashboard" onNavigate={onNavigate} />
 
-      {/* Main */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
-        {/* Page Header: title first (start), bell second (end) */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-          <div style={{ textAlign: "start" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>{t("dashboard.monthlyBudget")}</h1>
-              <span style={{ fontSize: 22 }}>☀️</span>
-            </div>
-            <p style={{ margin: "4px 0 0", fontSize: 14, color: "hsl(var(--color-gray-500))" }}>{t("dashboard.greetingDate", { name: greetingName, date: dateLabel })}</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setShowNotifications(true)}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-600))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </div>
-              <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
-            </div>
-          </div>
-        </div>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--background)" }}>
+        <AppTopBar
+          title={t("dashboard.monthlyBudget")}
+          subtitle={t("dashboard.greetingDate", { name: greetingName, date: dateLabel })}
+          onNavigate={handleAppNavigate}
+        />
+        <div style={{ flex: 1, overflowY: "auto", padding: "28px 36px" }}>
 
         {/* Row 1: Budget Card + Real-time Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
@@ -204,10 +190,8 @@ export default function DesktopDashboard({ onNavigate }: DesktopDashboardProps) 
             </div>
           </div>
         </div>
+        </div>
       </div>
-      {showNotifications && (
-        <NotificationsPanel variant="desktop" notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />
-      )}
     </div>
   );
 }

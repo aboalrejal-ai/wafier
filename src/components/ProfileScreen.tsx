@@ -10,7 +10,8 @@ import {
   YAxis,
 } from "recharts";
 import BottomNav from "./BottomNav";
-import NotificationsPanel from "./panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "./AppTopBar";
+import type { AppPage } from "./CommandPalette";
 import EditProfileModal from "./modals/EditProfileModal";
 import PeriodPicker from "./ui/PeriodPicker";
 import type { Screen } from "../App";
@@ -20,7 +21,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { updateProfile } from "../services/data-service";
 import { demoService } from "../services/data-service";
 import { formatMemberSince, resolveDisplayName } from "../lib/userStorage";
-import { LanguageToggle, useT } from "../i18n";
+import { useT } from "../i18n";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileScreenProps {
@@ -43,18 +44,20 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   const t = useT();
   const period = useAppStore((s) => s.period);
   const setPeriodStore = useAppStore((s) => s.setPeriod);
-  const { profile, notifications, historicalBills } = useDashboardData();
+  const { profile, historicalBills } = useDashboardData();
   const { signOut } = useAuth();
   const queryClient = useQueryClient();
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const displayName = resolveDisplayName({ fullName: profile?.full_name, email: profile?.email });
   const memberSince = profile?.member_since ? formatMemberSince(profile.member_since) : t("profile.memberNew");
   const chartDataFiltered = getFilteredChartData(historicalBills.length ? historicalBills : chartData, period);
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -70,61 +73,16 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   };
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <AppTopBar
+        compact
+        notificationsVariant="mobile"
+        title={t("profile.title")}
+        subtitle={t("profile.subtitle")}
+        onNavigate={handleAppNavigate}
+      />
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {/* Header */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "20px 20px 0",
-        }}>
-          {/* Spacer to balance centered title */}
-          <div style={{ width: 36 }} />
-
-          <div style={{ textAlign: "center" }}>
-            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
-              {t("profile.title")}
-            </h1>
-            <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
-              {t("profile.subtitle")}
-            </p>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <button
-              onClick={() => onNavigate("dashboard")}
-              style={{
-                background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer",
-                width: 36, height: 36, borderRadius: "50%",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "hsl(var(--color-gray-700))",
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Notification Bell */}
-        <div style={{ display: "flex", justifyContent: "flex-start", padding: "8px 20px 16px" }}>
-          <button
-            onClick={() => setShowNotifications(true)}
-            style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 0 }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-700))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span style={{
-              position: "absolute", top: -3, insetInlineEnd: -3,
-              width: 9, height: 9, background: "hsl(var(--color-sa-500))",
-              borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))",
-            }} />
-          </button>
-        </div>
-
         {/* User Card */}
-        <div style={{ margin: "0 16px 16px" }}>
+        <div style={{ margin: "12px 16px 16px" }}>
           <div style={{
             background: "#fff", borderRadius: 18, padding: "18px",
             border: "1px solid hsl(var(--color-gray-100))",
@@ -266,7 +224,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
 
       <BottomNav current="profile" onNavigate={onNavigate} />
 
-      {showNotifications && <NotificationsPanel notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />}
       {showEditProfile && (
         <EditProfileModal
           onClose={() => setShowEditProfile(false)}
@@ -275,7 +232,6 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
         />
       )}
       <div style={{ padding: "8px 16px 12px", display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
-        <LanguageToggle compact />
         <button
           onClick={() => {
             const until = new Date(Date.now() + 2 * 3600 * 1000).toISOString();

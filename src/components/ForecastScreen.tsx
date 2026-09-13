@@ -1,78 +1,45 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BottomNav from "./BottomNav";
-import NotificationsPanel from "./panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "./AppTopBar";
+import type { AppPage } from "./CommandPalette";
 import SetBudgetModal from "./modals/SetBudgetModal";
 import SeasonProfileCard from "./SeasonProfileCard";
 import type { Screen } from "../App";
 import { useDashboardData } from "../hooks/useDashboardData";
 import { useBudgetMutation } from "../hooks/useDashboard";
-import { demoService } from "../services/data-service";
-import { useQueryClient } from "@tanstack/react-query";
+import { useT } from "../i18n";
 
 interface ForecastScreenProps {
   onNavigate: (screen: Screen) => void;
 }
 
 export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
-  const [showNotifications, setShowNotifications] = useState(false);
+  const t = useT();
+  const navigate = useNavigate();
   const [showSetBudget, setShowSetBudget] = useState(false);
-  const { budget, forecast, devices, notifications, seasonProfile, weather } = useDashboardData();
+  const { budget, forecast, devices, seasonProfile, weather } = useDashboardData();
   const saveBudget = useBudgetMutation();
-  const queryClient = useQueryClient();
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <AppTopBar
+        compact
+        notificationsVariant="mobile"
+        title={t("nav.forecast")}
+        subtitle={`${forecast.toFixed(2)} ${t("common.sar")} · ${budget} ${t("common.sar")}`}
+        onNavigate={handleAppNavigate}
+      />
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {/* Header */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "20px 20px 0",
-        }}>
-          <button
-            onClick={() => setShowNotifications(true)}
-            style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 4 }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-700))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span style={{
-              position: "absolute", top: 1, insetInlineEnd: 1,
-              width: 9, height: 9, background: "hsl(var(--color-sa-500))",
-              borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))",
-            }} />
-          </button>
-
-          <div style={{ textAlign: "center" }}>
-            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
-              توقعات الفاتورة
-            </h1>
-          </div>
-
-          <button
-            onClick={() => onNavigate("dashboard")}
-            style={{
-              background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer",
-              width: 36, height: 36, borderRadius: "50%",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              color: "hsl(var(--color-gray-700))",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        </div>
-
-        <p style={{ textAlign: "center", margin: "6px 24px 16px", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
-          توقع {forecast.toFixed(2)} ر.س (ميزانية {budget} ر.س)
-        </p>
-
-        <div style={{ margin: "0 16px 16px" }}>
+        <div style={{ margin: "12px 16px 16px" }}>
           <SeasonProfileCard seasonProfile={seasonProfile} temperature={weather.temp_c} />
         </div>
 
@@ -198,7 +165,6 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
       </div>
 
       <BottomNav current="forecast" onNavigate={onNavigate} />
-      {showNotifications && <NotificationsPanel notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />}
       {showSetBudget && (
         <SetBudgetModal
           initialAmount={String(budget)}

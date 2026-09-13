@@ -12,11 +12,28 @@ import PipelineRail, { pipelineStatusFromAudit } from "./hackathon/PipelineRail"
 import SyntheticNotice from "./SyntheticNotice";
 import { useT } from "../i18n";
 
+/** Canonical team from docs/TECHNICAL-REPORT.md — roles verbatim. */
 const TEAM = [
-  { name: "Fatima Alsultan", role: "Team Lead" },
-  { name: "Jorry Alfalah", role: "ML & Backend" },
-  { name: "Noor Alshammari", role: "UI/UX & Frontend" },
-  { name: "Shahad Alsultan", role: "Data & Policy" },
+  {
+    name: "Mohammed Nadher Aboalrejal",
+    role: "Mentor — Technical Lead, System Architect, Technical Report Author",
+  },
+  {
+    name: "Fatima Alsultan",
+    role: "Document research, concept ideation, policy gap analysis, report structuring",
+  },
+  {
+    name: "Shahad Alsultan",
+    role: "Video production, report drafting",
+  },
+  {
+    name: "Jorry Alfalah",
+    role: "App UI design, logo design",
+  },
+  {
+    name: "Noor Alshammari",
+    role: "App UI templates, logo design",
+  },
 ];
 
 function ScenarioButton({
@@ -83,12 +100,12 @@ export default function AboutScreen({ onBack }: { onBack?: () => void }) {
           <SyntheticNotice />
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 16, padding: 20, marginBottom: 16, border: "1px solid #E5E7EB" }}>
-          <h2 style={{ fontSize: 16, margin: "0 0 12px", textAlign: "start" }}>{t("about.team")}</h2>
+        <div style={{ background: "var(--card)", borderRadius: 16, padding: 20, marginBottom: 16, border: "1px solid var(--border)" }}>
+          <h2 style={{ fontSize: 16, margin: "0 0 12px", textAlign: "start", color: "var(--foreground)" }}>{t("about.team")}</h2>
           {TEAM.map((m) => (
-            <div key={m.name} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid hsl(var(--color-gray-100))" }}>
-              <span style={{ fontSize: 12, color: "hsl(var(--color-gray-500))" }}>{m.role}</span>
-              <span style={{ fontWeight: 600 }}>{m.name}</span>
+            <div key={m.name} style={{ padding: "10px 0", borderBottom: "1px solid var(--border)", textAlign: "start" }}>
+              <div style={{ fontWeight: 700, color: "var(--foreground)", fontSize: 14 }}>{m.name}</div>
+              <div style={{ fontSize: 12, color: "var(--muted-foreground)", marginTop: 4, lineHeight: 1.45 }}>{m.role}</div>
             </div>
           ))}
         </div>

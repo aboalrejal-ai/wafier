@@ -1,7 +1,10 @@
 import { ragChat } from "../../lib/rag-chat";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import AppTopBar, { navigateToAppPage } from "../AppTopBar";
+import type { AppPage } from "../CommandPalette";
 import Toast from "../ui/Toast";
 import { useT } from "../../i18n";
 
@@ -137,6 +140,7 @@ interface DesktopAIAssistantProps {
 
 export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantProps) {
   const t = useT();
+  const navigate = useNavigate();
   const { spend, budget, forecast } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>(() => [
     { role: "ai", text: t("ai.welcome"), time: getTime() },
@@ -148,6 +152,14 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
   const [toast, setToast] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
+  };
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -176,36 +188,12 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
       <Sidebar current="ai" onNavigate={onNavigate} />
 
-      {/* Main chat area */}
       <div style={{
         flex: 1, display: "flex", flexDirection: "column",
-        background: "#FCFCFD",
+        background: "var(--background)",
         overflow: "hidden",
       }}>
-        {/* Header */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "flex-start",
-          padding: "20px 32px 18px",
-          background: "#FFFFFF",
-          borderBottom: "1px solid #E5E7EB",
-          flexShrink: 0,
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ textAlign: "start" }}>
-              <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafir AI</h1>
-              <p style={{ margin: "2px 0 0", fontSize: 12, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
-            </div>
-            <div style={{
-              width: 44, height: 44, borderRadius: "50%",
-              background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-                <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
-              </svg>
-            </div>
-          </div>
-        </div>
+        <AppTopBar title={t("nav.ai")} subtitle={t("ai.poweredBy")} onNavigate={handleAppNavigate} />
 
         {/* Messages — centered column */}
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 0 8px" }}>

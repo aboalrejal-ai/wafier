@@ -1,56 +1,45 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import NotificationsPanel from "../panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "../AppTopBar";
+import type { AppPage } from "../CommandPalette";
 import SetBudgetModal from "../modals/SetBudgetModal";
 import SeasonProfileCard from "../SeasonProfileCard";
 import type { Screen } from "../../App";
 import { useDashboardData } from "../../hooks/useDashboardData";
 import { useBudgetMutation } from "../../hooks/useDashboard";
-import { demoService } from "../../services/data-service";
-import { useQueryClient } from "@tanstack/react-query";
+import { useT } from "../../i18n";
 
 interface DesktopForecastProps {
   onNavigate: (screen: Screen) => void;
 }
 
 export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
-  const [showNotifications, setShowNotifications] = useState(false);
+  const t = useT();
+  const navigate = useNavigate();
   const [showBudget, setShowBudget] = useState(false);
-  const { budget, forecast, devices, notifications, seasonProfile, weather } = useDashboardData();
+  const { budget, forecast, devices, seasonProfile, weather } = useDashboardData();
   const saveBudget = useBudgetMutation();
-  const queryClient = useQueryClient();
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
 
   return (
     <div style={{ display: "flex", height: "100%", width: "100%" }}>
       <Sidebar current="forecast" onNavigate={onNavigate} />
 
-      {/* Main */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
-          <div style={{ textAlign: "start" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-              توقع {forecast.toFixed(2)} ر.س ضمن ميزانية {budget} ر.س
-            </p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setShowNotifications(true)}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-600))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </div>
-              <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
-            </div>
-          </div>
-        </div>
-
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "var(--background)" }}>
+        <AppTopBar
+          title={t("nav.forecast")}
+          subtitle={`${t("forecast.finalForecast")}: ${forecast.toFixed(2)} ${t("common.sar")} · ${budget} ${t("common.sar")}`}
+          onNavigate={handleAppNavigate}
+        />
+      <div style={{ flex: 1, overflowY: "auto", padding: "28px 36px" }}>
         <div style={{ marginBottom: 20 }}>
           <SeasonProfileCard variant="desktop" seasonProfile={seasonProfile} temperature={weather.temp_c} />
         </div>
@@ -165,8 +154,8 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
           </div>
         </div>
       </div>
-      {showNotifications && <NotificationsPanel variant="desktop" notifications={notifications} onClose={() => setShowNotifications(false)} onMarkAllRead={markAllRead} />}
       {showBudget && <SetBudgetModal initialAmount={String(budget)} onClose={() => setShowBudget(false)} onSet={async (a) => saveBudget(Number(a))} />}
+      </div>
     </div>
   );
 }

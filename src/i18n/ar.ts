@@ -13,6 +13,12 @@ export const ar = {
     language: "اللغة",
     arabic: "عربي",
     english: "English",
+    theme: "المظهر",
+    themeLight: "فاتح",
+    themeDark: "داكن",
+    search: "بحث",
+    searchPlaceholder: "ابحث في الصفحات…",
+    noResults: "لا توجد نتائج",
   },
   nav: {
     dashboard: "الميزانية الشهرية",
@@ -21,6 +27,9 @@ export const ar = {
     profile: "الملف الشخصي",
     about: "عن Wafir",
     mainMenu: "القائمة الرئيسية",
+    hackathonKb: "قاعدة المعرفة",
+    hackathonGaps: "فجوات السياسات",
+    hackathonReadiness: "جاهزية الهاكاثون",
   },
   login: {
     tagline: "إدارة الطاقة والحلول الذكية",
@@ -124,6 +133,7 @@ export const ar = {
     welcome: "مرحباً! أنا مساعد Wafir الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.",
     placeholder: "اسأل Wafir AI...",
     send: "إرسال",
+    poweredBy: "مدعوم بالذكاء الاصطناعي",
   },
   about: {
     title: "Wafir",

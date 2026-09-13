@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BottomNav from "./BottomNav";
-import NotificationsPanel from "./panels/NotificationsPanel";
+import AppTopBar, { navigateToAppPage } from "./AppTopBar";
+import type { AppPage } from "./CommandPalette";
 import type { Screen } from "../App";
 import { useDashboardData } from "../hooks/useDashboardData";
-import { demoService } from "../services/data-service";
-import { useQueryClient } from "@tanstack/react-query";
 import { useT } from "../i18n";
 
 interface DashboardScreenProps {
@@ -44,44 +43,27 @@ function DeviceBar({ icon, label, pct, color = "hsl(var(--color-sa-500))" }: { i
 
 export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
   const t = useT();
-  const [showNotifications, setShowNotifications] = useState(false);
-  const { budget, spend, remaining, usagePct, forecast, weather, devices, notifications, greetingName } = useDashboardData();
-  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { budget, spend, remaining, usagePct, forecast, weather, devices, greetingName } = useDashboardData();
 
-  const markAllRead = () => {
-    demoService.markAllNotificationsRead();
-    queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+  const handleAppNavigate = (page: AppPage) => {
+    if (page === "dashboard" || page === "forecast" || page === "ai" || page === "profile" || page === "about") {
+      onNavigate(page);
+      return;
+    }
+    navigateToAppPage(navigate, page);
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <AppTopBar
+        compact
+        notificationsVariant="mobile"
+        title={t("dashboard.goodMorning", { name: greetingName })}
+        onNavigate={handleAppNavigate}
+      />
       <div style={{ flex: 1, overflowY: "auto", padding: "0 0 8px" }}>
-        {/* Header: title first (start), bell second (end) */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          padding: "20px 20px 12px",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 15, color: "hsl(var(--color-gray-700))" }}>{t("dashboard.goodMorning", { name: greetingName })}</span>
-            <span style={{ fontSize: 18 }}>☀️</span>
-          </div>
-          <button
-            onClick={() => setShowNotifications(true)}
-            style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 4 }}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-700))" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span style={{
-              position: "absolute", top: 1, insetInlineEnd: 1,
-              width: 9, height: 9, background: "hsl(var(--color-sa-500))",
-              borderRadius: "50%", border: "2px solid #fff",
-            }} />
-          </button>
-        </div>
-
-        <div style={{ textAlign: "center", padding: "4px 0 16px" }}>
+        <div style={{ textAlign: "center", padding: "12px 0 16px" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
             <div style={{
               width: 32, height: 32, borderRadius: "50%",
@@ -92,9 +74,9 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
                 <path d="M13 2L4.5 13.5H11L10 22L19.5 10.5H13L13 2Z" />
               </svg>
             </div>
-            <span style={{ fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{t("common.wafir")}</span>
+            <span style={{ fontSize: 20, fontWeight: 700, color: "var(--foreground)" }}>{t("common.wafir")}</span>
           </div>
-          <p style={{ margin: "2px 0 0", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
+          <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--muted-foreground)" }}>
             {t("dashboard.tagline")}
           </p>
         </div>
@@ -244,13 +226,6 @@ export default function DashboardScreen({ onNavigate }: DashboardScreenProps) {
       </div>
 
       <BottomNav current="dashboard" onNavigate={onNavigate} />
-      {showNotifications && (
-        <NotificationsPanel
-          notifications={notifications}
-          onClose={() => setShowNotifications(false)}
-          onMarkAllRead={markAllRead}
-        />
-      )}
     </div>
   );
 }
