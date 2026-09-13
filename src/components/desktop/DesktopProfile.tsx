@@ -72,7 +72,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
                 🤖 مساعد AI
               </button>
               <button style={{ flex: 1, padding: "9px 0", borderRadius: 10, background: "transparent", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500, fontFamily: "inherit", cursor: "pointer" }}>
-                ✏️ تعديل
+                تعديل
               </button>
             </div>
           </div>
