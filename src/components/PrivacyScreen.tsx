@@ -4,7 +4,7 @@ export default function PrivacyScreen() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: "100dvh", background: "hsl(var(--color-gray-25))", direction: "rtl", padding: "24px 20px 40px" }}>
+    <div style={{ minHeight: "100dvh", background: "hsl(var(--color-gray-25))", padding: "24px 20px 40px" }}>
       <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "hsl(var(--color-sa-600))", fontFamily: "inherit", marginBottom: 20 }}>
         ← رجوع
       </button>

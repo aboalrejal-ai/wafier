@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, useAuth, setDemoSession } from "./contexts/AuthContext";
+import { LanguageProvider, useLanguage } from "./i18n";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 import ConsentScreen from "./components/ConsentScreen";
 import AboutScreen from "./components/AboutScreen";
 import GapsScreen from "./components/hackathon/GapsScreen";
@@ -19,6 +21,7 @@ import DesktopDashboard from "./components/desktop/DesktopDashboard";
 import DesktopForecast from "./components/desktop/DesktopForecast";
 import DesktopProfile from "./components/desktop/DesktopProfile";
 import DesktopAIAssistant from "./components/desktop/DesktopAIAssistant";
+import Sidebar from "./components/desktop/Sidebar";
 import { signIn, signUp, resetPassword, signInWithGoogle, isSupabaseConfigured, getSession } from "./services/data-service";
 import { useDashboard } from "./hooks/useDashboard";
 import { initPushRegistration } from "./lib/notification-distributor";
@@ -94,12 +97,9 @@ function LoginRoute() {
   );
 }
 
-function AppShell() {
-  const isDesktop = useIsDesktop();
+function ShellNav() {
   const navigate = useNavigate();
-  useDashboard();
-
-  const nav = (screen: Screen) => {
+  return (screen: Screen) => {
     const map: Record<Screen, string> = {
       login: "/login",
       dashboard: "/dashboard",
@@ -110,13 +110,19 @@ function AppShell() {
     };
     navigate(map[screen]);
   };
+}
+
+function AppShell() {
+  const isDesktop = useIsDesktop();
+  const nav = ShellNav();
+  useDashboard();
 
   const shellStyle: React.CSSProperties = isDesktop
-    ? { height: "100dvh", width: "100%", display: "flex", flexDirection: "column", background: "hsl(var(--color-gray-25))", overflow: "hidden", direction: "rtl" }
-    : { height: "100dvh", display: "flex", justifyContent: "center", alignItems: "center", background: "hsl(var(--color-gray-25))", direction: "rtl" };
+    ? { height: "100dvh", width: "100%", display: "flex", flexDirection: "column", background: "hsl(var(--color-gray-25))", overflow: "hidden" }
+    : { height: "100dvh", display: "flex", justifyContent: "center", alignItems: "center", background: "hsl(var(--color-gray-25))" };
 
   const innerStyle: React.CSSProperties = isDesktop
-    ? { flex: 1, overflow: "hidden", display: "flex" }
+    ? { flex: 1, overflow: "hidden", display: "flex", width: "100%", height: "100%" }
     : { width: "100%", maxWidth: 430, height: "100%", maxHeight: 900, background: "hsl(var(--color-gray-25))", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 12px 16px -4px hsl(220 39% 11% / 0.08)", position: "relative" };
 
   return (
@@ -127,14 +133,87 @@ function AppShell() {
           <Route path="/forecast" element={isDesktop ? <DesktopForecast onNavigate={nav} /> : <ForecastScreen onNavigate={nav} />} />
           <Route path="/profile" element={isDesktop ? <DesktopProfile onNavigate={nav} /> : <ProfileScreen onNavigate={nav} />} />
           <Route path="/ai" element={isDesktop ? <DesktopAIAssistant onNavigate={nav} /> : <AIAssistantScreen onNavigate={nav} />} />
-          <Route path="/about" element={<AboutScreen />} />
-          <Route path="/hackathon/kb" element={<KnowledgeBaseScreen onBack={() => navigate(-1)} />} />
-          <Route path="/hackathon/gaps" element={<GapsScreen onBack={() => navigate(-1)} />} />
-          <Route path="/hackathon/readiness" element={<ReadinessScreen onBack={() => navigate(-1)} />} />
+          <Route
+            path="/about"
+            element={
+              isDesktop ? (
+                <DesktopPageShell current="about" onNavigate={nav}>
+                  <AboutScreen />
+                </DesktopPageShell>
+              ) : (
+                <AboutScreen />
+              )
+            }
+          />
+          <Route
+            path="/hackathon/kb"
+            element={
+              isDesktop ? (
+                <DesktopPageShell current="about" onNavigate={nav}>
+                  <KnowledgeBaseScreen onBack={() => nav("about")} />
+                </DesktopPageShell>
+              ) : (
+                <KnowledgeBaseScreen onBack={() => nav("about")} />
+              )
+            }
+          />
+          <Route
+            path="/hackathon/gaps"
+            element={
+              isDesktop ? (
+                <DesktopPageShell current="about" onNavigate={nav}>
+                  <GapsScreen onBack={() => nav("about")} />
+                </DesktopPageShell>
+              ) : (
+                <GapsScreen onBack={() => nav("about")} />
+              )
+            }
+          />
+          <Route
+            path="/hackathon/readiness"
+            element={
+              isDesktop ? (
+                <DesktopPageShell current="about" onNavigate={nav}>
+                  <ReadinessScreen onBack={() => nav("about")} />
+                </DesktopPageShell>
+              ) : (
+                <ReadinessScreen onBack={() => nav("about")} />
+              )
+            }
+          />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
     </div>
+  );
+}
+
+/** Shared desktop chrome so About / hackathon pages fill the shell (no white screen). */
+function DesktopPageShell({
+  current,
+  onNavigate,
+  children,
+}: {
+  current: Screen;
+  onNavigate: (screen: Screen) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div style={{ display: "flex", height: "100%", width: "100%", overflow: "hidden" }}>
+      <Sidebar current={current} onNavigate={onNavigate} />
+      <div style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", background: "hsl(var(--color-gray-25))" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function AppWithI18nBoundary({ children }: { children: React.ReactNode }) {
+  const { t } = useLanguage();
+  return (
+    <ErrorBoundary fallbackTitle={t("error.title")} retryLabel={t("error.retry")}>
+      {children}
+    </ErrorBoundary>
   );
 }
 
@@ -145,16 +224,20 @@ export default function AppRouter() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginRoute />} />
-            <Route path="/consent" element={<ConsentScreen />} />
-            <Route path="/privacy" element={<PrivacyScreen />} />
-            <Route path="/*" element={<ProtectedRoute><AppShell /></ProtectedRoute>} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+      <LanguageProvider>
+        <AppWithI18nBoundary>
+          <AuthProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<LoginRoute />} />
+                <Route path="/consent" element={<ConsentScreen />} />
+                <Route path="/privacy" element={<PrivacyScreen />} />
+                <Route path="/*" element={<ProtectedRoute><AppShell /></ProtectedRoute>} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
+        </AppWithI18nBoundary>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

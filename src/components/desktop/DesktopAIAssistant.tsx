@@ -3,6 +3,7 @@ import { useDashboardData } from "../../hooks/useDashboardData";
 import { useState, useRef, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Toast from "../ui/Toast";
+import { useT } from "../../i18n";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 type Effort = "fast" | "balanced" | "high";
@@ -105,7 +106,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                 display: "flex", alignItems: "center", gap: 10, width: "100%",
                 padding: "11px 16px", border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: effort === o.id ? "hsl(var(--color-sa-50))" : "transparent",
-                textAlign: "end", transition: "background 0.1s",
+                textAlign: "start", transition: "background 0.1s",
               }}
               onMouseEnter={(e) => { if (effort !== o.id) e.currentTarget.style.background = "hsl(var(--color-gray-50))"; }}
               onMouseLeave={(e) => { if (effort !== o.id) e.currentTarget.style.background = "transparent"; }}
@@ -115,7 +116,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
-              <div style={{ flex: 1, textAlign: "end" }}>
+              <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 14, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
                   {o.icon} {o.label}
                 </p>
@@ -135,9 +136,10 @@ interface DesktopAIAssistantProps {
 }
 
 export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantProps) {
+  const t = useT();
   const { spend, budget, forecast } = useDashboardData();
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "مرحباً! أنا مساعد Wafir الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: "ai", text: t("ai.welcome"), time: getTime() },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -182,14 +184,14 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
       }}>
         {/* Header */}
         <div style={{
-          display: "flex", alignItems: "center", justifyContent: "flex-end",
+          display: "flex", alignItems: "center", justifyContent: "flex-start",
           padding: "20px 32px 18px",
           background: "#FFFFFF",
           borderBottom: "1px solid #E5E7EB",
           flexShrink: 0,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ textAlign: "end" }}>
+            <div style={{ textAlign: "start" }}>
               <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0D121C" }}>Wafir AI</h1>
               <p style={{ margin: "2px 0 0", fontSize: 12, color: "#4D5761" }}>مدعوم بالذكاء الاصطناعي</p>
             </div>
@@ -229,7 +231,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
             {messages.map((m, i) => (
               <div key={i} style={{
                 display: "flex",
-                flexDirection: m.role === "user" ? "row" : "row-reverse",
+                flexDirection: "row",
                 alignItems: "flex-end",
                 gap: 10,
                 marginBottom: 20,
@@ -254,7 +256,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     border: `1px solid ${m.role === "user" ? "#1B8354" : "#E5E7EB"}`,
                     boxShadow: m.role === "user" ? "none" : CARD_SHADOW,
                     color: m.role === "user" ? "#FFFFFF" : "#111927",
-                    fontSize: 14, lineHeight: 1.7, textAlign: "end", whiteSpace: "pre-line",
+                    fontSize: 14, lineHeight: 1.7, textAlign: "start", whiteSpace: "pre-line",
                   }}>
                     {m.text}
                     {m.sources && m.sources.length > 0 && (
@@ -278,7 +280,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
             ))}
 
             {isTyping && (
-              <div style={{ display: "flex", flexDirection: "row-reverse", alignItems: "flex-end", gap: 10, marginBottom: 20 }}>
+              <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 10, marginBottom: 20 }}>
                 <div style={{
                   width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
                   background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
@@ -313,7 +315,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                     key={s.text}
                     onClick={() => send(s.text)}
                     style={{
-                      padding: "18px 16px", borderRadius: 16, textAlign: "end",
+                      padding: "18px 16px", borderRadius: 16, textAlign: "start",
                       border: "1px solid #E5E7EB",
                       background: "#FFFFFF",
                       boxShadow: CARD_SHADOW,
@@ -379,7 +381,7 @@ export default function DesktopAIAssistant({ onNavigate }: DesktopAIAssistantPro
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
                 }}
-                placeholder="اسأل Wafir AI..."
+                placeholder={t("ai.placeholder")}
                 dir="rtl"
                 rows={1}
                 style={{

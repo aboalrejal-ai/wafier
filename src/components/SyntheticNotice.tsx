@@ -1,4 +1,7 @@
+import { useT } from "../i18n";
+
 export default function SyntheticNotice({ compact }: { compact?: boolean }) {
+  const t = useT();
   return (
     <div
       style={{
@@ -12,7 +15,7 @@ export default function SyntheticNotice({ compact }: { compact?: boolean }) {
         lineHeight: 1.5,
       }}
     >
-      ⚠️ بيانات محاكاة لأغراض الهاكاثون فقط — Synthetic data, hackathon use only
+      {t("synthetic")}
     </div>
   );
 }

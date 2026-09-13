@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { setConsent } from "../services/data-service";
+import { LanguageToggle, useT } from "../i18n";
 
 export default function ConsentScreen() {
+  const t = useT();
   const [accepted, setAccepted] = useState(false);
   const [privacy, setPrivacy] = useState(false);
   const { setHasConsent } = useAuth();
@@ -17,40 +19,43 @@ export default function ConsentScreen() {
   };
 
   return (
-    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "hsl(var(--color-gray-25))", direction: "rtl", padding: 24 }}>
+    <div style={{ minHeight: "100dvh", display: "flex", alignItems: "center", justifyContent: "center", background: "hsl(var(--color-gray-25))", padding: 24 }}>
       <div style={{ maxWidth: 480, width: "100%", background: "#fff", borderRadius: 20, padding: "32px 28px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
+        <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 12 }}>
+          <LanguageToggle compact />
+        </div>
         <div style={{ textAlign: "center", marginBottom: 24 }}>
           <div style={{ width: 56, height: 56, borderRadius: "50%", background: "hsl(var(--color-sa-600))", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
           </div>
-          <h1 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 800 }}>موافقة PDPL</h1>
+          <h1 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 800 }}>{t("consent.title")}</h1>
           <p style={{ margin: 0, fontSize: 14, color: "hsl(var(--color-gray-500))", lineHeight: 1.6 }}>
-            وفق نظام حماية البيانات الشخصية (PDPL)، نحتاج موافقتك قبل معالجة بيانات استهلاك الطاقة.
+            {t("consent.intro")}
           </p>
         </div>
 
-        <div style={{ background: "hsl(var(--color-sa-25))", borderRadius: 12, padding: 16, marginBottom: 20, fontSize: 13, lineHeight: 1.7, color: "hsl(var(--color-gray-700))" }}>
-          <p style={{ margin: "0 0 8px", fontWeight: 600 }}>ما الذي نجمعه:</p>
+        <div style={{ background: "hsl(var(--color-sa-25))", borderRadius: 12, padding: 16, marginBottom: 20, fontSize: 13, lineHeight: 1.7, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>
+          <p style={{ margin: "0 0 8px", fontWeight: 600 }}>{t("consent.collectTitle")}</p>
           <ul style={{ margin: 0, paddingInlineStart: 20 }}>
-            <li>قراءات العداد (kWh) والطقس</li>
-            <li>ميزانيتك الشهرية وتفضيلات التنبيه</li>
-            <li>محادثات الوكيل الذكي (للتحسين)</li>
+            <li>{t("consent.collectMeter")}</li>
+            <li>{t("consent.collectBudget")}</li>
+            <li>{t("consent.collectChat")}</li>
           </ul>
           <p style={{ margin: "12px 0 0", fontSize: 12, color: "hsl(var(--color-gray-500))" }}>
-            البيانات مشفرة ومخفية الهوية عند التحليل (Preprocessor Node — PP).
+            {t("consent.encrypted")}
           </p>
         </div>
 
-        <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12, cursor: "pointer" }}>
+        <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 12, cursor: "pointer", textAlign: "start" }}>
           <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} style={{ marginTop: 4 }} />
-          <span style={{ fontSize: 13 }}>أوافق على معالجة بيانات استهلاك الطاقة لأغراض التوقع والتنبيه</span>
+          <span style={{ fontSize: 13 }}>{t("consent.agreeProcess")}</span>
         </label>
-        <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 24, cursor: "pointer" }}>
+        <label style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 24, cursor: "pointer", textAlign: "start" }}>
           <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} style={{ marginTop: 4 }} />
           <span style={{ fontSize: 13 }}>
-            قرأت{" "}
+            {t("consent.readPrivacy")}{" "}
             <button type="button" onClick={() => navigate("/privacy")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", cursor: "pointer", fontFamily: "inherit", fontWeight: 600, padding: 0 }}>
-              سياسة الخصوصية
+              {t("consent.privacyPolicy")}
             </button>
           </span>
         </label>
@@ -65,7 +70,7 @@ export default function ConsentScreen() {
             fontSize: 15, fontWeight: 700, cursor: accepted && privacy ? "pointer" : "not-allowed", fontFamily: "inherit",
           }}
         >
-          متابعة إلى Wafir
+          {t("consent.continue")}
         </button>
       </div>
     </div>

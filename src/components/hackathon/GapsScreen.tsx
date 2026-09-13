@@ -3,7 +3,7 @@ import SyntheticNotice from "../SyntheticNotice";
 
 export default function GapsScreen({ onBack }: { onBack?: () => void }) {
   return (
-    <div style={{ minHeight: "100dvh", background: "hsl(var(--color-gray-25))", direction: "rtl", padding: "24px 20px 40px" }}>
+    <div style={{ minHeight: "100dvh", background: "hsl(var(--color-gray-25))", padding: "24px 20px 40px" }}>
       {onBack && (
         <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "hsl(var(--color-sa-600))", fontFamily: "inherit", marginBottom: 16 }}>
           ← رجوع

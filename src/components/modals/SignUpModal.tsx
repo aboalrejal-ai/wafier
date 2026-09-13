@@ -65,7 +65,7 @@ export default function SignUpModal({ onClose, onSignUp }: SignUpModalProps) {
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
-            <div style={{ textAlign: "end" }}>
+            <div style={{ textAlign: "start" }}>
               <h2 style={{ margin: "0 0 4px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>إنشاء حساب جديد</h2>
               <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-500))" }}>انضم إلى Wafir وابدأ التوفير</p>
             </div>
@@ -73,22 +73,22 @@ export default function SignUpModal({ onClose, onSignUp }: SignUpModalProps) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>الاسم الكامل</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>الاسم الكامل</label>
               <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="أدخل اسمك الكامل" dir="rtl"
                 style={{ width: "100%", padding: "13px 16px", border: "1.5px solid hsl(var(--color-gray-200))", borderRadius: 12, fontSize: 14, outline: "none", fontFamily: "inherit", background: "hsl(var(--color-gray-25))", color: "hsl(var(--color-gray-950))", boxSizing: "border-box" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>البريد الإلكتروني</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>البريد الإلكتروني</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="أدخل بريدك الإلكتروني" dir="rtl"
                 style={{ width: "100%", padding: "13px 16px", border: "1.5px solid hsl(var(--color-gray-200))", borderRadius: 12, fontSize: 14, outline: "none", fontFamily: "inherit", background: "hsl(var(--color-gray-25))", color: "hsl(var(--color-gray-950))", boxSizing: "border-box" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>كلمة المرور</label>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>كلمة المرور</label>
               <input type={showPass ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="6 أحرف على الأقل" dir="rtl"
                 style={{ width: "100%", padding: "13px 16px", border: "1.5px solid hsl(var(--color-gray-200))", borderRadius: 12, fontSize: 14, outline: "none", fontFamily: "inherit", background: "hsl(var(--color-gray-25))", color: "hsl(var(--color-gray-950))", boxSizing: "border-box" }} />
             </div>
             <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5, textAlign: "end", flex: 1 }}>
+              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5, textAlign: "start", flex: 1 }}>
                 أوافق على شروط الاستخدام وسياسة الخصوصية
               </p>
               <div onClick={() => setAgree(!agree)} style={{ width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 2, border: `2px solid ${agree ? "hsl(var(--color-sa-600))" : "hsl(var(--color-gray-300))"}`, background: agree ? "hsl(var(--color-sa-600))" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>

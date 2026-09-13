@@ -22,7 +22,7 @@ export default function EditProfileModal({ onClose, initial, onSave }: EditProfi
     <>
       <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "hsl(var(--color-gray-950) / 0.45)", zIndex: 300 }} />
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 301, background: "#fff", borderRadius: "24px 24px 0 0", maxHeight: "88vh", padding: "16px 24px 36px" }}>
-        <h2 style={{ textAlign: "end", fontSize: 20, fontWeight: 700 }}>تعديل الملف الشخصي</h2>
+        <h2 style={{ textAlign: "start", fontSize: 20, fontWeight: 700 }}>تعديل الملف الشخصي</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 16 }}>
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="الاسم" style={{ padding: 12, borderRadius: 10, border: "1px solid #E5E7EB", fontFamily: "inherit" }} />
           <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="البريد" dir="ltr" style={{ padding: 12, borderRadius: 10, border: "1px solid #E5E7EB", fontFamily: "inherit" }} />

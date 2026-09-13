@@ -53,7 +53,7 @@ export default function SeasonProfileCard({
         >
           ×{multiplier.toFixed(2)}
         </div>
-        <div style={{ textAlign: "end", flex: 1 }}>
+        <div style={{ textAlign: "start", flex: 1 }}>
           <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))", fontWeight: 600 }}>
             Winter Profile · MLFO
           </p>
@@ -63,11 +63,11 @@ export default function SeasonProfileCard({
         </div>
       </div>
 
-      <p style={{ margin: "12px 0 0", fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6, textAlign: "end" }}>
+      <p style={{ margin: "12px 0 0", fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6, textAlign: "start" }}>
         {copy.explanation}
       </p>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", justifyContent: "flex-start", gap: 8, marginTop: 12, flexWrap: "wrap" }}>
         <span
           style={{
             fontSize: 11,
@@ -84,7 +84,7 @@ export default function SeasonProfileCard({
       </div>
 
       {copy.winterTip && (
-        <p style={{ margin: "12px 0 0", fontSize: 12, color: "hsl(var(--color-sa-700))", lineHeight: 1.6, textAlign: "end" }}>
+        <p style={{ margin: "12px 0 0", fontSize: 12, color: "hsl(var(--color-sa-700))", lineHeight: 1.6, textAlign: "start" }}>
           {copy.winterTip}
         </p>
       )}

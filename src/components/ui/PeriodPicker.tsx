@@ -58,7 +58,7 @@ export default function PeriodPicker({ value, onChange }: PeriodPickerProps) {
               key={o}
               onClick={() => { onChange(o); setOpen(false); }}
               style={{
-                display: "block", width: "100%", textAlign: "end",
+                display: "block", width: "100%", textAlign: "start",
                 padding: "10px 14px",
                 background: o === value ? "hsl(var(--color-sa-25))" : "#fff",
                 border: "none", cursor: "pointer",

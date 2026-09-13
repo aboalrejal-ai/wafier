@@ -95,8 +95,8 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
               <rect x="10" y="52" width="35" height="20" rx="1" fill="rgba(255,255,255,0.8)" transform="rotate(-8,27,62)" />
             </svg>
 
-            <div style={{ position: "relative", textAlign: "end", color: "#fff" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8, marginBottom: 8 }}>
+            <div style={{ position: "relative", textAlign: "start", color: "#fff" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 8, marginBottom: 8 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="4" width="18" height="18" rx="2" />
                   <line x1="16" y1="2" x2="16" y2="6" />
@@ -175,7 +175,7 @@ export default function ForecastScreen({ onNavigate }: ForecastScreenProps) {
             borderRadius: 16, padding: "18px",
             display: "flex", alignItems: "center", gap: 16,
           }}>
-            <div style={{ textAlign: "end", flex: 1 }}>
+            <div style={{ textAlign: "start", flex: 1 }}>
               <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك</p>
               <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>
                 أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.

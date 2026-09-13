@@ -3,6 +3,7 @@ import Toast from "./ui/Toast";
 import BottomNav from "./BottomNav";
 import { ragChat } from "../lib/rag-chat";
 import { useDashboardData } from "../hooks/useDashboardData";
+import { useT } from "../i18n";
 
 type Screen = "login" | "dashboard" | "forecast" | "profile" | "ai" | "about";
 
@@ -110,7 +111,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                 display: "flex", alignItems: "center", gap: 10, width: "100%",
                 padding: "10px 14px", border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: effort === o.id ? "hsl(var(--color-sa-50))" : "transparent",
-                textAlign: "end",
+                textAlign: "start",
                 transition: "background 0.1s",
               }}
               onMouseEnter={(e) => { if (effort !== o.id) e.currentTarget.style.background = "hsl(var(--color-gray-50))"; }}
@@ -121,7 +122,7 @@ function EffortDropdown({ effort, onChange }: { effort: Effort; onChange: (e: Ef
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               )}
-              <div style={{ flex: 1, textAlign: "end" }}>
+              <div style={{ flex: 1, textAlign: "start" }}>
                 <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: effort === o.id ? "hsl(var(--color-sa-700))" : "hsl(var(--color-gray-900))" }}>
                   {o.icon} {o.label}
                 </p>
@@ -156,7 +157,7 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
           <div style={{ width: 36, height: 4, borderRadius: 99, background: "hsl(var(--color-gray-200))" }} />
         </div>
-        <p style={{ margin: "0 20px 12px", fontSize: 11, fontWeight: 600, color: "hsl(var(--color-gray-500))", letterSpacing: "0.06em", textAlign: "end" }}>
+        <p style={{ margin: "0 20px 12px", fontSize: 11, fontWeight: 600, color: "hsl(var(--color-gray-500))", letterSpacing: "0.06em", textAlign: "start" }}>
           أضف مرجعاً
         </p>
         {options.map((o) => (
@@ -166,13 +167,13 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
             style={{
               display: "flex", alignItems: "center", gap: 14, width: "100%",
               padding: "14px 20px", border: "none", cursor: "pointer",
-              background: "transparent", fontFamily: "inherit", textAlign: "end",
+              background: "transparent", fontFamily: "inherit", textAlign: "start",
               transition: "background 0.1s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--color-gray-50))")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <div style={{ flex: 1, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12 }}>
+            <div style={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", gap: 12 }}>
               <span style={{ fontSize: 14, fontWeight: 500, color: "hsl(var(--color-gray-900))" }}>{o.label}</span>
               <span style={{ fontSize: 22 }}>{o.icon}</span>
             </div>
@@ -191,9 +192,10 @@ function ReferenceSheet({ onClose }: { onClose: () => void }) {
 }
 
 export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps) {
+  const t = useT();
   const { spend, budget, forecast } = useDashboardData();
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "مرحباً! أنا مساعد Wafir الذكي 🌿\nاسألني أي شيء عن استهلاك الطاقة، الفاتورة، أو نصائح التوفير.", time: getTime() },
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: "ai", text: t("ai.welcome"), time: getTime() },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -294,7 +296,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
         {messages.map((m, i) => (
           <div key={i} style={{
             display: "flex",
-            flexDirection: m.role === "user" ? "row" : "row-reverse",
+            flexDirection: "row",
             alignItems: "flex-end",
             gap: 8,
             marginBottom: 16,
@@ -329,7 +331,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 color: m.role === "user" ? "#FFFFFF" : "#111927",
                 fontSize: 14,
                 lineHeight: 1.65,
-                textAlign: "end",
+                textAlign: "start",
                 whiteSpace: "pre-line",
               }}>
                 {m.text}
@@ -355,7 +357,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
 
         {/* Typing indicator */}
         {isTyping && (
-          <div style={{ display: "flex", flexDirection: "row-reverse", alignItems: "flex-end", gap: 8, marginBottom: 16 }}>
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", gap: 8, marginBottom: 16 }}>
             <div style={{
               width: 28, height: 28, borderRadius: "50%", flexShrink: 0,
               background: "linear-gradient(135deg, hsl(var(--color-sa-700)), hsl(var(--color-sa-500)))",
@@ -391,7 +393,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 key={s.text}
                 onClick={() => send(s.text)}
                 style={{
-                  padding: "14px 12px", borderRadius: 14, textAlign: "end",
+                  padding: "14px 12px", borderRadius: 14, textAlign: "start",
                   border: "1px solid #E5E7EB",
                   background: "#FFFFFF",
                   boxShadow: CARD_SHADOW,
@@ -460,7 +462,7 @@ export default function AIAssistantScreen({ onNavigate }: AIAssistantScreenProps
                 send(input);
               }
             }}
-            placeholder="اسأل Wafir AI..."
+            placeholder={t("ai.placeholder")}
             dir="rtl"
             rows={1}
             style={{

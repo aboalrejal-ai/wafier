@@ -1,15 +1,17 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../i18n";
 import type { ReactNode } from "react";
 
 export default function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading, hasConsent } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
 
   if (loading) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100dvh", direction: "rtl" }}>
-        <p style={{ color: "hsl(var(--color-gray-500))" }}>جاري التحميل...</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100dvh" }}>
+        <p style={{ color: "hsl(var(--color-gray-500))" }}>{t("common.loading")}</p>
       </div>
     );
   }

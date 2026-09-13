@@ -5,6 +5,7 @@ import {
   requestDeviceNotificationPermission,
   type DevicePermissionState,
 } from "../../lib/notification-distributor";
+import { useT } from "../../i18n";
 
 interface NotificationsPanelProps {
   onClose: () => void;
@@ -22,19 +23,20 @@ const typeColor: Record<string, string> = {
   success: "hsl(var(--color-success))",
 };
 
-function formatTime(iso: string) {
-  const diff = Date.now() - new Date(iso).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return "منذ دقائق";
-  if (hours < 24) return `منذ ${hours} ساعة`;
-  return "أمس";
-}
-
 export default function NotificationsPanel({ onClose, notifications, onMarkAllRead, variant = "mobile" }: NotificationsPanelProps) {
+  const t = useT();
   const unread = notifications.filter((n) => !n.read).length;
   const isDesktop = variant === "desktop";
   const [devicePermission, setDevicePermission] = useState<DevicePermissionState>(() => getDevicePermissionState());
   const [enabling, setEnabling] = useState(false);
+
+  const formatTime = (iso: string) => {
+    const diff = Date.now() - new Date(iso).getTime();
+    const hours = Math.floor(diff / 3600000);
+    if (hours < 1) return t("notifications.minutesAgo");
+    if (hours < 24) return t("notifications.hoursAgo", { hours });
+    return t("notifications.yesterday");
+  };
 
   useEffect(() => {
     setDevicePermission(getDevicePermissionState());
@@ -74,74 +76,52 @@ export default function NotificationsPanel({ onClose, notifications, onMarkAllRe
           <div style={{ display: "flex", gap: 8 }}>
             {unread > 0 && onMarkAllRead && (
               <button onClick={onMarkAllRead} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: "hsl(var(--color-sa-600))", fontFamily: "inherit", fontWeight: 600 }}>
-                تعليم الكل كمقروء
+                {t("notifications.markAllRead")}
               </button>
             )}
             <button onClick={onClose} style={{ background: "hsl(var(--color-gray-100))", border: "none", cursor: "pointer", width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--color-gray-700))" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+              ✕
             </button>
           </div>
-          <div style={{ textAlign: "end" }}>
-            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>الإشعارات</h2>
-            {unread > 0 && <p style={{ margin: "2px 0 0", fontSize: 11, color: "hsl(var(--color-sa-600))", fontWeight: 600 }}>{unread} غير مقروء</p>}
+          <div style={{ textAlign: "start" }}>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{t("notifications.title")}</h2>
           </div>
         </div>
 
-        {devicePermission !== "unsupported" && (
-          <div style={{ padding: "0 16px 12px" }}>
-            {devicePermission === "granted" ? (
-              <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-sa-700))", textAlign: "end" }}>إشعارات الجهاز مفعّلة</p>
-            ) : (
-              <button
-                type="button"
-                onClick={enableDeviceNotifications}
-                disabled={enabling || devicePermission === "denied"}
-                style={{
-                  width: "100%",
-                  padding: "10px 12px",
-                  borderRadius: 12,
-                  border: "1px solid hsl(var(--color-sa-200))",
-                  background: "hsl(var(--color-sa-25))",
-                  color: "hsl(var(--color-sa-700))",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  fontFamily: "inherit",
-                  cursor: devicePermission === "denied" ? "not-allowed" : "pointer",
-                }}
-              >
-                {devicePermission === "denied"
-                  ? "الإذن مرفوض — فعّله من إعدادات المتصفح أو الجهاز"
-                  : enabling
-                    ? "جاري التفعيل…"
-                    : "تفعيل إشعارات الجهاز"}
-              </button>
-            )}
+        {devicePermission !== "granted" && (
+          <div style={{ padding: "0 20px 12px" }}>
+            <button type="button" disabled={enabling} onClick={enableDeviceNotifications} style={{ width: "100%", padding: 10, borderRadius: 10, border: "1px solid hsl(var(--color-sa-200))", background: "hsl(var(--color-sa-25))", color: "hsl(var(--color-sa-700))", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", fontSize: 12 }}>
+              {t("notifications.enableDevice")}
+            </button>
           </div>
+        )}
+        {devicePermission === "granted" && (
+          <p style={{ margin: "0 20px 12px", fontSize: 12, color: "hsl(var(--color-sa-700))", textAlign: "start" }}>{t("notifications.deviceEnabled")}</p>
         )}
 
         <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 24px" }}>
+          {notifications.length === 0 && (
+            <p style={{ textAlign: "center", color: "hsl(var(--color-gray-400))", fontSize: 13, marginTop: 40 }}>{t("notifications.empty")}</p>
+          )}
           {notifications.map((n) => (
-            <div key={n.id} style={{ display: "flex", gap: 12, padding: "14px 0", borderBottom: "1px solid hsl(var(--color-gray-100))", opacity: n.read ? 0.65 : 1 }}>
-              <div style={{ paddingTop: 2, flexShrink: 0 }}>{!n.read && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "hsl(var(--color-sa-500))" }} />}</div>
-              <div style={{ flex: 1, textAlign: "end" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, marginBottom: 4 }}>
-                  <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "hsl(var(--color-gray-900))" }}>{n.title}</p>
-                  <div style={{ color: typeColor[n.level] ?? typeColor.warning }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
-                  </div>
+            <div key={n.id} style={{ display: "flex", gap: 12, padding: "14px 12px", borderRadius: 12, background: n.read ? "transparent" : "hsl(var(--color-sa-25))", marginBottom: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: "50%", background: typeColor[n.level] ?? typeColor.info, marginTop: 6, flexShrink: 0 }} />
+              <div style={{ flex: 1, textAlign: "start" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{n.title}</span>
+                  <span style={{ fontSize: 11, color: "hsl(var(--color-gray-400))" }}>{formatTime(n.created_at)}</span>
                 </div>
-                <p style={{ margin: "0 0 4px", fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>{n.body}</p>
-                <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-400))" }}>{formatTime(n.created_at)}</p>
+                <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.5 }}>{n.body}</p>
               </div>
             </div>
           ))}
         </div>
+        <style>{`
+          @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+          @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+          @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        `}</style>
       </div>
-      <style>{`
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-      `}</style>
     </>
   );
 }

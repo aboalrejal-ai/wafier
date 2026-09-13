@@ -33,6 +33,12 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+          <div style={{ textAlign: "start" }}>
+            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
+            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
+              توقع {forecast.toFixed(2)} ر.س ضمن ميزانية {budget} ر.س
+            </p>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setShowNotifications(true)}>
               <div style={{ width: 40, height: 40, borderRadius: 10, background: "#fff", border: "1px solid hsl(var(--color-gray-200))", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -42,12 +48,6 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
               </div>
               <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
             </div>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>توقعات الفاتورة</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>
-              توقع {forecast.toFixed(2)} ر.س ضمن ميزانية {budget} ر.س
-            </p>
           </div>
         </div>
 
@@ -83,8 +83,8 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
             </div>
           </div>
 
-          <div style={{ textAlign: "end" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end", marginBottom: 12 }}>
+          <div style={{ textAlign: "start" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-start", marginBottom: 12 }}>
               <p style={{ margin: 0, fontSize: 16, fontWeight: 700, color: "#fff" }}>آخر تحديث: منذ دقيقة</p>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
             </div>
@@ -159,7 +159,7 @@ export default function DesktopForecast({ onNavigate }: DesktopForecastProps) {
               </svg>
             </div>
           </div>
-          <div style={{ textAlign: "end" }}>
+          <div style={{ textAlign: "start" }}>
             <p style={{ margin: "0 0 4px", fontSize: 15, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>كفاءة الاستهلاك ✓</p>
             <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))" }}>أنت على المسار الصحيح! استهلاكك ضمن الحدود المثالية.</p>
           </div>

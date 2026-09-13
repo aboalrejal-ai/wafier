@@ -50,6 +50,10 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
 
       <div style={{ flex: 1, overflowY: "auto", padding: "32px 36px", background: "hsl(var(--color-gray-25))" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+          <div style={{ textAlign: "start" }}>
+            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الملف الشخصي</h1>
+            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>حسابك واستهلاك الطاقة</p>
+          </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
               type="button"
@@ -63,10 +67,6 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
               </div>
               <span style={{ position: "absolute", top: -3, insetInlineEnd: -3, width: 9, height: 9, background: "hsl(var(--color-sa-500))", borderRadius: "50%", border: "2px solid hsl(var(--color-gray-25))" }} />
             </button>
-          </div>
-          <div style={{ textAlign: "end" }}>
-            <h1 style={{ margin: "0 0 4px", fontSize: 24, fontWeight: 800, color: "hsl(var(--color-gray-950))" }}>الملف الشخصي</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-500))" }}>حسابك واستهلاك الطاقة</p>
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export default function DesktopProfile({ onNavigate }: DesktopProfileProps) {
             <div style={{ width: 56, height: 56, borderRadius: "50%", background: "hsl(var(--color-sa-600))", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px hsla(var(--color-sa-600), 0.3)", flexShrink: 0 }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
             </div>
-            <div style={{ textAlign: "end", flex: 1 }}>
+            <div style={{ textAlign: "start", flex: 1 }}>
               <p style={{ margin: "0 0 6px", fontSize: 16, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
               <p style={{ margin: 0, fontSize: 13, color: "hsl(var(--color-gray-600))", lineHeight: 1.7 }}>أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.</p>
             </div>

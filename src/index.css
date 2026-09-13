@@ -85,12 +85,8 @@ html, body, #root {
   padding: 0;
 }
 
-html, body, #root {
-  direction: rtl;
-}
-
+/* Direction comes from <html dir> via LanguageProvider — do not hardcode rtl here. */
 body {
-  direction: rtl;
   font-family: 'IBM Plex Sans Arabic', 'Work Sans', system-ui, sans-serif;
   background-color: var(--background);
   color: var(--foreground);

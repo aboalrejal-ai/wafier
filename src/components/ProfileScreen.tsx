@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -19,6 +20,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { updateProfile } from "../services/data-service";
 import { demoService } from "../services/data-service";
 import { formatMemberSince, resolveDisplayName } from "../lib/userStorage";
+import { LanguageToggle, useT } from "../i18n";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ProfileScreenProps {
@@ -37,6 +39,8 @@ const chartData = [
 
 
 export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
+  const navigate = useNavigate();
+  const t = useT();
   const period = useAppStore((s) => s.period);
   const setPeriodStore = useAppStore((s) => s.setPeriod);
   const { profile, notifications, historicalBills } = useDashboardData();
@@ -45,7 +49,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const displayName = resolveDisplayName({ fullName: profile?.full_name, email: profile?.email });
-  const memberSince = profile?.member_since ? formatMemberSince(profile.member_since) : "عضو جديد";
+  const memberSince = profile?.member_since ? formatMemberSince(profile.member_since) : t("profile.memberNew");
   const chartDataFiltered = getFilteredChartData(historicalBills.length ? historicalBills : chartData, period);
 
   const markAllRead = () => {
@@ -77,10 +81,10 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
 
           <div style={{ textAlign: "center" }}>
             <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
-              الملف الشخصي
+              {t("profile.title")}
             </h1>
             <p style={{ margin: 0, fontSize: 11, color: "hsl(var(--color-gray-500))" }}>
-              حسابك واستهلاك الطاقة
+              {t("profile.subtitle")}
             </p>
           </div>
 
@@ -150,8 +154,8 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
               </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ textAlign: "end" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-end" }}>
+                <div style={{ textAlign: "start" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "flex-start" }}>
                     <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>{displayName}</p>
                     <span style={{ color: "hsl(var(--color-sa-600))", fontSize: 14 }}>✓</span>
                   </div>
@@ -239,7 +243,7 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
             borderRadius: 16, padding: "18px",
             display: "flex", alignItems: "center", gap: 16,
           }}>
-            <div style={{ textAlign: "end", flex: 1 }}>
+            <div style={{ textAlign: "start", flex: 1 }}>
               <p style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 700, color: "hsl(var(--color-sa-700))" }}>نصيحة ذكية 💡</p>
               <p style={{ margin: 0, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.6 }}>
                 أنت تستخدم طاقتك بذكاء، استمر على هذا النهج لتحقيق المزيد من التوفير.
@@ -270,20 +274,21 @@ export default function ProfileScreen({ onNavigate }: ProfileScreenProps) {
           onSave={async (data) => { await updateProfile(data); queryClient.invalidateQueries({ queryKey: ["dashboard"] }); }}
         />
       )}
-      <div style={{ padding: "8px 16px 0", display: "flex", gap: 8, justifyContent: "center" }}>
-                <button
+      <div style={{ padding: "8px 16px 12px", display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", alignItems: "center" }}>
+        <LanguageToggle compact />
+        <button
           onClick={() => {
             const until = new Date(Date.now() + 2 * 3600 * 1000).toISOString();
             demoService.setAlertOverride(until);
-            alert("تم إيقاف التنبيهات ساعتين (Human-in-the-loop).");
+            alert(t("profile.hitlDone"));
           }}
-          style={{ background: "none", border: "1px solid hsl(var(--color-sa-200))", borderRadius: 10, padding: "8px 12px", color: "hsl(var(--color-sa-700))", fontSize: 12, cursor: "pointer", fontFamily: "inherit", marginInlineEnd: 8 }}
+          style={{ background: "none", border: "1px solid hsl(var(--color-sa-200))", borderRadius: 10, padding: "8px 12px", color: "hsl(var(--color-sa-700))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}
         >
-          إيقاف التنبيهات ساعتين (HITL)
+          {t("profile.hitl")}
         </button>
 
-        <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>عن Wafir</button>
-        <button onClick={async () => { await signOut(); window.location.href = "/login"; }} style={{ background: "none", border: "none", color: "hsl(var(--color-gray-500))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>تسجيل الخروج</button>
+        <button onClick={() => onNavigate("about")} style={{ background: "none", border: "none", color: "hsl(var(--color-sa-600))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>{t("nav.about")}</button>
+        <button onClick={async () => { await signOut(); navigate("/login", { replace: true }); }} style={{ background: "none", border: "none", color: "hsl(var(--color-gray-500))", fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>{t("common.logout")}</button>
       </div>
     </div>
   );

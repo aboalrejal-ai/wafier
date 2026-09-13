@@ -1,4 +1,5 @@
 import type { Screen } from "../App";
+import { useT } from "../i18n";
 
 type NavTab = "dashboard" | "forecast" | "ai" | "profile";
 
@@ -8,30 +9,24 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ current, onNavigate }: BottomNavProps) {
+  const t = useT();
+
+  // DOM order = reading order: dashboard first → appears on the start side (right in ar, left in en)
   const tabs: { id: NavTab; label: string; icon: React.ReactNode }[] = [
     {
-      id: "profile",
-      label: "الملف الشخصي",
+      id: "dashboard",
+      label: t("nav.dashboard"),
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="8" r="4" />
-          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-        </svg>
-      ),
-    },
-    {
-      id: "ai",
-      label: "الوكيل الذكي",
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
-          <path d="M19 14.5l.7 1.9 1.8.7-1.8.7-.7 1.9-.7-1.9-1.8-.7 1.8-.7z" />
+          <rect x="2" y="5" width="20" height="15" rx="2" />
+          <path d="M2 10h20" />
+          <path d="M6 15h4M14 15h4" />
         </svg>
       ),
     },
     {
       id: "forecast",
-      label: "توقعات الفاتورة",
+      label: t("nav.forecast"),
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -41,13 +36,22 @@ export default function BottomNav({ current, onNavigate }: BottomNavProps) {
       ),
     },
     {
-      id: "dashboard",
-      label: "الميزانية الشهرية",
+      id: "ai",
+      label: t("nav.ai"),
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="5" width="20" height="15" rx="2" />
-          <path d="M2 10h20" />
-          <path d="M6 15h4M14 15h4" />
+          <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+          <path d="M19 14.5l.7 1.9 1.8.7-1.8.7-.7 1.9-.7-1.9-1.8-.7 1.8-.7z" />
+        </svg>
+      ),
+    },
+    {
+      id: "profile",
+      label: t("nav.profile"),
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
         </svg>
       ),
     },

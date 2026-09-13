@@ -37,7 +37,7 @@ export default function ForgotPasswordModal({ onClose, onReset }: ForgotPassword
 
         {!sent ? (
           <>
-            <div style={{ textAlign: "end", marginBottom: 24 }}>
+            <div style={{ textAlign: "start", marginBottom: 24 }}>
               <h2 style={{ margin: "0 0 6px", fontSize: 20, fontWeight: 700, color: "hsl(var(--color-gray-950))" }}>
                 نسيت كلمة المرور؟
               </h2>
@@ -47,7 +47,7 @@ export default function ForgotPasswordModal({ onClose, onReset }: ForgotPassword
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "end" }}>
+              <label style={{ fontSize: 13, fontWeight: 500, color: "hsl(var(--color-gray-700))", textAlign: "start" }}>
                 البريد الإلكتروني
               </label>
               <div style={{ position: "relative" }}>
@@ -68,7 +68,7 @@ export default function ForgotPasswordModal({ onClose, onReset }: ForgotPassword
                   onFocus={(e) => (e.target.style.borderColor = "hsl(var(--color-sa-600))")}
                   onBlur={(e) => (e.target.style.borderColor = "hsl(var(--color-gray-200))")}
                 />
-                <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "hsl(var(--color-gray-400))" }}>
+                <span style={{ position: "absolute", insetInlineStart: 14, top: "50%", transform: "translateY(-50%)", color: "hsl(var(--color-gray-400))" }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 8l10 6 10-6" />
                   </svg>
