@@ -12,6 +12,30 @@ import PipelineRail, { pipelineStatusFromAudit } from "./hackathon/PipelineRail"
 import SyntheticNotice from "./SyntheticNotice";
 import { useT } from "../i18n";
 
+/** Human labels for audit actions — keep technical code visible for judges. */
+const AUDIT_ACTION_LABEL: Record<string, string> = {
+  src: "المصدر",
+  collector: "الجامع",
+  preprocessor: "المعالج",
+  rag: "مساعد المعرفة",
+  "kb-policy": "حارس السياسة",
+  policy: "السياسة",
+  heatwave: "موجة الحر",
+  sandbox: "صندوق التجربة",
+  MLFO: "تبديل الموسم",
+};
+
+function formatAuditLine(action: string, detail: string): string {
+  const human = AUDIT_ACTION_LABEL[action] ?? action;
+  const friendlyDetail = detail
+    .replace(/\bVIOLATION\b/g, "مخالفة")
+    .replace(/\bBLOCK_DATA_USE\b/g, "منع استخدام البيانات")
+    .replace(/\bCOMPLIANT\b/g, "متوافق")
+    .replace(/\bgap-fill\b/gi, "تعبئة الفجوة")
+    .replace(/\banon=/g, "رمز الأسرة=");
+  return human === action ? `${action}: ${friendlyDetail}` : `${human} (${action}): ${friendlyDetail}`;
+}
+
 /** Canonical team from docs/TECHNICAL-REPORT.md — roles verbatim. */
 const TEAM = [
   {
@@ -141,9 +165,7 @@ export default function AboutScreen({ onBack }: { onBack?: () => void }) {
           <h2 style={{ fontSize: 16, margin: "0 0 8px", textAlign: "start" }}>{t("about.auditLog")}</h2>
           <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 12, color: "hsl(var(--color-gray-600))", lineHeight: 1.8, textAlign: "start" }}>
             {audit.slice(0, 10).map((e: { id: string; action: string; detail: string }) => (
-              <li key={e.id}>
-                <strong>{e.action}</strong>: {e.detail}
-              </li>
+              <li key={e.id}>{formatAuditLine(e.action, e.detail)}</li>
             ))}
             {audit.length === 0 && <li>{t("about.runScenario")}</li>}
           </ul>
